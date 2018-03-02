@@ -168,10 +168,13 @@ Params		: Param 'comma' Params
 Param		: Type 'paramName';
 
 ReturnStmt	: 'return' ID
-			| 'return' VALUE
+			| 'return' TEXTVALUE
+			| 'return' NUMBERVALUE
 			|
 			;
 			
-ID : [a-z]+ ;
+ID : [a-zA-Z]+[a-zA-Z0-9]*;
 NONE : 'none' ;
-VALUE : [a-z]+ ;
+TEXTVALUE : '"' ~('\r' | '\n' | '"')* '"' ;
+NUMBERVALUE : [0-9]+ 
+			| [0-9]+.[0-9]+;
