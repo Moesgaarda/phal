@@ -16,14 +16,15 @@ public class PhalParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		Includes=1, Include=2, Setup=3, SetupCnt=4, Exprs=5, Expr=6, SetupDcls=7, 
-		VarDcls=8, VarDcl=9, Type=10, CmpDcls=11, CmpDcl=12, AdvType=13, Groups=14, 
-		Group=15, GrpCnts=16, GrpCnt=17, Stmts=18, Stmt=19, Selective=20, Switch=21, 
-		CaseList=22, Cases=23, Case=24, DefaultCase=25, IfStmt=26, Iterative=27, 
-		Loop=28, FuncCall=29, CallParams=30, CallParam=31, Assignment=32, AssStmt=33, 
-		CompOp=34, Oper=35, LogicalStmt=36, LogicOper=37, Repeat=38, RepeatCnt=39, 
-		Funcs=40, Func=41, FuncContent=42, Params=43, Param=44, ReturnStmt=45, 
-		ID=46, NONE=47, TEXTVALUE=48, NUMBERVALUE=49, BOOLVALUE=50;
+		Includes=1, Include=2, Setup=3, SetupCnts=4, SetupCnt=5, Dcl=6, VarDcls=7, 
+		VarDcl=8, Type=9, CmpDcls=10, CmpDcl=11, AdvType=12, Groups=13, Group=14, 
+		GrpCnts=15, GrpCnt=16, Stmts=17, Stmt=18, Selective=19, Switch=20, CaseList=21, 
+		Cases=22, Case=23, DefaultCase=24, IfStmt=25, Iterative=26, Loop=27, FuncCall=28, 
+		CallParams=29, CallParam=30, Assignment=31, AssStmt=32, CompOp=33, Oper=34, 
+		LogicalStmt=35, LogicOper=36, Repeat=37, RepeatCnts=38, RepeatCnt=39, 
+		Funcs=40, Func=41, FuncContents=42, FuncContent=43, Params=44, Param=45, 
+		ReturnStmt=46, LEFTBRACKET=47, RIGHTBRACKET=48, ID=49, NONE=50, TEXTVALUE=51, 
+		NUMBERVALUE=52, BOOLVALUE=53;
 	public static final int
 		RULE_r = 0;
 	public static final String[] ruleNames = {
@@ -34,17 +35,19 @@ public class PhalParser extends Parser {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, "'none'"
+		null, null, null, null, null, null, null, null, null, null, null, "'{'", 
+		"'}'", null, "'none'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "Includes", "Include", "Setup", "SetupCnt", "Exprs", "Expr", "SetupDcls", 
+		null, "Includes", "Include", "Setup", "SetupCnts", "SetupCnt", "Dcl", 
 		"VarDcls", "VarDcl", "Type", "CmpDcls", "CmpDcl", "AdvType", "Groups", 
 		"Group", "GrpCnts", "GrpCnt", "Stmts", "Stmt", "Selective", "Switch", 
 		"CaseList", "Cases", "Case", "DefaultCase", "IfStmt", "Iterative", "Loop", 
 		"FuncCall", "CallParams", "CallParam", "Assignment", "AssStmt", "CompOp", 
-		"Oper", "LogicalStmt", "LogicOper", "Repeat", "RepeatCnt", "Funcs", "Func", 
-		"FuncContent", "Params", "Param", "ReturnStmt", "ID", "NONE", "TEXTVALUE", 
-		"NUMBERVALUE", "BOOLVALUE"
+		"Oper", "LogicalStmt", "LogicOper", "Repeat", "RepeatCnts", "RepeatCnt", 
+		"Funcs", "Func", "FuncContents", "FuncContent", "Params", "Param", "ReturnStmt", 
+		"LEFTBRACKET", "RIGHTBRACKET", "ID", "NONE", "TEXTVALUE", "NUMBERVALUE", 
+		"BOOLVALUE"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -96,9 +99,9 @@ public class PhalParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class RContext extends ParserRuleContext {
-		public TerminalNode Includes() { return getToken(PhalParser.Includes, 0); }
 		public TerminalNode Setup() { return getToken(PhalParser.Setup, 0); }
 		public TerminalNode Repeat() { return getToken(PhalParser.Repeat, 0); }
+		public TerminalNode Includes() { return getToken(PhalParser.Includes, 0); }
 		public TerminalNode Funcs() { return getToken(PhalParser.Funcs, 0); }
 		public RContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -117,17 +120,34 @@ public class PhalParser extends Parser {
 	public final RContext r() throws RecognitionException {
 		RContext _localctx = new RContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_r);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2);
-			match(Includes);
 			setState(3);
-			match(Setup);
-			setState(4);
-			match(Repeat);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Includes) {
+				{
+				setState(2);
+				match(Includes);
+				}
+			}
+
 			setState(5);
-			match(Funcs);
+			match(Setup);
+			setState(6);
+			match(Repeat);
+			setState(8);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==Funcs) {
+				{
+				setState(7);
+				match(Funcs);
+				}
+			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -142,9 +162,10 @@ public class PhalParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\64\n\4\2\t\2\3\2"+
-		"\3\2\3\2\3\2\3\2\3\2\2\2\3\2\2\2\2\b\2\4\3\2\2\2\4\5\7\3\2\2\5\6\7\5\2"+
-		"\2\6\7\7(\2\2\7\b\7*\2\2\b\3\3\2\2\2\2";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\67\r\4\2\t\2\3\2"+
+		"\5\2\6\n\2\3\2\3\2\3\2\5\2\13\n\2\3\2\2\2\3\2\2\2\2\r\2\5\3\2\2\2\4\6"+
+		"\7\3\2\2\5\4\3\2\2\2\5\6\3\2\2\2\6\7\3\2\2\2\7\b\7\5\2\2\b\n\7\'\2\2\t"+
+		"\13\7*\2\2\n\t\3\2\2\2\n\13\3\2\2\2\13\3\3\2\2\2\4\5\n";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

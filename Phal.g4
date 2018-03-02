@@ -11,10 +11,10 @@ Includes	: Include Includes
 			
 Include 	: 'using' 'moduleName' ;
 
-Setup 		: 'setup' 'leftBracket' SetupCnts  ;
+Setup 		: 'setup' LEFTBRACKET SetupCnts;
 
 SetupCnts	: SetupCnt SetupCnts
-			| 'rightBracket'
+			| RIGHTBRACKET
 			;
 			
 SetupCnt	: Stmt
@@ -58,7 +58,7 @@ Groups		: Group Groups
 			| Group
 			;
 
-Group		: 'group' 'groupName' 'leftBracket' GrpCnts 'rightBracket'
+Group		: 'group' 'groupName' LEFTBRACKET GrpCnts RIGHTBRACKET
 			;
 
 GrpCnts		: GrpCnt GrpCnts
@@ -81,9 +81,9 @@ Stmt		: Selective
 Selective	: Switch
 			| IfStmt;
 			
-Switch		: 'switch' 'leftParen' ID 'rightParen' CaseList 'rightBracket'
-			| 'switch' 'leftParen' NUMBERVALUE 'rightParen' CaseList 'rightBracket'
-			| 'switch' 'leftParen' TEXTVALUE 'rightParen' CaseList 'rightBracket'
+Switch		: 'switch' 'leftParen' ID 'rightParen' CaseList RIGHTBRACKET
+			| 'switch' 'leftParen' NUMBERVALUE 'rightParen' CaseList RIGHTBRACKET
+			| 'switch' 'leftParen' TEXTVALUE 'rightParen' CaseList RIGHTBRACKET
 			;
 
 CaseList	: Cases DefaultCase;
@@ -96,14 +96,14 @@ Case		: 'number' 'colon' Stmts;
 
 DefaultCase	: 'default' 'colon' Stmts;
 
-IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Stmts 'rightBracket'
-			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Stmts 'rightBracket' 'else' 'leftBracket' Stmts 'rightBracket'
-			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Stmts 'rightBracket' 'else' IfStmt 'leftBracket' Stmts 'rightBracket';
+IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then' LEFTBRACKET Stmts RIGHTBRACKET
+			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' LEFTBRACKET Stmts RIGHTBRACKET 'else' LEFTBRACKET Stmts RIGHTBRACKET
+			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' LEFTBRACKET Stmts RIGHTBRACKET 'else' IfStmt LEFTBRACKET Stmts RIGHTBRACKET;
 
 Iterative	: Loop;
 
-Loop		: 'loop' NUMBERVALUE 'times' 'leftBracket' Stmts 'rightBracket'
-			| 'loop' 'until' LogicalStmt 'leftBracket' Stmts 'rightBracket';
+Loop		: 'loop' NUMBERVALUE 'times' LEFTBRACKET Stmts RIGHTBRACKET
+			| 'loop' 'until' LogicalStmt LEFTBRACKET Stmts RIGHTBRACKET;
 
 FuncCall	: 'call' ID 'with' 'leftParen' CallParams 'rightParen';
 
@@ -155,11 +155,11 @@ LogicOper	: 'greaterThan'
 			| 'equal'
 			;
 
-Repeat		: 'repeat' 'leftBracket' RepeatCnts 
+Repeat		: 'repeat' LEFTBRACKET RepeatCnts 
 			;
 
 RepeatCnts  : RepeatCnt RepeatCnts
-			| 'rightBracket'
+			| RIGHTBRACKET
 			;
 
 RepeatCnt	: Stmts
@@ -169,11 +169,11 @@ Funcs		: Func Funcs
 			| Func
 			;
 			
-Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type 'leftBracket' FuncContent 
+Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type LEFTBRACKET FuncContent 
 			;
 			
 FuncContents: FuncContent FuncContents
-			| ReturnStmt 'rightBracket'
+			| ReturnStmt RIGHTBRACKET
 			;
 			
 FuncContent	: VarDcl 
@@ -194,7 +194,9 @@ ReturnStmt	: 'return' ID
 			| 'return' BOOLVALUE
 			|  NONE
 			;
-			
+
+LEFTBRACKET: '{';
+RIGHTBRACKET: '}';			
 ID : [a-zA-Z]+[a-zA-Z0-9]*;
 NONE : 'none' ;
 TEXTVALUE : '"' ~('\r' | '\n' | '"')* '"' ;
