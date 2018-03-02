@@ -3,18 +3,18 @@
  */
 grammar Phal;
 
-r 	: Includes Setup Repeat Funcs ;
+r 	: Includes? Setup Repeat Funcs? ;
 
 Includes	: Include Includes 
-			| /* Epsilon */
+			| Include
 			;
 			
 Include 	: 'using' 'moduleName' ;
 
-Setup 		: 'setup' 'leftBracket' SetupCnts 'rightBracket' ;
+Setup 		: 'setup' 'leftBracket' SetupCnts  ;
 
 SetupCnts	: SetupCnt SetupCnts
-			| 
+			| 'rightBracket'
 			;
 			
 SetupCnt	: Stmt
@@ -27,7 +27,7 @@ Dcl			: VarDcl
 			;
 			
 VarDcls		: VarDcl VarDcls
-			|
+			| VarDcl
 			;
 			
 VarDcl	 	: Type ID
@@ -44,7 +44,7 @@ Type		: 'number'
 			;
 			
 CmpDcls		: CmpDcl CmpDcls
-			|
+			| CmpDcl
 			;
 			
 CmpDcl		: AdvType ID 'assignment' 'pin' 'pinNumber';
@@ -55,21 +55,21 @@ AdvType		: 'lightBulb'
 			;
 			
 Groups		: Group Groups
-			| 
+			| Group
 			;
 
 Group		: 'group' 'groupName' 'leftBracket' GrpCnts 'rightBracket'
 			;
 
 GrpCnts		: GrpCnt GrpCnts
-			| 
+			| GrpCnt
 			;
 
 GrpCnt		: ID
 			| 'groupName';
 
 Stmts		: Stmt Stmts
-			| 
+			| Stmt
 			;
 
 Stmt		: Selective
@@ -89,7 +89,7 @@ Switch		: 'switch' 'leftParen' ID 'rightParen' CaseList 'rightBracket'
 CaseList	: Cases DefaultCase;
 
 Cases		: Case Cases
-			|
+			| Case
 			;
 			
 Case		: 'number' 'colon' Stmts;
@@ -155,22 +155,29 @@ LogicOper	: 'greaterThan'
 			| 'equal'
 			;
 
-Repeat		: 'repeat' 'leftBracket' RepeatCnt 'rightBracket'
+Repeat		: 'repeat' 'leftBracket' RepeatCnts 
+			;
+
+RepeatCnts  : RepeatCnt RepeatCnts
+			| 'rightBracket'
 			;
 
 RepeatCnt	: Stmts
-			|
 			;
 
 Funcs		: Func Funcs
-			|
+			| Func
 			;
 			
-Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type 'leftBracket' FuncContent 'rightBracket'
+Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type 'leftBracket' FuncContent 
 			;
-
-FuncContent	: VarDcls Stmts ReturnStmt
-			|
+			
+FuncContents: FuncContent FuncContents
+			| ReturnStmt 'rightBracket'
+			;
+			
+FuncContent	: VarDcl 
+			| Stmt 
 			;
 
 Params		: Param 'comma' Params
@@ -185,6 +192,7 @@ ReturnStmt	: 'return' ID
 			| 'return' TEXTVALUE
 			| 'return' NUMBERVALUE
 			| 'return' BOOLVALUE
+			|  NONE
 			;
 			
 ID : [a-zA-Z]+[a-zA-Z0-9]*;
