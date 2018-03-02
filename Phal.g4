@@ -71,7 +71,7 @@ Stmts		: Stmt Stmts
 Stmt		: Selective
 			| Iterative
 			| FuncCall
-			| AssStmt;
+			| Assignment;
 
 Selective	: Switch
 			| IfStmt;
@@ -120,7 +120,7 @@ AssStmt		: 'id' Oper AssStmt
 			| 'value'
 			| 'id';
 			
-CompOp: 	'increment'
+CompOp		: 'increment'
 			| 'decrement';
 
 Oper		: 'plus' 
