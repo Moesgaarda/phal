@@ -9,7 +9,7 @@ Includes	: Include Includes
 			| Include
 			;
 			
-Include 	: 'using' 'moduleName' ;
+Include 	: 'using' INCLUDE ;
 
 Setup 		: 'setup' STARTBRACKET SetupCnts;
 
@@ -31,10 +31,10 @@ VarDcls		: VarDcl VarDcls
 			;
 			
 VarDcl	 	: Type ID
-			| Type ID 'assignment' NUMBERVALUE
-			| Type ID 'assignment' BOOLVALUE
-			| Type ID 'assignment' TEXTVALUE
-			| Type ID 'assignment' ID
+			| Type ID ASSIGNMENT NUMBERVALUE
+			| Type ID ASSIGNMENT BOOLVALUE
+			| Type ID ASSIGNMENT TEXTVALUE
+			| Type ID ASSIGNMENT ID
 			;
 
 Type		: 'number'
@@ -47,7 +47,7 @@ CmpDcls		: CmpDcl CmpDcls
 			| CmpDcl
 			;
 			
-CmpDcl		: AdvType ID 'assignment' 'pin' 'pinNumber';
+CmpDcl		: AdvType ID ASSIGNMENT 'pin' PINNUMBER;
 
 AdvType		: 'lightBulb'
 			| 'coffeeMachine'
@@ -58,7 +58,7 @@ Groups		: Group Groups
 			| Group
 			;
 
-Group		: 'group' 'groupName' STARTBRACKET GrpCnts ENDBRACKET
+Group		: 'group' GROUPNAME  STARTBRACKET GrpCnts ENDBRACKET
 			;
 
 GrpCnts		: GrpCnt GrpCnts
@@ -66,7 +66,7 @@ GrpCnts		: GrpCnt GrpCnts
 			;
 
 GrpCnt		: ID
-			| 'groupName';
+			| GROUPNAME ;
 
 Stmts		: Stmt Stmts
 			| Stmt
@@ -92,13 +92,13 @@ Cases		: Case Cases
 			| Case
 			;
 			
-Case		: 'number' 'colon' Stmts;
+Case		: 'number' COLON Stmts;
 
-DefaultCase	: 'default' 'colon' Stmts;
+DefaultCase	: 'default' COLON Stmts;
 
-IfStmt		: 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET
-			| 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET 'else' STARTBRACKET Stmts ENDBRACKET
-			| 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET 'else' IfStmt STARTBRACKET Stmts ENDBRACKET;
+IfStmt		: 'if' STARTPAREN LogicalStmt ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN LogicalStmt ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN LogicalStmt ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' IfStmt STARTBRACKET Stmts ENDBRACKET;
 
 Iterative	: Loop;
 
@@ -117,8 +117,8 @@ CallParam	: ID
 			| BOOLVALUE
 			| TEXTVALUE;
 
-Assignment	: ID 'assignment' AssStmt
-			| ID 'assignment' LogicalStmt;
+Assignment	: ID ASSIGNMENT AssStmt
+			| ID ASSIGNMENT LogicalStmt;
 			
 AssStmt		: ID Oper AssStmt
 			| ID Oper NUMBERVALUE
@@ -130,13 +130,16 @@ AssStmt		: ID Oper AssStmt
 			| NUMBERVALUE
 			| ID;
 			
-CompOp		: 'increment'
-			| 'decrement';
+CompOp		: INCREMENT
+			| DECREMENT
+			;
 
-Oper		: 'plus' 
-			| 'minus' 
-			| 'divide'
-			| 'times';
+Oper		: PLUS 
+			| MINUS 
+			| TIMES
+			| DIVIDE
+			| MODULO
+			;
 
 LogicalStmt	: ID LogicOper LogicalStmt
 			| ID LogicOper ID
@@ -147,12 +150,14 @@ LogicalStmt	: ID LogicOper LogicalStmt
 			| ID
 			| BOOLVALUE;
 
-LogicOper	: 'greaterThan'
-			| 'lessThan'
-			| 'lessThanEqual'
-			| 'greaterThanEqual'
-			| 'notEqual'
-			| 'equal'
+LogicOper	: LESSTHAN
+			| LESSTHANEQUAL
+			| GREATERTHAN 
+			| GREATERTHANEQUAL
+			| NOTEQUAL
+			| EQUALTO
+			| AND
+			| OR
 			;
 
 Repeat		: 'repeat' STARTBRACKET RepeatCnts 
@@ -172,7 +177,7 @@ Funcs		: Func Funcs
 Func		: 'define' ID 'with' STARTPAREN Params ENDPAREN 'returnType' Type STARTBRACKET FuncContent 
 			;
 			
-FuncContents: FuncContent FuncContents
+FuncContents: FuncContent FuncContents	
 			| ReturnStmt ENDBRACKET
 			;
 			
@@ -185,9 +190,9 @@ Params		: Param COMMA Params
 			| NONE
 			;
 
-Param		: Type 'paramName'
+Param		: Type ID
 			;
-
+			
 ReturnStmt	: 'return' ID
 			| 'return' TEXTVALUE
 			| 'return' NUMBERVALUE
@@ -195,16 +200,35 @@ ReturnStmt	: 'return' ID
 			|  NONE
 			;
 
-
-STARTPAREN: '(';
-ENDPAREN: ')';
-COMMA: ',';
+EQUALTO		: 'is' | '==';
+NOTEQUAL	: 'is not' | '!=' ;
+LESSTHAN	: '<';
+LESSTHANEQUAL: '<=';
+GREATERTHAN	: '>';
+GREATERTHANEQUAL : '>=';
+AND			: 'and' | '&&' ;
+OR			: 'or'  | '||'  ; 
+PLUS        : '+';
+MINUS        : '-';
+TIMES        : '*';
+DIVIDE        : '/';
+MODULO        : '%';
+INCREMENT	: '++';
+DECREMENT	: '--';
+ASSIGNMENT	: '=';
+COLON		: ':';
+STARTPAREN	: '(';
+ENDPAREN	: ')';
+COMMA		: ',';
 STARTBRACKET: '{';
-ENDBRACKET: '}';			
-ID : [a-zA-Z]+[a-zA-Z0-9]*;
-NONE : 'none' ;
-TEXTVALUE : '"' ~('\r' | '\n' | '"')* '"' ;
+ENDBRACKET	: '}';
+INCLUDE		: [a-zA-Z]+[a-zA-Z0-9]*;
+GROUPNAME 	: [a-zA-Z]+[a-zA-Z0-9]*;
+ID 			: [a-zA-Z]+[a-zA-Z0-9]*;
+NONE 		: 'none' ;
+TEXTVALUE 	: '"' ~('\r' | '\n' | '"')* '"' ;
 NUMBERVALUE : [0-9]+ 
 			| [0-9]+.[0-9]+;
-BOOLVALUE : 'true'|'false'
+BOOLVALUE 	: 'true'|'false'
 			|'on' |'off'; 
+PINNUMBER	: [0-9]+;
