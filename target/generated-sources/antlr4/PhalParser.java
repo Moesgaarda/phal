@@ -22,7 +22,8 @@ public class PhalParser extends Parser {
 		CaseList=22, Cases=23, Case=24, DefaultCase=25, IfStmt=26, Iterative=27, 
 		Loop=28, FuncCall=29, CallParams=30, CallParam=31, Assignment=32, AssStmt=33, 
 		CompOp=34, Oper=35, LogicalStmt=36, LogicOper=37, Repeat=38, RepeatCnt=39, 
-		Funcs=40, Func=41, FuncContent=42, Params=43, Param=44, ReturnStmt=45;
+		Funcs=40, Func=41, FuncContent=42, Params=43, Param=44, ReturnStmt=45, 
+		ID=46, NONE=47, VALUE=48;
 	public static final int
 		RULE_r = 0;
 	public static final String[] ruleNames = {
@@ -30,6 +31,10 @@ public class PhalParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, "'none'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "Includes", "Include", "Setup", "SetupCnt", "Exprs", "Expr", "SetupDcls", 
@@ -38,7 +43,7 @@ public class PhalParser extends Parser {
 		"CaseList", "Cases", "Case", "DefaultCase", "IfStmt", "Iterative", "Loop", 
 		"FuncCall", "CallParams", "CallParam", "Assignment", "AssStmt", "CompOp", 
 		"Oper", "LogicalStmt", "LogicOper", "Repeat", "RepeatCnt", "Funcs", "Func", 
-		"FuncContent", "Params", "Param", "ReturnStmt"
+		"FuncContent", "Params", "Param", "ReturnStmt", "ID", "NONE", "VALUE"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -136,9 +141,9 @@ public class PhalParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3/\n\4\2\t\2\3\2\3"+
-		"\2\3\2\3\2\3\2\3\2\2\2\3\2\2\2\2\b\2\4\3\2\2\2\4\5\7\3\2\2\5\6\7\5\2\2"+
-		"\6\7\7(\2\2\7\b\7*\2\2\b\3\3\2\2\2\2";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\62\n\4\2\t\2\3\2"+
+		"\3\2\3\2\3\2\3\2\3\2\2\2\3\2\2\2\2\b\2\4\3\2\2\2\4\5\7\3\2\2\5\6\7\5\2"+
+		"\2\6\7\7(\2\2\7\b\7*\2\2\b\3\3\2\2\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

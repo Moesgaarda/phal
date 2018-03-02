@@ -32,9 +32,9 @@ VarDcls		: VarDcl VarDcls
 			|
 			;
 			
-VarDcl	 	: Type 'id'
-			| Type 'id' 'assignment' 'value'
-			| Type 'id' 'assignment' 'id';
+VarDcl	 	: Type ID
+			| Type ID 'assignment' VALUE
+			| Type ID 'assignment' ID;
 
 Type		: 'number'
 			| 'text'
@@ -45,7 +45,7 @@ CmpDcls		: CmpDcl CmpDcls
 			|
 			;
 			
-CmpDcl		: AdvType 'id' 'assignment' 'pin' 'pinNumber';
+CmpDcl		: AdvType ID 'assignment' 'pin' 'pinNumber';
 
 AdvType		: 'lightBulb'
 			| 'coffeeMachine'
@@ -61,7 +61,7 @@ GrpCnts		: GrpCnt GrpCnts
 			| 
 			;
 
-GrpCnt		: 'id'
+GrpCnt		: ID
 			| 'groupName';
 
 Stmts		: Stmt Stmts
@@ -94,31 +94,31 @@ IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Exprs '
 
 Iterative	: Loop;
 
-Loop		: 'loop' 'value' 'times' 'leftBracket' Stmts 'rightBracket'
-			| 'loop' 'until' 'id' Oper 'value' 'leftBracket' Stmts 'rightBracket';
+Loop		: 'loop' VALUE 'times' 'leftBracket' Stmts 'rightBracket'
+			| 'loop' 'until' ID Oper VALUE 'leftBracket' Stmts 'rightBracket';
 
-FuncCall	: 'call' 'id' 'with' 'leftParen' CallParams 'rightParen';
+FuncCall	: 'call' ID 'with' 'leftParen' CallParams 'rightParen';
 
 CallParams	: CallParam 'comma' CallParams
 			| CallParam
-			| 'none'
+			| NONE
 			;
 
-CallParam	: 'id'
-			| 'value';
+CallParam	: ID
+			| VALUE;
 
-Assignment	: 'id' 'assignment' AssStmt
-			| 'id' 'assignment' LogicalStmt;
+Assignment	: ID 'assignment' AssStmt
+			| ID 'assignment' LogicalStmt;
 			
-AssStmt		: 'id' Oper AssStmt
-			| 'id' Oper 'value'
-			| 'id' Oper 'id'
-			| 'value' Oper 'value'
-			| 'value' Oper 'id'
-			| 'id' CompOp
-			| 'value' CompOp
-			| 'value'
-			| 'id';
+AssStmt		: ID Oper AssStmt
+			| ID Oper VALUE
+			| ID Oper ID
+			| VALUE Oper VALUE
+			| VALUE Oper ID
+			| ID CompOp
+			| VALUE CompOp
+			| VALUE
+			| ID;
 			
 CompOp		: 'increment'
 			| 'decrement';
@@ -128,14 +128,14 @@ Oper		: 'plus'
 			| 'divide'
 			| 'times';
 
-LogicalStmt	: 'id' LogicOper LogicalStmt
-			| 'id' LogicOper 'id'
-			| 'id' LogicOper 'value'
-			| 'value' LogicOper LogicalStmt
-			| 'value' LogicOper 'id'
-			| 'value' LogicOper 'value'
-			| 'id'
-			| 'value';
+LogicalStmt	: ID LogicOper LogicalStmt
+			| ID LogicOper ID
+			| ID LogicOper VALUE
+			| VALUE LogicOper LogicalStmt
+			| VALUE LogicOper ID
+			| VALUE LogicOper VALUE
+			| ID
+			| VALUE;
 
 LogicOper	: 'greaterThan'
 			| 'lessThan'
@@ -155,7 +155,7 @@ Funcs		: Func Funcs
 			|
 			;
 			
-Func		: 'define' 'id' 'with' 'leftParen' Params 'rightParen' 'returnType' Type 'leftBracket' FuncContent 'rightBracket';
+Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type 'leftBracket' FuncContent 'rightBracket';
 
 FuncContent	: VarDcls Stmts ReturnStmt
 			|
@@ -163,12 +163,15 @@ FuncContent	: VarDcls Stmts ReturnStmt
 
 Params		: Param 'comma' Params
 			| Param
-			| 'none';
+			| NONE;
 
 Param		: Type 'paramName';
 
-ReturnStmt	: 'return' 'id'
-			| 'return' 'value'
+ReturnStmt	: 'return' ID
+			| 'return' VALUE
 			|
 			;
 			
+ID : [a-z]+ ;
+NONE : 'none' ;
+VALUE : [a-z]+ ;
