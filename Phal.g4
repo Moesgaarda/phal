@@ -11,28 +11,19 @@ Includes	: Include Includes
 			
 Include 	: 'using' 'moduleName' ;
 
-Setup 		: 'setup' 'leftBracket' SetupCnt 'rightBracket' ;
+Setup 		: 'setup' 'leftBracket' SetupCnts 'rightBracket' ;
 
-SetupCnt	: SetupExprs
+SetupCnts	: SetupCnt SetupCnts
 			| 
 			;
-SetupExprs	: SetupExpr SetupExprs
-			|
-			;
-
-SetupExpr   : Expr
-			| SetupDcls;
 			
-Exprs	 	: Expr Exprs
-			|
+SetupCnt	: Stmt
+			| Dcl
 			;
 
-Expr		: VarDcls
-			| Stmts
-			;
-
-SetupDcls	: CmpDcls
-			| Groups
+Dcl			: VarDcl 
+			| CmpDcl
+			| Group
 			;
 			
 VarDcls		: VarDcl VarDcls
@@ -43,12 +34,14 @@ VarDcl	 	: Type ID
 			| Type ID 'assignment' NUMBERVALUE
 			| Type ID 'assignment' BOOLVALUE
 			| Type ID 'assignment' TEXTVALUE
-			| Type ID 'assignment' ID;
+			| Type ID 'assignment' ID
+			;
 
 Type		: 'number'
 			| 'text'
 			| 'letter'
-			| 'bool' ;
+			| 'bool' 
+			;
 			
 CmpDcls		: CmpDcl CmpDcls
 			|
@@ -58,13 +51,15 @@ CmpDcl		: AdvType ID 'assignment' 'pin' 'pinNumber';
 
 AdvType		: 'lightBulb'
 			| 'coffeeMachine'
-			| 'temperatureSensor';
+			| 'temperatureSensor'
+			;
 			
 Groups		: Group Groups
 			| 
 			;
 
-Group		: 'group' 'groupName' 'leftBracket' GrpCnts 'rightBracket';
+Group		: 'group' 'groupName' 'leftBracket' GrpCnts 'rightBracket'
+			;
 
 GrpCnts		: GrpCnt GrpCnts
 			| 
@@ -80,12 +75,16 @@ Stmts		: Stmt Stmts
 Stmt		: Selective
 			| Iterative
 			| FuncCall
-			| Assignment;
+			| Assignment
+			;
 
 Selective	: Switch
 			| IfStmt;
 			
-Switch		: 'switch' 'leftParen' Expr 'rightParen' CaseList 'rightBracket';
+Switch		: 'switch' 'leftParen' ID 'rightParen' CaseList 'rightBracket'
+			| 'switch' 'leftParen' NUMBERVALUE 'rightParen' CaseList 'rightBracket'
+			| 'switch' 'leftParen' TEXTVALUE 'rightParen' CaseList 'rightBracket'
+			;
 
 CaseList	: Cases DefaultCase;
 
@@ -97,9 +96,9 @@ Case		: 'number' 'colon' Stmts;
 
 DefaultCase	: 'default' 'colon' Stmts;
 
-IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Exprs 'rightBracket'
-			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Exprs 'rightBracket' 'else' 'leftBracket' Exprs 'rightBracket'
-			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Exprs 'rightBracket' 'else' IfStmt 'leftBracket' Exprs 'rightBracket';
+IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Stmts 'rightBracket'
+			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Stmts 'rightBracket' 'else' 'leftBracket' Stmts 'rightBracket'
+			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Stmts 'rightBracket' 'else' IfStmt 'leftBracket' Stmts 'rightBracket';
 
 Iterative	: Loop;
 
@@ -153,12 +152,13 @@ LogicOper	: 'greaterThan'
 			| 'lessThanEqual'
 			| 'greaterThanEqual'
 			| 'notEqual'
-			| 'equal';
+			| 'equal'
+			;
 
-Repeat		: 'repeat' 'leftBracket' RepeatCnt 'rightBracket';
+Repeat		: 'repeat' 'leftBracket' RepeatCnt 'rightBracket'
+			;
 
-RepeatCnt	: VarDcls
-			| Stmts
+RepeatCnt	: Stmts
 			|
 			;
 
@@ -166,7 +166,8 @@ Funcs		: Func Funcs
 			|
 			;
 			
-Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type 'leftBracket' FuncContent 'rightBracket';
+Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type 'leftBracket' FuncContent 'rightBracket'
+			;
 
 FuncContent	: VarDcls Stmts ReturnStmt
 			|
@@ -174,9 +175,11 @@ FuncContent	: VarDcls Stmts ReturnStmt
 
 Params		: Param 'comma' Params
 			| Param
-			| NONE;
+			| NONE
+			;
 
-Param		: Type 'paramName';
+Param		: Type 'paramName'
+			;
 
 ReturnStmt	: 'return' ID
 			| 'return' TEXTVALUE
