@@ -107,7 +107,7 @@ Loop		: 'loop' NUMBERVALUE 'times' LEFTBRACKET Stmts RIGHTBRACKET
 
 FuncCall	: 'call' ID 'with' 'leftParen' CallParams 'rightParen';
 
-CallParams	: CallParam 'comma' CallParams
+CallParams	: CallParam COMMA CallParams
 			| CallParam
 			| NONE
 			;
@@ -180,7 +180,7 @@ FuncContent	: VarDcl
 			| Stmt 
 			;
 
-Params		: Param 'comma' Params
+Params		: Param COMMA Params
 			| Param
 			| NONE
 			;
@@ -195,6 +195,7 @@ ReturnStmt	: 'return' ID
 			|  NONE
 			;
 
+COMMA: ',';
 LEFTBRACKET: '{';
 RIGHTBRACKET: '}';			
 ID : [a-zA-Z]+[a-zA-Z0-9]*;
