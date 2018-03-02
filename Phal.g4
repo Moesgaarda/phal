@@ -88,7 +88,7 @@ Case		: 'number' 'colon' Stmts;
 
 DefaultCase	: 'default' 'colon' Stmts;
 
-IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then'; /* Implement if content */
+IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then'; /* Implement if content pls */
 
 Iterative	: Loop;
 
