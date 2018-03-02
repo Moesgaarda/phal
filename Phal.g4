@@ -28,7 +28,7 @@ SetupDcls	: VarDcls
 			| Groups
 			| Stmts ;
 			
-VarDcls		: VarDcls VarDcl
+VarDcls		: VarDcl VarDcls
 			|
 			;
 			
@@ -171,3 +171,4 @@ ReturnStmt	: 'return' 'id'
 			| 'return' 'value'
 			|
 			;
+			
