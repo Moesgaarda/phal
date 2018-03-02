@@ -28,15 +28,11 @@ Exprs	 	: Expr Exprs
 			;
 
 Expr		: VarDcls
-			| Dcls 
+			| Stmts
 			;
 
 SetupDcls	: CmpDcls
 			| Groups
-			;
-			
-Dcls        : VarDcls
-			| Stmts 
 			;
 			
 VarDcls		: VarDcl VarDcls
