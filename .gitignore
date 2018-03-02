@@ -120,3 +120,6 @@ xcuserdata
 # VSCode Java plugin temporary files
 javac-services.0.log
 javac-services.0.log.lck
+
+/target/*
+target/*
