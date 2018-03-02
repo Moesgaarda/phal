@@ -27,7 +27,7 @@ SetupDcls	: VarDcls
 			| Groups
 			| Stmts ;
 			
-VarDcls		: VarDcl
+VarDcls		: VarDcls VarDcl
 			|
 			;
 			
@@ -40,7 +40,7 @@ Type		: 'number'
 			| 'letter'
 			| 'bool' ;
 			
-CmpDcls		: CmpDcl
+CmpDcls		: CmpDcl CmpDcls
 			|
 			;
 			
@@ -92,9 +92,9 @@ IfStmt		: ; /* Implement if */
 Iterative	: Loop;
 
 Loop		: 'loop' 'value' 'times' 'leftBracket' Stmts 'rightBracket'
-			| 'loop' 'until' 'id' Oper 'value' 'leftBracket' Stmts 'rightBracket'
+			| 'loop' 'until' 'id' Oper 'value' 'leftBracket' Stmts 'rightBracket';
 
-FuncCall	: 'call' 'id' 'with' 'leftParen' CallParams 'rightParen' ;
+FuncCall	: 'call' 'id' 'with' 'leftParen' CallParams 'rightParen';
 
 CallParams	: CallParam 'comma' CallParams
 			| CallParam
