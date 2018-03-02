@@ -13,20 +13,31 @@ Include 	: 'using' 'moduleName' ;
 
 Setup 		: 'setup' 'leftBracket' SetupCnt 'rightBracket' ;
 
-SetupCnt	: Exprs
+SetupCnt	: SetupExprs
 			| 
 			;
- 
+SetupExprs	: SetupExpr SetupExprs
+			|
+			;
+
+SetupExpr   : Expr
+			| SetupDcls;
+			
 Exprs	 	: Expr Exprs
 			|
 			;
 
-Expr		: SetupDcls ;
+Expr		: VarDcls
+			| Dcls 
+			;
 
-SetupDcls	: VarDcls
-			| CmpDcls
+SetupDcls	: CmpDcls
 			| Groups
-			| Stmts ;
+			;
+			
+Dcls        : VarDcls
+			| Stmts 
+			;
 			
 VarDcls		: VarDcl VarDcls
 			|
