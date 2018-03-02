@@ -33,7 +33,9 @@ VarDcls		: VarDcl VarDcls
 			;
 			
 VarDcl	 	: Type ID
-			| Type ID 'assignment' VALUE
+			| Type ID 'assignment' NUMBERVALUE
+			| Type ID 'assignment' BOOLVALUE
+			| Type ID 'assignment' TEXTVALUE
 			| Type ID 'assignment' ID;
 
 Type		: 'number'
@@ -94,8 +96,8 @@ IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then' 'leftBracket' Exprs '
 
 Iterative	: Loop;
 
-Loop		: 'loop' VALUE 'times' 'leftBracket' Stmts 'rightBracket'
-			| 'loop' 'until' ID Oper VALUE 'leftBracket' Stmts 'rightBracket';
+Loop		: 'loop' NUMBERVALUE 'times' 'leftBracket' Stmts 'rightBracket'
+			| 'loop' 'until' LogicalStmt 'leftBracket' Stmts 'rightBracket';
 
 FuncCall	: 'call' ID 'with' 'leftParen' CallParams 'rightParen';
 
@@ -105,19 +107,21 @@ CallParams	: CallParam 'comma' CallParams
 			;
 
 CallParam	: ID
-			| VALUE;
+			| NUMBERVALUE
+			| BOOLVALUE
+			| TEXTVALUE;
 
 Assignment	: ID 'assignment' AssStmt
 			| ID 'assignment' LogicalStmt;
 			
 AssStmt		: ID Oper AssStmt
-			| ID Oper VALUE
+			| ID Oper NUMBERVALUE
 			| ID Oper ID
-			| VALUE Oper VALUE
-			| VALUE Oper ID
+			| NUMBERVALUE Oper NUMBERVALUE
+			| NUMBERVALUE Oper ID
 			| ID CompOp
-			| VALUE CompOp
-			| VALUE
+			| NUMBERVALUE CompOp
+			| NUMBERVALUE
 			| ID;
 			
 CompOp		: 'increment'
@@ -130,12 +134,12 @@ Oper		: 'plus'
 
 LogicalStmt	: ID LogicOper LogicalStmt
 			| ID LogicOper ID
-			| ID LogicOper VALUE
-			| VALUE LogicOper LogicalStmt
-			| VALUE LogicOper ID
-			| VALUE LogicOper VALUE
+			| ID LogicOper BOOLVALUE
+			| BOOLVALUE LogicOper LogicalStmt
+			| BOOLVALUE LogicOper ID
+			| BOOLVALUE LogicOper BOOLVALUE
 			| ID
-			| VALUE;
+			| BOOLVALUE;
 
 LogicOper	: 'greaterThan'
 			| 'lessThan'
@@ -170,7 +174,7 @@ Param		: Type 'paramName';
 ReturnStmt	: 'return' ID
 			| 'return' TEXTVALUE
 			| 'return' NUMBERVALUE
-			|
+			| 'return' BOOLVALUE
 			;
 			
 ID : [a-zA-Z]+[a-zA-Z0-9]*;
@@ -178,3 +182,5 @@ NONE : 'none' ;
 TEXTVALUE : '"' ~('\r' | '\n' | '"')* '"' ;
 NUMBERVALUE : [0-9]+ 
 			| [0-9]+.[0-9]+;
+BOOLVALUE : 'true'|'false'
+			|'on' |'off'; 
