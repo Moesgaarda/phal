@@ -11,10 +11,10 @@ Includes	: Include Includes
 			
 Include 	: 'using' 'moduleName' ;
 
-Setup 		: 'setup' LEFTBRACKET SetupCnts;
+Setup 		: 'setup' STARTBRACKET SetupCnts;
 
 SetupCnts	: SetupCnt SetupCnts
-			| RIGHTBRACKET
+			| ENDBRACKET
 			;
 			
 SetupCnt	: Stmt
@@ -58,7 +58,7 @@ Groups		: Group Groups
 			| Group
 			;
 
-Group		: 'group' 'groupName' LEFTBRACKET GrpCnts RIGHTBRACKET
+Group		: 'group' 'groupName' STARTBRACKET GrpCnts ENDBRACKET
 			;
 
 GrpCnts		: GrpCnt GrpCnts
@@ -81,9 +81,9 @@ Stmt		: Selective
 Selective	: Switch
 			| IfStmt;
 			
-Switch		: 'switch' 'leftParen' ID 'rightParen' CaseList RIGHTBRACKET
-			| 'switch' 'leftParen' NUMBERVALUE 'rightParen' CaseList RIGHTBRACKET
-			| 'switch' 'leftParen' TEXTVALUE 'rightParen' CaseList RIGHTBRACKET
+Switch		: 'switch' STARTPAREN ID ENDPAREN CaseList ENDBRACKET
+			| 'switch' STARTPAREN NUMBERVALUE ENDPAREN CaseList ENDBRACKET
+			| 'switch' STARTPAREN TEXTVALUE ENDPAREN CaseList ENDBRACKET
 			;
 
 CaseList	: Cases DefaultCase;
@@ -96,16 +96,16 @@ Case		: 'number' 'colon' Stmts;
 
 DefaultCase	: 'default' 'colon' Stmts;
 
-IfStmt		: 'if' 'leftParan' LogicalStmt 'rightParan' 'then' LEFTBRACKET Stmts RIGHTBRACKET
-			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' LEFTBRACKET Stmts RIGHTBRACKET 'else' LEFTBRACKET Stmts RIGHTBRACKET
-			| 'if' 'leftParan' LogicalStmt 'rightParan' 'then' LEFTBRACKET Stmts RIGHTBRACKET 'else' IfStmt LEFTBRACKET Stmts RIGHTBRACKET;
+IfStmt		: 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET 'else' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET 'else' IfStmt STARTBRACKET Stmts ENDBRACKET;
 
 Iterative	: Loop;
 
-Loop		: 'loop' NUMBERVALUE 'times' LEFTBRACKET Stmts RIGHTBRACKET
-			| 'loop' 'until' LogicalStmt LEFTBRACKET Stmts RIGHTBRACKET;
+Loop		: 'loop' NUMBERVALUE 'times' STARTBRACKET Stmts ENDBRACKET
+			| 'loop' 'until' LogicalStmt STARTBRACKET Stmts ENDBRACKET;
 
-FuncCall	: 'call' ID 'with' 'leftParen' CallParams 'rightParen';
+FuncCall	: 'call' ID 'with' STARTPAREN CallParams ENDPAREN;
 
 CallParams	: CallParam COMMA CallParams
 			| CallParam
@@ -155,11 +155,11 @@ LogicOper	: 'greaterThan'
 			| 'equal'
 			;
 
-Repeat		: 'repeat' LEFTBRACKET RepeatCnts 
+Repeat		: 'repeat' STARTBRACKET RepeatCnts 
 			;
 
 RepeatCnts  : RepeatCnt RepeatCnts
-			| RIGHTBRACKET
+			| ENDBRACKET
 			;
 
 RepeatCnt	: Stmts
@@ -169,11 +169,11 @@ Funcs		: Func Funcs
 			| Func
 			;
 			
-Func		: 'define' ID 'with' 'leftParen' Params 'rightParen' 'returnType' Type LEFTBRACKET FuncContent 
+Func		: 'define' ID 'with' STARTPAREN Params ENDPAREN 'returnType' Type STARTBRACKET FuncContent 
 			;
 			
 FuncContents: FuncContent FuncContents
-			| ReturnStmt RIGHTBRACKET
+			| ReturnStmt ENDBRACKET
 			;
 			
 FuncContent	: VarDcl 
@@ -195,9 +195,12 @@ ReturnStmt	: 'return' ID
 			|  NONE
 			;
 
+
+STARTPAREN: '(';
+ENDPAREN: ')';
 COMMA: ',';
-LEFTBRACKET: '{';
-RIGHTBRACKET: '}';			
+STARTBRACKET: '{';
+ENDBRACKET: '}';			
 ID : [a-zA-Z]+[a-zA-Z0-9]*;
 NONE : 'none' ;
 TEXTVALUE : '"' ~('\r' | '\n' | '"')* '"' ;
