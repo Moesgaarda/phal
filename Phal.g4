@@ -31,9 +31,7 @@ VarDcls		: VarDcl VarDcls
 			;
 			
 VarDcl	 	: Type ID
-			| Type ID ASSIGNMENT NUMBERVALUE
-			| Type ID ASSIGNMENT BOOLVALUE
-			| Type ID ASSIGNMENT TEXTVALUE
+			| Type ID ASSIGNMENT Value
 			| Type ID ASSIGNMENT ID
 			;
 
@@ -41,6 +39,11 @@ Type		: 'number'
 			| 'text'
 			| 'letter'
 			| 'bool' 
+			;
+		
+Value		: NUMBERVALUE
+			| BOOLVALUE
+			| TEXTVALUE
 			;
 			
 CmpDcls		: CmpDcl CmpDcls
@@ -96,14 +99,15 @@ Case		: 'number' COLON Stmts;
 
 DefaultCase	: 'default' COLON Stmts;
 
-IfStmt		: 'if' STARTPAREN LogicalStmt ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET
-			| 'if' STARTPAREN LogicalStmt ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' STARTBRACKET Stmts ENDBRACKET
-			| 'if' STARTPAREN LogicalStmt ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' IfStmt STARTBRACKET Stmts ENDBRACKET;
+IfStmt		: 'if' STARTPAREN Condition ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN Condition ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN Condition ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' IfStmt 
+			;
 
 Iterative	: Loop;
 
 Loop		: 'loop' NUMBERVALUE 'times' STARTBRACKET Stmts ENDBRACKET
-			| 'loop' 'until' LogicalStmt STARTBRACKET Stmts ENDBRACKET;
+			| 'loop' 'until' Condition STARTBRACKET Stmts ENDBRACKET;
 
 FuncCall	: 'call' ID 'with' STARTPAREN CallParams ENDPAREN;
 
@@ -141,12 +145,16 @@ Oper		: PLUS
 			| MODULO
 			;
 
-LogicalStmt	: ID LogicOper LogicalStmt
-			| ID LogicOper ID
-			| ID LogicOper BOOLVALUE
+Condition   : ID LogicOper LogicalStmt
+			| NUMBERVALUE LogicOper LogicalStmt
 			| BOOLVALUE LogicOper LogicalStmt
-			| BOOLVALUE LogicOper ID
-			| BOOLVALUE LogicOper BOOLVALUE
+			| ID
+			| BOOLVALUE;
+
+LogicalStmt	: ID LogicOper LogicalStmt
+			| NUMBERVALUE LogicOper LogicalStmt
+			| BOOLVALUE LogicOper LogicalStmt
+			| NUMBERVALUE
 			| ID
 			| BOOLVALUE;
 
@@ -194,9 +202,7 @@ Param		: Type ID
 			;
 			
 ReturnStmt	: 'return' ID
-			| 'return' TEXTVALUE
-			| 'return' NUMBERVALUE
-			| 'return' BOOLVALUE
+			| 'return' Value
 			|  NONE
 			;
 
