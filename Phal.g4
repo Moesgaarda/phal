@@ -109,11 +109,14 @@ Iterative	: Loop;
 Loop		: 'loop' NUMBERVALUE 'times' STARTBRACKET Stmts ENDBRACKET
 			| 'loop' 'until' Condition STARTBRACKET Stmts ENDBRACKET;
 
-FuncCall	: 'call' ID 'with' STARTPAREN CallParams ENDPAREN;
+FuncCall	: 'call' ID 'with' STARTPAREN Call ENDPAREN;
 
+Call		: CallParams
+			| NONE
+			;
+			
 CallParams	: CallParam COMMA CallParams
 			| CallParam
-			| NONE
 			;
 
 CallParam	: ID
@@ -123,14 +126,11 @@ CallParam	: ID
 
 Assignment	: ID ASSIGNMENT AssStmt
 			| ID ASSIGNMENT LogicalStmt;
-			
+
 AssStmt		: ID Oper AssStmt
-			| ID Oper NUMBERVALUE
-			| ID Oper ID
-			| NUMBERVALUE Oper NUMBERVALUE
-			| NUMBERVALUE Oper ID
+			| NUMBERVALUE Oper AssStmt
+			| ID CompOp Oper AssStmt
 			| ID CompOp
-			| NUMBERVALUE CompOp
 			| NUMBERVALUE
 			| ID;
 			
@@ -182,7 +182,7 @@ Funcs		: Func Funcs
 			| Func
 			;
 			
-Func		: 'define' ID 'with' STARTPAREN Params ENDPAREN 'returnType' Type STARTBRACKET FuncContent 
+Func		: 'define' ID 'with' STARTPAREN Parameters ENDPAREN 'returnType' Type STARTBRACKET FuncContent 
 			;
 			
 FuncContents: FuncContent FuncContents	
@@ -193,9 +193,12 @@ FuncContent	: VarDcl
 			| Stmt 
 			;
 
+Parameters	: Params
+			| NONE
+			;
+
 Params		: Param COMMA Params
 			| Param
-			| NONE
 			;
 
 Param		: Type ID
