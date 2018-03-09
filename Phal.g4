@@ -3,208 +3,93 @@
  */
 grammar Phal;
 
-r 	: Includes? Setup Repeat Funcs? ;
+r        : (Include)* Setup Repeat (Func)*;
 
-Includes	: Include Includes 
-			| Include
-			;
-			
-Include 	: 'using' 'moduleName' ;
+Include    : 'using' 'moduleName' NEWLINE;
 
-Setup 		: 'setup' STARTBRACKET SetupCnts;
+Setup        : 'setup' '{' (SetupCnt)* '}';
 
-SetupCnts	: SetupCnt SetupCnts
-			| ENDBRACKET
-			;
-			
-SetupCnt	: Stmt
-			| Dcl
-			;
+SetupCnt    : Stmt | Dcl ;
 
-Dcl			: VarDcl 
-			| CmpDcl
-			| Group
-			;
-			
-VarDcls		: VarDcl VarDcls
-			| VarDcl
-			;
-			
-VarDcl	 	: Type ID
-			| Type ID 'assignment' NUMBERVALUE
-			| Type ID 'assignment' BOOLVALUE
-			| Type ID 'assignment' TEXTVALUE
-			| Type ID 'assignment' ID
-			;
+Dcl         : VarDcl NEWLINE   |   CmpDcl NEWLINE |   AdvDataType ;
 
-Type		: 'number'
-			| 'text'
-			| 'letter'
-			| 'bool' 
-			;
-			
-CmpDcls		: CmpDcl CmpDcls
-			| CmpDcl
-			;
-			
-CmpDcl		: AdvType ID 'assignment' 'pin' 'pinNumber';
+AdvDataType    : Group   |   List ;
 
-AdvType		: 'lightBulb'
-			| 'coffeeMachine'
-			| 'temperatureSensor'
-			;
-			
-Groups		: Group Groups
-			| Group
-			;
+VarDcl        : Type ID  | Type ID '=' AssStmt ;
+ 
+Type        : NUMBER |  TEXT  |  LETTER  |  BOOL ;
 
-Group		: 'group' 'groupName' STARTBRACKET GrpCnts ENDBRACKET
-			;
+CmpDcl    : AdvType ID '=' 'pin' 'PINNUMBER' ;
 
-GrpCnts		: GrpCnt GrpCnts
-			| GrpCnt
-			;
+AdvType    : 'lightbulb'  |  'coffeeMachine'   |    'temperatureSensor' ;
 
-GrpCnt		: ID
-			| 'groupName';
+Group        : 'group' 'groupName' '{' (GrpCnt NEWLINE)+ '}' ;
 
-Stmts		: Stmt Stmts
-			| Stmt
-			;
+GrpCnt            : ID   |   'groupName' ;
 
-Stmt		: Selective
-			| Iterative
-			| FuncCall
-			| Assignment
-			;
+List        : 'list' Type 'listName' '{' ListCnt ( ',' ListCnt)* '}' ;
 
-Selective	: Switch
-			| IfStmt;
-			
-Switch		: 'switch' STARTPAREN ID ENDPAREN CaseList ENDBRACKET
-			| 'switch' STARTPAREN NUMBERVALUE ENDPAREN CaseList ENDBRACKET
-			| 'switch' STARTPAREN TEXTVALUE ENDPAREN CaseList ENDBRACKET
-			;
+ListCnt        : ID | VALUE ;
 
-CaseList	: Cases DefaultCase;
+Stmt        : (Selective   |   Iterative   |   FuncCall NEWLINE  |   Assignment NEWLINE );
 
-Cases		: Case Cases
-			| Case
-			;
-			
-Case		: 'number' 'colon' Stmts;
+Selective    : Switch   |   IfStmt ;
 
-DefaultCase	: 'default' 'colon' Stmts;
+Switch        :  'switch' '(' ID ')' { CaseList }   |   'switch' '(' VALUE ')' '{' CaseList '}' ;
+ 
+CaseList    : (Case NEWLINE)+ DefaultCase ;
 
-IfStmt		: 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET
-			| 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET 'else' STARTBRACKET Stmts ENDBRACKET
-			| 'if' STARTPAREN LogicalStmt 'ENDParan' 'then' STARTBRACKET Stmts ENDBRACKET 'else' IfStmt STARTBRACKET Stmts ENDBRACKET;
+Case        : VALUE ':' (Stmt)* NEWLINE;
 
-Iterative	: Loop;
+DefaultCase    : 'default' ':' (Stmt)* NEWLINE;
 
-Loop		: 'loop' NUMBERVALUE 'times' STARTBRACKET Stmts ENDBRACKET
-			| 'loop' 'until' LogicalStmt STARTBRACKET Stmts ENDBRACKET;
+IfStmt        : 'if' '(' Condition ')' 'then' '{' (Stmt)* '}' |
+				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  '{'  (Stmt)*  '}'  |
+				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  IfStmt  ;
 
-FuncCall	: 'call' ID 'with' STARTPAREN CallParams ENDPAREN;
+Condition    :  ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
+     		   |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  'boolValue' ;
 
-CallParams	: CallParam COMMA CallParams
-			| CallParam
-			| NONE
-			;
+Iterative    : Loop ;
 
-CallParam	: ID
-			| NUMBERVALUE
-			| BOOLVALUE
-			| TEXTVALUE;
+Loop        : 'loop' VALUE 'times' '{' (Stmt)* '}'    |    'loop' 'until' Condition '{' (Stmt)* '}' ;
 
-Assignment	: ID 'assignment' AssStmt
-			| ID 'assignment' LogicalStmt;
-			
-AssStmt		: ID Oper AssStmt
-			| ID Oper NUMBERVALUE
-			| ID Oper ID
-			| NUMBERVALUE Oper NUMBERVALUE
-			| NUMBERVALUE Oper ID
-			| ID CompOp
-			| NUMBERVALUE CompOp
-			| NUMBERVALUE
-			| ID;
-			
-CompOp		: 'increment'
-			| 'decrement';
+FuncCall    : 'call' ID 'with' '(' Call ')'   |    ID'.methodId(' Call ')';
 
-Oper		: 'plus' 
-			| 'minus' 
-			| 'divide'
-			| 'times';
+Call        : NONE | CallParam ( ',' CallParam)* ;
 
-LogicalStmt	: ID LogicOper LogicalStmt
-			| ID LogicOper ID
-			| ID LogicOper BOOLVALUE
-			| BOOLVALUE LogicOper LogicalStmt
-			| BOOLVALUE LogicOper ID
-			| BOOLVALUE LogicOper BOOLVALUE
-			| ID
-			| BOOLVALUE;
+CallParam    : ID   |   VALUE ;
 
-LogicOper	: 'greaterThan'
-			| 'lessThan'
-			| 'lessThanEqual'
-			| 'greaterThanEqual'
-			| 'notEqual'
-			| 'equal'
-			;
+Assignment    : ID '=' AssStmt    |    ID '=' LogicalStmt | CompOp ID   |   ID CompOp  ;
 
-Repeat		: 'repeat' STARTBRACKET RepeatCnts 
-			;
+AssStmt    : ID Oper AssStmt   |  VALUE Oper AssStmt   |   ID CompOp Oper AssStmt  |    ID CompOp |   VALUE   |    ID ;
 
-RepeatCnts  : RepeatCnt RepeatCnts
-			| ENDBRACKET
-			;
+Oper         : '+'  |  '-'  |  '/' |   '*' |   '%' ;
 
-RepeatCnt	: Stmts
-			;
+CompOp    : 'increment'    |    'decrement' ;
 
-Funcs		: Func Funcs
-			| Func
-			;
-			
-Func		: 'define' ID 'with' STARTPAREN Params ENDPAREN 'returnType' Type STARTBRACKET FuncContent 
-			;
-			
-FuncContents: FuncContent FuncContents
-			| ReturnStmt ENDBRACKET
-			;
-			
-FuncContent	: VarDcl 
-			| Stmt 
-			;
+LogicalStmt     : ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
+  			      |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  VALUE ;
 
-Params		: Param COMMA Params
-			| Param
-			| NONE
-			;
+LogicOper    : '>'   |  '<'   |   '<='  |   '>='   |   'is not'   |   'is'   |  '='   |   '!=' ;
 
-Param		: Type 'paramName'
-			;
+Repeat    : 'repeat' '{'  (RepeatCnt)* '}'  ;
 
-ReturnStmt	: 'return' ID
-			| 'return' TEXTVALUE
-			| 'return' NUMBERVALUE
-			| 'return' BOOLVALUE
-			|  NONE
-			;
+RepeatCnt    : VarDcl NEWLINE  |   Stmt ;
 
+Func        : 'define' ID 'with' '(' Parameters ')' 'returnType' Type '{' ((Stmt | ReturnStmt) NEWLINE)*  ReturnStmt?'}' ;
 
-STARTPAREN: '(';
-ENDPAREN: ')';
-COMMA: ',';
-STARTBRACKET: '{';
-ENDBRACKET: '}';			
-ID : [a-zA-Z]+[a-zA-Z0-9]*;
-NONE : 'none' ;
-TEXTVALUE : '"' ~('\r' | '\n' | '"')* '"' ;
-NUMBERVALUE : [0-9]+ 
-			| [0-9]+.[0-9]+;
-BOOLVALUE : 'true'|'false'
-			|'on' |'off'; 
+Parameters    :  (Param)+    |    NONE ;
+
+Param        : Type 'paramName' ;
+
+ReturnStmt    : 'return' (ID | VALUE) ;
+
+NEWLINE    : ('\r') '\n' ;
+VALUE : ID+ ;  // Skal have en rigtig værdi
+ID : ('a'..'z' | 'A'..'Z') (('a'..'z' | 'A'..'Z') | ('0'..'9'))*;
+LETTER: ('a'..'z' | 'A'..'Z');
+TEXT : '"' ~('\r' | '\n' | '"')* '"' ;
+NUMBER : ('0'..'9');
+BOOL : 'true'|'false' | 'on' |'off'; 
+NONE : 'none';
