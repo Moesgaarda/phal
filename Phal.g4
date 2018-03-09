@@ -5,25 +5,58 @@ grammar Phal;
 
 r        : (Include)* Setup Repeat (Func)*;
 
-Include    : 'using' 'moduleName' NEWLINE;
+Includes	: Include Includes 
+			| Include
+			;
+			
+Include 	: 'using' INCLUDE ;
 
 Setup        : 'setup' '{' (SetupCnt)* '}';
 
 SetupCnt    : Stmt | Dcl ;
 
-Dcl         : VarDcl NEWLINE   |   CmpDcl NEWLINE |   AdvDataType ;
+Dcl			: VarDcl 
+			| CmpDcl
+			| Group
+			;
+			
+VarDcls		: VarDcl VarDcls
+			| VarDcl
+			;
+			
+VarDcl	 	: Type ID
+			| Type ID ASSIGNMENT Value
+			| Type ID ASSIGNMENT ID
+			;
 
-AdvDataType    : Group   |   List ;
+Type		: 'number'
+			| 'text'
+			| 'letter'
+			| 'bool' 
+			;
+		
+Value		: NUMBERVALUE
+			| BOOLVALUE
+			| TEXTVALUE
+			;
+			
+CmpDcls		: CmpDcl CmpDcls
+			| CmpDcl
+			;
+			
+CmpDcl		: AdvType ID ASSIGNMENT 'pin' PINNUMBER;
 
 VarDcl        : Type ID  | Type ID '=' AssStmt ;
  
 Type        : NUMBER |  TEXT  |  LETTER  |  BOOL ;
 
-CmpDcl    : AdvType ID '=' 'pin' 'PINNUMBER' ;
+Group		: 'group' GROUPNAME  STARTBRACKET GrpCnts ENDBRACKET
+			;
 
 AdvType    : 'lightbulb'  |  'coffeeMachine'   |    'temperatureSensor' ;
 
-Group        : 'group' 'groupName' '{' (GrpCnt NEWLINE)+ '}' ;
+GrpCnt		: ID
+			| GROUPNAME ;
 
 GrpCnt            : ID   |   'groupName' ;
 
@@ -33,34 +66,79 @@ ListCnt        : ID | VALUE ;
 
 Stmt        : (Selective   |   Iterative   |   FuncCall NEWLINE  |   Assignment NEWLINE );
 
-Selective    : Switch   |   IfStmt ;
+Cases		: Case Cases
+			| Case
+			;
+			
+Case		: 'number' COLON Stmts;
 
-Switch        :  'switch' '(' ID ')' { CaseList }   |   'switch' '(' VALUE ')' '{' CaseList '}' ;
- 
-CaseList    : (Case NEWLINE)+ DefaultCase ;
+DefaultCase	: 'default' COLON Stmts;
 
-Case        : VALUE ':' (Stmt)* NEWLINE;
+IfStmt		: 'if' STARTPAREN Condition ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN Condition ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' STARTBRACKET Stmts ENDBRACKET
+			| 'if' STARTPAREN Condition ENDPAREN 'then' STARTBRACKET Stmts ENDBRACKET 'else' IfStmt 
+			;
 
 DefaultCase    : 'default' ':' (Stmt)* NEWLINE;
 
-IfStmt        : 'if' '(' Condition ')' 'then' '{' (Stmt)* '}' |
-				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  '{'  (Stmt)*  '}'  |
-				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  IfStmt  ;
+Loop		: 'loop' NUMBERVALUE 'times' STARTBRACKET Stmts ENDBRACKET
+			| 'loop' 'until' Condition STARTBRACKET Stmts ENDBRACKET;
 
-Condition    :  ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
-     		   |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  'boolValue' ;
+FuncCall	: 'call' ID 'with' STARTPAREN Call ENDPAREN;
 
-Iterative    : Loop ;
+Call		: CallParams
+			| NONE
+			;
+			
+CallParams	: CallParam COMMA CallParams
+			| CallParam
+			;
 
 Loop        : 'loop' VALUE 'times' '{' (Stmt)* '}'    |    'loop' 'until' Condition '{' (Stmt)* '}' ;
 
-FuncCall    : 'call' ID 'with' '(' Call ')'   |    ID'.methodId(' Call ')';
+Assignment	: ID ASSIGNMENT AssStmt
+			| ID ASSIGNMENT LogicalStmt;
 
-Call        : NONE | CallParam ( ',' CallParam)* ;
+AssStmt		: ID Oper AssStmt
+			| NUMBERVALUE Oper AssStmt
+			| ID CompOp Oper AssStmt
+			| ID CompOp
+			| NUMBERVALUE
+			| ID;
+			
+CompOp		: INCREMENT
+			| DECREMENT
+			;
 
-CallParam    : ID   |   VALUE ;
+Oper		: PLUS 
+			| MINUS 
+			| TIMES
+			| DIVIDE
+			| MODULO
+			;
 
-Assignment    : ID '=' AssStmt    |    ID '=' LogicalStmt | CompOp ID   |   ID CompOp  ;
+Condition   : ID LogicOper LogicalStmt
+			| NUMBERVALUE LogicOper LogicalStmt
+			| BOOLVALUE LogicOper LogicalStmt
+			| ID
+			| BOOLVALUE;
+
+LogicalStmt	: ID LogicOper LogicalStmt
+			| NUMBERVALUE LogicOper LogicalStmt
+			| BOOLVALUE LogicOper LogicalStmt
+			| NUMBERVALUE
+			| ID
+			| BOOLVALUE;
+
+LogicOper	: LESSTHAN
+			| LESSTHANEQUAL
+			| GREATERTHAN 
+			| GREATERTHANEQUAL
+			| NOTEQUAL
+			| EQUALTO
+			| AND
+			| OR
+			;
 
 AssStmt    : ID Oper AssStmt   |  VALUE Oper AssStmt   |   ID CompOp Oper AssStmt  |    ID CompOp |   VALUE   |    ID ;
 
@@ -68,25 +146,76 @@ Oper         : '+'  |  '-'  |  '/' |   '*' |   '%' ;
 
 CompOp    : 'increment'    |    'decrement' ;
 
-LogicalStmt     : ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
-  			      |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  VALUE ;
+Funcs		: Func Funcs
+			| Func
+			;
+			
+Func		: 'define' ID 'with' STARTPAREN Parameters ENDPAREN 'returnType' Type STARTBRACKET FuncContent 
+			;
+			
+FuncContents: FuncContent FuncContents	
+			| ReturnStmt ENDBRACKET
+			;
+			
+FuncContent	: VarDcl 
+			| Stmt 
+			;
 
-LogicOper    : '>'   |  '<'   |   '<='  |   '>='   |   'is not'   |   'is'   |  '='   |   '!=' ;
+Parameters	: Params
+			| NONE
+			;
 
-Repeat    : 'repeat' '{'  (RepeatCnt)* '}'  ;
+Params		: Param COMMA Params
+			| Param
+			;
 
-RepeatCnt    : VarDcl NEWLINE  |   Stmt ;
+Param		: Type ID
+			;
+			
+ReturnStmt	: 'return' ID
+			| 'return' Value
+			|  NONE
+			;
 
-Func        : 'define' ID 'with' '(' Parameters ')' 'returnType' Type '{' ((Stmt | ReturnStmt) NEWLINE)*  ReturnStmt?'}' ;
-
-Parameters    :  (Param)+    |    NONE ;
+EQUALTO		: 'is' | '==';
+NOTEQUAL	: 'is not' | '!=' ;
+LESSTHAN	: '<';
+LESSTHANEQUAL: '<=';
+GREATERTHAN	: '>';
+GREATERTHANEQUAL : '>=';
+AND			: 'and' | '&&' ;
+OR			: 'or'  | '||'  ; 
+PLUS        : '+';
+MINUS        : '-';
+TIMES        : '*';
+DIVIDE        : '/';
+MODULO        : '%';
+INCREMENT	: '++';
+DECREMENT	: '--';
+ASSIGNMENT	: '=';
+COLON		: ':';
+STARTPAREN	: '(';
+ENDPAREN	: ')';
+COMMA		: ',';
+STARTBRACKET: '{';
+ENDBRACKET	: '}';
+INCLUDE		: [a-zA-Z]+[a-zA-Z0-9]*;
+GROUPNAME 	: [a-zA-Z]+[a-zA-Z0-9]*;
+ID 			: [a-zA-Z]+[a-zA-Z0-9]*;
+NONE 		: 'none' ;
+TEXTVALUE 	: '"' ~('\r' | '\n' | '"')* '"' ;
+NUMBERVALUE : [0-9]+ 
+			| [0-9]+.[0-9]+;
+BOOLVALUE 	: 'true'|'false'
+			|'on' |'off'; 
+PINNUMBER	: [0-9]+;
 
 Param        : Type 'paramName' ;
 
 ReturnStmt    : 'return' (ID | VALUE) ;
 
 NEWLINE    : ('\r') '\n' ;
-VALUE : ID+ ;  // Skal have en rigtig værdi
+VALUE : ID+ ;  // Skal have en rigtig vï¿½rdi
 ID : ('a'..'z' | 'A'..'Z') (('a'..'z' | 'A'..'Z') | ('0'..'9'))*;
 LETTER: ('a'..'z' | 'A'..'Z');
 TEXT : '"' ~('\r' | '\n' | '"')* '"' ;
