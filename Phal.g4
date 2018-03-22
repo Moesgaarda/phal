@@ -5,7 +5,7 @@ grammar Phal;
 
 r        : (Include)* Setup Repeat (Func)*;
 
-Include    : 'using' 'moduleName' NEWLINE;
+Include    : 'using' ID NEWLINE;
 
 Setup        : 'setup' '{' (SetupCnt)* '}';
 
@@ -15,23 +15,21 @@ Dcl         : VarDcl NEWLINE   |   CmpDcl NEWLINE |   AdvDataType ;
 
 AdvDataType    : Group   |   List ;
 
-VarDcl        : Type ID  | Type ID '=' AssStmt ;
+VarDcl        : Type ID  | Type ID ':=' AssStmt ;
  
-Type        : NUMBER |  TEXT  |  LETTER  |  BOOL ;
+Type        : 'number' |  'text'  |  'letter'  |  'bool' ;
 
-CmpDcl    : AdvType ID '=' 'pin' 'PINNUMBER' ;
+CmpDcl    : AdvType ID ':=' 'pin' INTEGER ;
 
-AdvType    : 'lightbulb'  |  'coffeeMachine'   |    'temperatureSensor' ;
+AdvType    : 'lightbulb'  |  'coffeeMachine'   |  'temperatureSensor' ;
 
-Group        : 'group' 'groupName' '{' (GrpCnt NEWLINE)+ '}' ;
+Group        : 'group' ID '{' (ID NEWLINE)+ '}' ;
 
-GrpCnt            : ID   |   'groupName' ;
-
-List        : 'list' Type 'listName' '{' ListCnt ( ',' ListCnt)* '}' ;
+List        : 'list' Type ID '{' ListCnt ( ',' ListCnt)* '}' ;
 
 ListCnt        : ID | VALUE ;
 
-Stmt        : (Selective   |   Iterative   |   FuncCall NEWLINE  |   Assignment NEWLINE );
+Stmt        : Selective   |   Iterative   |   FuncCall NEWLINE  |   Assignment NEWLINE ;
 
 Selective    : Switch   |   IfStmt ;
 
@@ -39,7 +37,7 @@ Switch        :  'switch' '(' ID ')' { CaseList }   |   'switch' '(' VALUE ')' '
  
 CaseList    : (Case NEWLINE)+ DefaultCase ;
 
-Case        : VALUE ':' (Stmt)* NEWLINE;
+Case        : VALUE ':' '{'(Stmt)*'}' NEWLINE;
 
 DefaultCase    : 'default' ':' (Stmt)* NEWLINE;
 
@@ -48,48 +46,52 @@ IfStmt        : 'if' '(' Condition ')' 'then' '{' (Stmt)* '}' |
 				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  IfStmt  ;
 
 Condition    :  ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
-     		   |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  'boolValue' ;
+     		   |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  BOOL ;
 
 Iterative    : Loop ;
 
-Loop        : 'loop' VALUE 'times' '{' (Stmt)* '}'    |    'loop' 'until' Condition '{' (Stmt)* '}' ;
+Loop        : 'loop' INTEGER 'times' '{' (Stmt)* '}'    |    'loop' 'until ' Condition '{' (Stmt)* '}' ;
 
-FuncCall    : 'call' ID 'with' '(' Call ')'   |    ID'.methodId(' Call ')';
+FuncCall    : 'call' ID 'with' '(' Call ')'   |    ID'.'ID'(' Call ')';
 
-Call        : NONE | CallParam ( ',' CallParam)* ;
+Call        : 'none' | CallParam ( ',' CallParam)* ;
 
 CallParam    : ID   |   VALUE ;
 
-Assignment    : ID '=' AssStmt    |    ID '=' LogicalStmt | CompOp ID   |   ID CompOp  ;
+Assignment    : ID ':=' AssStmt    |    ID ':=' LogicalStmt | ID '+=' ID | ID '+=' VALUE| ID '-=' ID | ID '-=' VALUE ;
 
-AssStmt    : ID Oper AssStmt   |  VALUE Oper AssStmt   |   ID CompOp Oper AssStmt  |    ID CompOp |   VALUE   |    ID ;
+AssStmt    : ID Oper AssStmt   |  VALUE Oper AssStmt  | FuncCall Oper AssStmt |   VALUE   |    ID   |  FuncCall;
 
 Oper         : '+'  |  '-'  |  '/' |   '*' |   '%' ;
-
-CompOp    : 'increment'    |    'decrement' ;
 
 LogicalStmt     : ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
   			      |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  VALUE ;
 
-LogicOper    : '>'   |  '<'   |   '<='  |   '>='   |   'is not'   |   'is'   |  '='   |   '!=' ;
+LogicOper    : '>'   |  '<'   |   '<='  |   '>='  |  '='   |   '!=' | '&' | '|' 
+				| 'is not'   |   'is'   | 'greater than or equal to' | 'less than or equal to' |'greater than' | 'less than' | 'or' | 'and' | 'not';
 
-Repeat    : 'repeat' '{'  (RepeatCnt)* '}'  ;
+Repeat    : 'repeat' '{' (Stmt)* '}'  ;
 
-RepeatCnt    : VarDcl NEWLINE  |   Stmt ;
+Func        : 'define' ID 'with' '(' Parameters ')' 'returnType' RType '{' (FuncCnt)*  ReturnStmt?'}' ;
 
-Func        : 'define' ID 'with' '(' Parameters ')' 'returnType' Type '{' ((Stmt | ReturnStmt) NEWLINE)*  ReturnStmt?'}' ;
+FuncCnt		: VarDcl NEWLINE | Stmt | ReturnStmt;
 
-Parameters    :  (Param)+    |    NONE ;
+RType		: Type | 'none';
+
+Parameters    :  (Param)+    |   'none' ;
 
 Param        : Type 'paramName' ;
 
-ReturnStmt    : 'return' (ID | VALUE) ;
+ReturnStmt    : 'return' (ID | VALUE | 'none') ;
 
 NEWLINE    : ('\r') '\n' ;
-VALUE : ID+ ;  // Skal have en rigtig værdi
+VALUE : NUMBER | BOOL | TEXT ;  // Skal have en rigtig værdi
 ID : ('a'..'z' | 'A'..'Z') (('a'..'z' | 'A'..'Z') | ('0'..'9'))*;
 LETTER: ('a'..'z' | 'A'..'Z');
 TEXT : '"' ~('\r' | '\n' | '"')* '"' ;
-NUMBER : ('0'..'9');
+DIGIT : ('0'..'9');
+INTEGER : (DIGIT |('1'..'9')(DIGIT)+);
+FLOAT : ('-')?((DIGIT | ('1'..'9')(DIGIT)+)'.'(DIGIT | (DIGIT)*('1'..'9')));
+NUMBER : ('-')?INTEGER | FLOAT ;
 BOOL : 'true'|'false' | 'on' |'off'; 
-NONE : 'none';
+
