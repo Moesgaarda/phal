@@ -52,9 +52,9 @@ Iterative    : Loop ;
 
 Loop        : 'loop' INTEGER 'times' '{' (Stmt)* '}'    |    'loop' 'until ' Condition '{' (Stmt)* '}' ;
 
-FuncCall    : 'call' ID 'with' '(' Call ')'   |    ID'.'ID'(' Call ')';
+FuncCall    : 'call' ID 'with' '(' Call ')' |  'call' ID 'with' '(' 'none' ')'  |    ID'.'ID'(' Call ')' |    ID'.'ID'(' 'none' ')';
 
-Call        : 'none' | CallParam ( ',' CallParam)* ;
+Call        : CallParam ( ',' CallParam)* ;
 
 CallParam    : ID   |   VALUE ;
 
@@ -78,7 +78,7 @@ FuncCnt		: VarDcl NEWLINE | Stmt | ReturnStmt;
 
 RType		: Type | 'none';
 
-Parameters    :  (Param)+    |   'none' ;
+Parameters    :  (Param)+  ;
 
 Param        : Type 'paramName' ;
 
