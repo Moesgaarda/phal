@@ -41,8 +41,8 @@ Case        : VALUE ':' '{'(Stmt)*'}' NEWLINE;
 
 DefaultCase    : 'default' ':' (Stmt)* NEWLINE;
 
-IfStmt        : 'if' '(' Condition ')' 'then' '{' (Stmt)* '}' |
-				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  '{'  (Stmt)*  '}'  |
+IfStmt        : 'if' '(' Condition ')' 'then' '{' (Stmt)* '}'
+				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  '{'  (Stmt)*  '}'
 				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  IfStmt  ;
 
 Condition    :  ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
@@ -56,9 +56,9 @@ FuncCall    : 'call' ID 'with' '(' Call ')' |  'call' ID 'with' '(' 'none' ')'  
 
 Call        : CallParam ( ',' CallParam)* ;
 
-CallParam    : ID   |   VALUE ;
+CallParam    : ID | VALUE ;
 
-Assignment    : ID ':=' AssStmt    |    ID ':=' LogicalStmt | ID '+=' ID | ID '+=' VALUE| ID '-=' ID | ID '-=' VALUE ;
+Assignment    : ID ':=' AssStmt | ID ':=' LogicalStmt | ID '+=' ID | ID '+=' VALUE | ID '-=' ID | ID '-=' VALUE ;
 
 AssStmt    : ID Oper AssStmt   |  VALUE Oper AssStmt  | FuncCall Oper AssStmt |   VALUE   |    ID   |  FuncCall;
 
@@ -85,7 +85,7 @@ Param        : Type 'paramName' ;
 ReturnStmt    : 'return' (ID | VALUE | 'none') ;
 
 NEWLINE    : ('\r') '\n' ;
-VALUE : NUMBER | BOOL | TEXT ;  // Skal have en rigtig værdi
+VALUE : NUMBER | BOOL | TEXT ;  // Skal have en rigtig vï¿½rdi
 ID : LETTER (LETTER | DIGIT)*;
 LETTER: ('a'..'z' | 'A'..'Z');
 TEXT : '"' ~('\r' | '\n' | '"')* '"' ;
