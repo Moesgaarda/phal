@@ -17,7 +17,7 @@ AdvDataType    : Group   |   List ;
 
 VarDcl        : Type ID  | Type ID ':=' AssStmt ;
  
-Type        : 'number' |  'text'  |  'letter'  |  'bool' ;
+Type        : 'number' |  'text'  |  'bool' ;
 
 CmpDcl    : AdvType ID ':=' 'pin' INTEGER ;
 
@@ -86,7 +86,7 @@ ReturnStmt    : 'return' (ID | VALUE | 'none') ;
 
 NEWLINE    : ('\r') '\n' ;
 VALUE : NUMBER | BOOL | TEXT ;  // Skal have en rigtig værdi
-ID : ('a'..'z' | 'A'..'Z') (('a'..'z' | 'A'..'Z') | ('0'..'9'))*;
+ID : LETTER (LETTER | DIGIT)*;
 LETTER: ('a'..'z' | 'A'..'Z');
 TEXT : '"' ~('\r' | '\n' | '"')* '"' ;
 DIGIT : ('0'..'9');
