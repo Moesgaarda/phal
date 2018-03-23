@@ -33,7 +33,7 @@ Stmt        : Selective   |   Iterative   |   FuncCall NEWLINE  |   Assignment N
 
 Selective    : Switch   |   IfStmt ;
 
-Switch        :  'switch' '(' ID ')' { CaseList }   |   'switch' '(' VALUE ')' '{' CaseList '}' ;
+Switch        :  'switch' '(' ID ')' '{' CaseList '}'   |   'switch' '(' VALUE ')' '{' CaseList '}' ;
  
 CaseList    : (Case NEWLINE)+ DefaultCase ;
 
