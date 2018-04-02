@@ -1,91 +1,195 @@
 /**
  * Define a grammar called Phal
+ * Beware might need NEWLINE* before include if newline or whitespace becomes a problem
  */
 grammar Phal;
 
-r        : (Include)* Setup Repeat (Func)*;
+r        
+	: 	(Include)* Setup Repeat (Func)* EOF
+	;
 
-Include    : 'using' ID NEWLINE;
+Include    
+	: 	'using' ID NEWLINE
+	;
 
-Setup        : 'setup' '{' (SetupCnt)* '}';
+Setup        
+	: 	'setup' '{' (SetupCnt)* '}'
+	;
 
-SetupCnt    : Stmt | Dcl ;
+SetupCnt    
+	: 	Dcl 
+	| 	Stmt 
+	;
 
-Dcl         : VarDcl NEWLINE   |   CmpDcl NEWLINE |   AdvDataType ;
+Dcl         
+	: 	VarDcl NEWLINE   
+	|   CmpDcl NEWLINE 
+	|   AdvDataType 
+	;
 
-AdvDataType    : Group   |   List ;
+VarDcl        
+	: 	Type ID  
+	| 	Type ID ':=' Expr 
+	;
+  
+  Type        
+	: 	'number' 
+	|  	'text'  
+	|  	'bool' 
+	;
+	
 
-VarDcl        : Type ID  | Type ID ':=' AssStmt ;
+  
+  FieldID
+  :		ID('.'ID)+
+  ;
+  
+AdvDataType    
+	: 	Group   
+	|   List 
+	;
+
+CmpDcl    	
+	: 	AdvType ID ':=' 'pin' INTEGER 
+	;
+
+AdvType    
+	: 	'lightbulb'  
+	|  	'coffeeMachine'   
+	|  	'temperatureSensor' 
+	;
+
+Group        
+	: 	'group' ID '{' (ID NEWLINE)+ '}' 
+	;
+
+List        
+	: 	'list' Type ID '{' ListCnt ( ',' ListCnt)* '}' 
+	;
+
+ListCnt        
+	: 	ID 
+	| 	VALUE 
+	;
+
+Stmt        
+	: 	Selective   
+	|   Iterative   
+	|   FuncCall NEWLINE  
+	|   Assignment NEWLINE 
+	;
+
+Selective    
+	: 	Switch   
+	|   IfStmt 
+	;
+
+Switch        
+	:  	'switch' '(' ID ')' { CaseList }   
+	|   'switch' '(' VALUE ')' '{' CaseList '}' 
+	;
+
  
-Type        : 'number' |  'text'  |  'bool' ;
+CaseList    
+	: 	(Case NEWLINE)+ DefaultCase 
+	;
 
-CmpDcl    : AdvType ID ':=' 'pin' INTEGER ;
+Case        
+	: 	VALUE ':' '{'(Stmt)*'}' NEWLINE
+	;
 
-AdvType    : 'lightbulb'  |  'coffeeMachine'   |  'temperatureSensor' ;
+DefaultCase    
+	: 	'default' ':' (Stmt)* NEWLINE
+	;
 
-Group        : 'group' ID '{' (ID NEWLINE)+ '}' ;
+IfStmt        
+	: 	'if' '(' Expr ')' 'then' '{' (Stmt)* '}'
+	|   'if' '(' Expr ')' 'then' '{' (Stmt)*  '}' 'else'  '{'  (Stmt)*  '}'
+	|   'if' '(' Expr ')' 'then' '{' (Stmt)*  '}' 'else'  IfStmt  
+	;
 
-List        : 'list' Type ID '{' ListCnt ( ',' ListCnt)* '}' ;
 
-ListCnt        : ID | VALUE ;
+Iterative    
+	: 	Loop 
+	;
 
-Stmt        : Selective   |   Iterative   |   FuncCall NEWLINE  |   Assignment NEWLINE ;
+Loop        
+	: 	'loop' INTEGER 'times' '{' (Stmt)* '}'    
+	|   'loop' 'until ' Expr '{' (Stmt)* '}' 
+	;
 
-Selective    : Switch   |   IfStmt ;
+FuncCall    
+	: 	'call' ID 'with' '(' Call ')' 
+	|  	'call' ID 'with' '(' 'none' ')'  
+	|    ID'.'ID'(' Call ')' 
+	|    ID'.'ID'(' 'none' ')';
 
-Switch        :  'switch' '(' ID ')' '{' CaseList '}'   |   'switch' '(' VALUE ')' '{' CaseList '}' ;
- 
-CaseList    : (Case NEWLINE)+ DefaultCase ;
+Call        
+	: 	Expr ( ',' Expr)* 
+	;
 
-Case        : VALUE ':' '{'(Stmt)*'}' NEWLINE;
+Assignment    
+	: 	ID ':=' Expr 
+	| 	ID '+=' Expr 
+	| 	ID '-=' Expr 
+	;
 
-DefaultCase    : 'default' ':' (Stmt)* NEWLINE;
+Repeat    
+	: 	'repeat' '{' (Stmt)* '}'  
+	;
 
-IfStmt        : 'if' '(' Condition ')' 'then' '{' (Stmt)* '}'
-				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  '{'  (Stmt)*  '}'
-				|    'if' '(' Condition ')' 'then' '{' (Stmt)*  '}' 'else'  IfStmt  ;
+Func        
+	: 	'define' ID 'with' '(' Parameters? ')' 'returnType' RType '{' (FuncCnt)*  ReturnStmt?'}' 
+	;
 
-Condition    :  ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
-     		   |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  BOOL ;
+FuncCnt		
+	:	VarDcl NEWLINE 
+	| 	Stmt 
+	| 	ReturnStmt
+	;
 
-Iterative    : Loop ;
+RType		
+	: 	Type 
+	| 	'none'
+	;
 
-Loop        : 'loop' INTEGER 'times' '{' (Stmt)* '}'    |    'loop' 'until ' Condition '{' (Stmt)* '}' ;
+Parameters    
+	:  	Param ( ',' Param)*  
+	;
 
-FuncCall    : 'call' ID 'with' '(' Call ')' |  'call' ID 'with' '(' 'none' ')'  |    ID'.'ID'(' Call ')' |    ID'.'ID'(' 'none' ')';
+Param        
+	: 	Type ID
+	;
 
-Call        : CallParam ( ',' CallParam)* ;
-
-CallParam    : ID | VALUE ;
-
-Assignment    : ID ':=' AssStmt | ID ':=' LogicalStmt | ID '+=' ID | ID '+=' VALUE | ID '-=' ID | ID '-=' VALUE ;
-
-AssStmt    : ID Oper AssStmt   |  VALUE Oper AssStmt  | FuncCall Oper AssStmt |   VALUE   |    ID   |  FuncCall;
-
-Oper         : '+'  |  '-'  |  '/' |   '*' |   '%' ;
-
-LogicalStmt     : ID LogicOper  LogicalStmt  |  ID LogicOper ID  |  ID LogicOper VALUE  |  VALUE LogicOper LogicalStmt
-  			      |    VALUE LogicOper ID  |  VALUE LogicOper VALUE  |  ID   |  VALUE ;
-
-LogicOper    : '>'   |  '<'   |   '<='  |   '>='  |  '='   |   '!=' | '&' | '|' 
-				| 'is not'   |   'is'   | 'greater than or equal to' | 'less than or equal to' |'greater than' | 'less than' | 'or' | 'and' | 'not';
-
-Repeat    : 'repeat' '{' (Stmt)* '}'  ;
-
-Func        : 'define' ID 'with' '(' Parameters ')' 'returnType' RType '{' (FuncCnt)*  ReturnStmt?'}' ;
-
-FuncCnt		: VarDcl NEWLINE | Stmt | ReturnStmt;
-
-RType		: Type | 'none';
-
-Parameters    :  (Param)+  ;
-
-Param        : Type 'paramName' ;
-
-ReturnStmt    : 'return' (ID | VALUE | 'none') ;
-
+ReturnStmt    
+	: 'return' (ID | VALUE | 'none') 
+	;
+	
+Expr
+  :		ID		# unaryExpr
+  |		FieldID
+  |		DIGIT
+  |		TEXT
+  |		BOOL
+  |		FuncCall
+  |		'(' Expr ')'	
+  |		'not' Expr
+  |		'-' Expr
+  |   ('!'|'not') Expr
+  |		Expr ('*'|'/'|'%') Expr
+  |		Expr ('+'|'-') Expr
+  |		Expr ('<'|'>'|'less than'|'greater than') Expr
+  |		Expr ('<='|'>='|'less than or equal to'|'greater than or equal to') Expr
+  |		Expr ('!='|'='| 'is' | 'is not') Expr            								
+  |		Expr ('and'|'&') Expr
+  |		Expr ('or'|'|') Expr
+  |		
+  ;
+	
+	
+//dgfdgfd
 NEWLINE    : ('\r') '\n' ;
-VALUE : NUMBER | BOOL | TEXT ;  // Skal have en rigtig v�rdi
+VALUE : NUMBER | BOOL | TEXT ;  
 ID : LETTER (LETTER | DIGIT)*;
 LETTER: ('a'..'z' | 'A'..'Z');
 TEXT : '"' ~('\r' | '\n' | '"')* '"' ;
@@ -94,4 +198,4 @@ INTEGER : (DIGIT |('1'..'9')(DIGIT)+);
 FLOAT : ('-')?((DIGIT | ('1'..'9')(DIGIT)+)'.'(DIGIT | (DIGIT)*('1'..'9')));
 NUMBER : ('-')?INTEGER | FLOAT ;
 BOOL : 'true'|'false' | 'on' |'off'; 
-
+COMMENT : '//' ~[\r\n]*             -> skip ;
