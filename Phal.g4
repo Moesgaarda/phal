@@ -178,8 +178,7 @@ expr
   ;
   
 
-	
-//dgfdgfd
+
 NEWLINE    : ('\r') '\n' ;
 VALUE : NUMBER | BOOL | TEXT ;  
 ID : LETTER (LETTER | DIGIT)*;
@@ -191,7 +190,7 @@ FLOAT : ('-')?((DIGIT | ('1'..'9')(DIGIT)+)'.'(DIGIT | (DIGIT)*('1'..'9')));
 NUMBER : ('-')?INTEGER | FLOAT ;
 BOOL : 'true'|'false' | 'on' |'off'; 
 COMMENT : '#' ~('\r' | '\n')* 		-> skip ;
-MULTILINECOMMET: '/*' ~ '*/'    	-> skip ;
+MULTILINECOMMET: '/*' .*? '*/' 		-> skip ;
 
 
 
