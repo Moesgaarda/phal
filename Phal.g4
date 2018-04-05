@@ -161,7 +161,7 @@ returnStmt
 	
 expr
   :		ID																				# idRefExpr
-  |		DIGIT																			# litNumExpr
+  |		NUMBER																			# litNumExpr
   |		TEXT																			# litTextExpr
   |		BOOL																			# litBoolExpr
   |		funcCall																		# funcExpr
@@ -178,19 +178,24 @@ expr
   ;
   
 
+NEWLINE			:  ('\r\n'|'\n'|'\r');
+VALUE 			: NUMBER | BOOL | TEXT ;  
+ID 				: LETTER (LETTER | DIGIT)*;
 
-NEWLINE    : ('\r') '\n' ;
-VALUE : NUMBER | BOOL | TEXT ;  
-ID : LETTER (LETTER | DIGIT)*;
-LETTER: ('a'..'z' | 'A'..'Z');
-TEXT : '"' ~('\r' | '\n' | '"')* '"' ;
-DIGIT : ('0'..'9');
-INTEGER : (DIGIT |('1'..'9')(DIGIT)+);
-FLOAT : ('-')?((DIGIT | ('1'..'9')(DIGIT)+)'.'(DIGIT | (DIGIT)*('1'..'9')));
-NUMBER : ('-')?INTEGER | FLOAT ;
-BOOL : 'true'|'false' | 'on' |'off'; 
-COMMENT : '#' ~('\r' | '\n')* 		-> skip ;
-MULTILINECOMMET: '/*' .*? '*/' 		-> skip ;
+TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
 
+//INTEGER 		: (DIGIT |[1-9](DIGIT)+);
+//FLOAT 			: ('-')?((DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]));
+
+INTEGER			: DIGIT+ ;
+FLOAT			: DIGIT+ '.' DIGIT+;
+NUMBER 			: ('-')? (INTEGER | FLOAT) ;
+BOOL 			: ('true'|'false' | 'on' |'off'); 
+COMMENT 		: '#' ~('\r' | '\n')* 		-> skip ;
+MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
+WS  			:   [ \t]+ -> channel(HIDDEN);
+
+fragment LETTER			: [a-zA-Z];
+fragment DIGIT 			: [0-9];
 
 
