@@ -72,6 +72,7 @@ stmt
 	|   iterative   
 	|   funcCall NEWLINE  
 	|   assignment NEWLINE 
+	|	returnStmt
 	;
 
 selective    
@@ -80,7 +81,7 @@ selective
 	;
 
 switchStmt        
-	:  	'switch' '(' ID ')' { caseList }   
+	:  	'switch' '(' ID ')' '{' caseList '}'   
 	|   'switch' '(' VALUE ')' '{' caseList '}' 
 	;
 
@@ -90,7 +91,7 @@ caseList
 	;
 
 caseStmt        
-	: 	VALUE ':' '{'(stmt)*'}' NEWLINE
+	: 	'case' VALUE ':' '{'(stmt)*'}' NEWLINE
 	;
 
 defaultCase    
@@ -139,7 +140,6 @@ func
 funcCnt		
 	:	varDcl NEWLINE 
 	| 	stmt 
-	| 	returnStmt
 	;
 
 rType		
