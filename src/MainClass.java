@@ -13,7 +13,7 @@ public class MainClass {
 
 	public static void main(String args[]) 
 	{
-		String text = "using asd \n setup{number a3  \n number t := 4 \n } repeat{}";
+		String text = "using asd \n setup{number a \n number t := -15 \n } repeat{}";
 		
 		try {
 			ANTLRInputStream inputStream = new ANTLRInputStream(text);
