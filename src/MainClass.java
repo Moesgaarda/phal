@@ -13,7 +13,7 @@ public class MainClass {
 
 	public static void main(String args[]) 
 	{
-		String fileName = "D:\\GitSource\\phal\\src\\PhalLangEx";
+		String fileName = "..\\phal\\src\\PhalLangEx";
         File file = new File(fileName);
         FileInputStream fis = null;
 		
