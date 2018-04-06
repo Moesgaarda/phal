@@ -29,3 +29,7 @@ repeat{
   
   call wait with (42) # Wait 2.32 seconds
 }
+
+define wait with(number num) returnType none{
+	num += 45
+}

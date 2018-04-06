@@ -6,7 +6,7 @@
 grammar Phal;
 
 program
-	:	NEWLINE* (include)* setup NEWLINE* repeat (func)* EOF
+	:	NEWLINE* (include)* setup NEWLINE* repeat NEWLINE* (func)* EOF
 	;
   
 include
@@ -114,7 +114,7 @@ loop
 	;
 
 funcCall    
-	: 	'call' ID 'with' '(' call ')' 
+	: 	'call' ID 'with' '(' VALUE ')' 
 	|  	'call' ID 'with' '(' 'none' ')'  
 	|    ID'.'ID'(' call ')' 
 	|    ID'.'ID'(' 'none' ')';
@@ -134,7 +134,7 @@ repeat
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE? '{' (funcCnt)*  returnStmt?'}' 
+	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE? '{' NEWLINE* (funcCnt)* NEWLINE* returnStmt? NEWLINE* '}' 
 	;
 
 funcCnt		
@@ -167,7 +167,6 @@ expr
   |		funcCall																		# funcExpr
   |		'(' expr ')'																	# parenExpr
   |   	('!'|'not') expr																# unaryExpr
-  |		'-' expr																		# unaryExpr
   |		expr ('+'|'-') expr																# infixExpr
   |		expr ('*'|'/'|'%') expr															# infixExpr
   |		expr ('!='|'='| 'is' | 'is not') expr            								# infixExpr	
@@ -178,18 +177,19 @@ expr
   ;
   
 
-ID 				: LETTER (LETTER | DIGIT)*;
-INTEGER 		: DIGIT | ([1-9](DIGIT)+);
-FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
-NUMBER 			: INTEGER | FLOAT ;
-BOOL 			: ('true'|'false' | 'on' |'off'); 
 TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
+ID 				: LETTER (LETTER | DIGIT)*;
+INTEGER 		: DIGIT+;
+FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
+NUMBER 			: ('-')? (INTEGER | FLOAT) ;
+BOOL 			: ('true'|'false' | 'on' |'off'); 
 
-VALUE 			: NUMBER | BOOL | TEXT ;  
 COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
 WS  			:   [ \t]+ 				-> channel(HIDDEN) ;
 NEWLINE			:  [\r\n];
+VALUE 			: NUMBER | BOOL | TEXT ;  
 
+fragment 
 LETTER			: [a-zA-Z];
 DIGIT 			: [0-9];
