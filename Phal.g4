@@ -45,7 +45,7 @@ advDataType
 	;
 
 cmpDcl    	
-	: 	advType ID ':=' 'pin' INTEGER 
+	: 	advType ID ':=' 'pin' NUMBER 
 	;
 
 advType    
@@ -69,9 +69,9 @@ listCnt
 
 stmt        
 	: 	selective NEWLINE+  
-	|   iterative NEWLINE+  
-	|   funcCall NEWLINE+  
-	|   assignment NEWLINE+ 
+	|   iterative NEWLINE+ 
+	|   funcCall
+	|   assignment NEWLINE+
 	|	returnStmt NEWLINE+
 	;
 
@@ -109,17 +109,17 @@ iterative
 	;
 
 loop        
-	: 	'loop' INTEGER 'times' '{' (stmt)* '}'    
+	: 	'loop' NUMBER 'times' '{' (stmt)* '}'    
 	|   'loop' 'until' expr '{' (stmt)* '}' 
 	;
 
 funcCall    
-	: 	'call' ID 'with' '(' VALUE ')' 
-	|  	'call' ID 'with' '(' 'none' ')'  
-	|    ID'.'ID'(' call ')' 
+	:  	'call' ID
+	| 	'call' ID 'with' '(' callCnt ')'
+	|    ID'.'ID'(' callCnt ')' 
 	|    ID'.'ID'(' 'none' ')';
 
-call        
+callCnt        
 	: 	expr ( ',' expr)* 
 	;
 
@@ -130,16 +130,20 @@ assignment
 	;
 
 repeat    
-	: 	'repeat' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'  
+	: 	'repeat' NEWLINE* '{' NEWLINE* (repeatCnt)* NEWLINE* '}'  
+	;
+
+repeatCnt
+	: 	stmt
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE? '{' NEWLINE* (funcCnt)* NEWLINE* returnStmt? NEWLINE* '}' 
+	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE? '{' NEWLINE* (funcCnt)* NEWLINE* returnStmt? '}' 
 	;
 
 funcCnt		
 	:	varDcl NEWLINE+ 
-	| 	stmt 
+	| 	stmt NEWLINE+
 	;
 
 rType		
@@ -179,10 +183,11 @@ expr
 
 TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
 ID 				: LETTER (LETTER | DIGIT)*;
-INTEGER 		: DIGIT+;
-FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
+fragment INTEGER 		: DIGIT+;
+fragment FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
 NUMBER 			: ('-')? (INTEGER | FLOAT) ;
 BOOL 			: ('true'|'false' | 'on' |'off'); 
+
 
 COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
@@ -190,6 +195,6 @@ WS  			:   [ \t]+ 				-> channel(HIDDEN) ;
 NEWLINE			:  [\r\n];
 VALUE 			: NUMBER | BOOL | TEXT ;  
 
-fragment 
-LETTER			: [a-zA-Z];
-DIGIT 			: [0-9];
+
+fragment LETTER			: [a-zA-Z];
+fragment DIGIT 			: '0'..'9';

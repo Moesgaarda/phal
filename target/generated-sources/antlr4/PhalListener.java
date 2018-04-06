@@ -237,15 +237,15 @@ public interface PhalListener extends ParseTreeListener {
 	 */
 	void exitFuncCall(PhalParser.FuncCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PhalParser#call}.
+	 * Enter a parse tree produced by {@link PhalParser#callCnt}.
 	 * @param ctx the parse tree
 	 */
-	void enterCall(PhalParser.CallContext ctx);
+	void enterCallCnt(PhalParser.CallCntContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PhalParser#call}.
+	 * Exit a parse tree produced by {@link PhalParser#callCnt}.
 	 * @param ctx the parse tree
 	 */
-	void exitCall(PhalParser.CallContext ctx);
+	void exitCallCnt(PhalParser.CallCntContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PhalParser#assignment}.
 	 * @param ctx the parse tree
@@ -266,6 +266,16 @@ public interface PhalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRepeat(PhalParser.RepeatContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PhalParser#repeatCnt}.
+	 * @param ctx the parse tree
+	 */
+	void enterRepeatCnt(PhalParser.RepeatCntContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PhalParser#repeatCnt}.
+	 * @param ctx the parse tree
+	 */
+	void exitRepeatCnt(PhalParser.RepeatCntContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PhalParser#func}.
 	 * @param ctx the parse tree
