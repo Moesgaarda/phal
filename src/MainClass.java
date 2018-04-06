@@ -17,7 +17,6 @@ public class MainClass {
         File file = new File(fileName);
         FileInputStream fis = null;
 		
-		
 		try {
 			fis = new FileInputStream(file);
 			ANTLRInputStream inputStream = new ANTLRInputStream(fis);

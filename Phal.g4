@@ -160,10 +160,10 @@ returnStmt
 	;
 	
 expr
-  :		ID																				# idRefExpr
-  |		NUMBER																			# litNumExpr
+  :		NUMBER																			# litNumExpr
   |		TEXT																			# litTextExpr
   |		BOOL																			# litBoolExpr
+  |		ID																				# idRefExpr
   |		funcCall																		# funcExpr
   |		'(' expr ')'																	# parenExpr
   |		'-' expr																		# unaryExpr
@@ -174,28 +174,22 @@ expr
   |		expr ('<='|'>='|'less than or equal to'|'greater than or equal to') expr		# infixExpr
   |		expr ('!='|'='| 'is' | 'is not') expr            								# infixExpr	
   |		expr ('and'|'&') expr															# infixExpr
-  |		expr ('or'|'|') expr															# infixExpr
+  |		expr ('or'|'|') expr															# infixExpr 
   ;
   
 
-NEWLINE			:  ('\r\n'|'\n'|'\r');
+NUMBER 			: ('-')? (INTEGER | FLOAT) ;
 VALUE 			: NUMBER | BOOL | TEXT ;  
 ID 				: LETTER (LETTER | DIGIT)*;
-
 TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
-
-//INTEGER 		: (DIGIT |[1-9](DIGIT)+);
-//FLOAT 			: ('-')?((DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]));
-
-INTEGER			: DIGIT+ ;
-FLOAT			: DIGIT+ '.' DIGIT+;
-NUMBER 			: ('-')? (INTEGER | FLOAT) ;
+INTEGER 		: (DIGIT |[1-9](DIGIT)+);
+FLOAT 			: ('-')?((DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]));
 BOOL 			: ('true'|'false' | 'on' |'off'); 
-COMMENT 		: '#' ~('\r' | '\n')* 		-> skip ;
+
+COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
-WS  			:   [ \t]+ -> channel(HIDDEN);
+WS  			:   [ \t]+ 				-> channel(HIDDEN);
+NEWLINE			:  ('\r\n'|'\n'|'\r');
 
-fragment LETTER			: [a-zA-Z];
-fragment DIGIT 			: [0-9];
-
-
+LETTER	: [a-zA-Z];
+DIGIT 	: [0-9];
