@@ -13,10 +13,14 @@ public class MainClass {
 
 	public static void main(String args[]) 
 	{
-		String text = "using asd \n setup{number a3  \n number t := 4 \n } repeat{}";
+		String fileName = "D:\\GitSource\\phal\\src\\PhalLangEx";
+        File file = new File(fileName);
+        FileInputStream fis = null;
+		
 		
 		try {
-			ANTLRInputStream inputStream = new ANTLRInputStream(text);
+			fis = new FileInputStream(file);
+			ANTLRInputStream inputStream = new ANTLRInputStream(fis);
 			PhalLexer lexer = new PhalLexer(inputStream);
 			CommonTokenStream ts = new CommonTokenStream(lexer);
 			PhalParser parser = new PhalParser(ts);
