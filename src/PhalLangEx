@@ -1,11 +1,31 @@
-using asd
+/*****************************************************
+ * Program purpose:                                  *
+ * The purpose of this program is to evaluate the    *
+ * light level within a room and increase the light- *
+ * level if needed.                                  *
+ *                                                   *
+ * Focus will be on the syntax of the language.      *
+******************************************************/
 
-# hello
+using lightsensorPRS
+# The setup method is a default method similar to main, it's used for defining what's in the different ports/pins and such.
+#define <method name> with <parameters and types> returntype <type>
 
 setup{
-  number a := 1
+  # The types define whether they are input or output
+  # <type> <name> := pin <number>
+  lightbulb l := pin 1
+  temperatureSensor ls := pin 2
 }
 
-repeat{
+# The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
+repeat{ 
+  l := on 
 
+  if(satan is true and god is dead) then { 
+  	satan := false
+  	god := alive
+  }
+  
+  call wait with (42) # Wait 2.32 seconds
 }

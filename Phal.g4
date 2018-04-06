@@ -6,7 +6,7 @@
 grammar Phal;
 
 program
-	:	NEWLINE* (include)* setup repeat (func)* EOF
+	:	NEWLINE* (include)* setup NEWLINE* repeat (func)* EOF
 	;
   
 include
@@ -14,7 +14,7 @@ include
 	;
 
 setup        
-	: 	'setup' NEWLINE? '{' (setupCnt)* '}'
+	: 	'setup' NEWLINE* '{' NEWLINE* (setupCnt)* NEWLINE* '}'
 	;
 
 setupCnt    
@@ -29,7 +29,7 @@ dcl
 	;
 
 varDcl        
-	: 	type ID  
+	: 	type ID 
 	| 	type ID ':=' expr 
 	;
   
@@ -68,11 +68,11 @@ listCnt
 	;
 
 stmt        
-	: 	selective   
-	|   iterative   
+	: 	selective NEWLINE+  
+	|   iterative NEWLINE+  
 	|   funcCall NEWLINE+  
 	|   assignment NEWLINE+ 
-	|	returnStmt
+	|	returnStmt NEWLINE+
 	;
 
 selective    
@@ -99,9 +99,9 @@ defaultCase
 	;
 
 ifStmt        
-	: 	'if' '(' expr ')' 'then' '{' (stmt)* '}'
-	|   'if' '(' expr ')' 'then' '{' (stmt)*  '}' 'else'  '{'  (stmt)*  '}'
-	|   'if' '(' expr ')' 'then' '{' (stmt)*  '}' 'else'  ifStmt  
+	: 	'if' '(' expr ')' 'then' '{' NEWLINE* (stmt)* NEWLINE* '}'
+	|   'if' '(' expr ')' 'then' '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  '{'  NEWLINE* (stmt)* NEWLINE*  '}'
+	|   'if' '(' expr ')' 'then' '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  ifStmt  
 	;
 
 iterative    
@@ -124,13 +124,13 @@ call
 	;
 
 assignment    
-	: 	ID ':=' expr 
-	| 	ID '+=' expr 
-	| 	ID '-=' expr 
+	: 	ID ':=' expr NEWLINE+
+	| 	ID '+=' expr NEWLINE+
+	| 	ID '-=' expr NEWLINE+
 	;
 
 repeat    
-	: 	'repeat' NEWLINE? '{' (stmt)* '}'  
+	: 	'repeat' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'  
 	;
 
 func        
@@ -160,36 +160,36 @@ returnStmt
 	;
 	
 expr
-  :		NUMBER																			# litNumExpr
-  |		TEXT																			# litTextExpr
-  |		BOOL																			# litBoolExpr
+  :		BOOL																			# litBoolExpr
+  |		NUMBER																			# litNumExpr
   |		ID																				# idRefExpr
+  |		TEXT																			# litTextExpr
   |		funcCall																		# funcExpr
   |		'(' expr ')'																	# parenExpr
+  |   	('!'|'not') expr																# unaryExpr
   |		'-' expr																		# unaryExpr
-  |   ('!'|'not') expr																	# unaryExpr
-  |		expr ('*'|'/'|'%') expr															# infixExpr
   |		expr ('+'|'-') expr																# infixExpr
+  |		expr ('*'|'/'|'%') expr															# infixExpr
+  |		expr ('!='|'='| 'is' | 'is not') expr            								# infixExpr	
   |		expr ('<'|'>'|'less than'|'greater than') expr									# infixExpr
   |		expr ('<='|'>='|'less than or equal to'|'greater than or equal to') expr		# infixExpr
-  |		expr ('!='|'='| 'is' | 'is not') expr            								# infixExpr	
   |		expr ('and'|'&') expr															# infixExpr
   |		expr ('or'|'|') expr															# infixExpr 
   ;
   
 
-NUMBER 			: ('-')? (INTEGER | FLOAT) ;
-VALUE 			: NUMBER | BOOL | TEXT ;  
 ID 				: LETTER (LETTER | DIGIT)*;
-TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
-INTEGER 		: (DIGIT |[1-9](DIGIT)+);
-FLOAT 			: ('-')?((DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]));
+INTEGER 		: DIGIT | ([1-9](DIGIT)+);
+FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
+NUMBER 			: INTEGER | FLOAT ;
 BOOL 			: ('true'|'false' | 'on' |'off'); 
+TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
 
+VALUE 			: NUMBER | BOOL | TEXT ;  
 COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
-WS  			:   [ \t]+ 				-> skip ;
+WS  			:   [ \t]+ 				-> channel(HIDDEN) ;
 NEWLINE			:  [\r\n];
 
-LETTER	: [a-zA-Z];
-DIGIT 	: [0-9];
+LETTER			: [a-zA-Z];
+DIGIT 			: [0-9];
