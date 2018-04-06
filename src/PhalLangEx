@@ -1,11 +1,11 @@
 using asd
 
-setup
-{
+# hello
 
+setup{
+  number a := 1
 }
 
-repeat
-{
+repeat{
 
 }

@@ -1,20 +1,20 @@
 /**
  * Define a grammar called Phal
- * Beware might need NEWLINE* before include if newline or whitespace becomes a problem
+ * Beware might need NEWLINE+* before include if NEWLINE+ or whitespace becomes a problem
  */
 
 grammar Phal;
 
 program
-	:	(include)* setup repeat (func)* EOF
+	:	NEWLINE* (include)* setup repeat (func)* EOF
 	;
   
 include
-	:	'using' ID NEWLINE
+	:	'using' ID NEWLINE+
 	;
 
 setup        
-	: 	'setup' '{' (setupCnt)* '}'
+	: 	'setup' NEWLINE? '{' (setupCnt)* '}'
 	;
 
 setupCnt    
@@ -23,8 +23,8 @@ setupCnt
 	;
 
 dcl         
-	: 	varDcl NEWLINE   
-	|   cmpDcl NEWLINE 
+	: 	varDcl NEWLINE+   
+	|   cmpDcl NEWLINE+ 
 	|   advDataType 
 	;
 
@@ -55,7 +55,7 @@ advType
 	;
 
 group        
-	: 	'group' ID '{' (ID NEWLINE)+ '}' 
+	: 	'group' ID '{' (ID NEWLINE+)+ '}' 
 	;
 
 list        
@@ -70,8 +70,8 @@ listCnt
 stmt        
 	: 	selective   
 	|   iterative   
-	|   funcCall NEWLINE  
-	|   assignment NEWLINE 
+	|   funcCall NEWLINE+  
+	|   assignment NEWLINE+ 
 	|	returnStmt
 	;
 
@@ -87,15 +87,15 @@ switchStmt
 
  
 caseList    
-	: 	(caseStmt NEWLINE)+ defaultCase 
+	: 	(caseStmt NEWLINE+)+ defaultCase 
 	;
 
 caseStmt        
-	: 	'case' VALUE ':' '{'(stmt)*'}' NEWLINE
+	: 	'case' VALUE ':' '{'(stmt)*'}' NEWLINE+
 	;
 
 defaultCase    
-	: 	'default' ':' (stmt)* NEWLINE
+	: 	'default' ':' (stmt)* NEWLINE+
 	;
 
 ifStmt        
@@ -130,15 +130,15 @@ assignment
 	;
 
 repeat    
-	: 	'repeat' '{' (stmt)* '}'  
+	: 	'repeat' NEWLINE? '{' (stmt)* '}'  
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType '{' (funcCnt)*  returnStmt?'}' 
+	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE? '{' (funcCnt)*  returnStmt?'}' 
 	;
 
 funcCnt		
-	:	varDcl NEWLINE 
+	:	varDcl NEWLINE+ 
 	| 	stmt 
 	;
 
@@ -188,8 +188,8 @@ BOOL 			: ('true'|'false' | 'on' |'off');
 
 COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
-WS  			:   [ \t]+ 				-> channel(HIDDEN);
-NEWLINE			:  ('\r\n'|'\n'|'\r');
+WS  			:   [ \t]+ 				-> skip ;
+NEWLINE			:  [\r\n];
 
 LETTER	: [a-zA-Z];
 DIGIT 	: [0-9];
