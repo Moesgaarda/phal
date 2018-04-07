@@ -31,6 +31,7 @@ dcl
 varDcl        
 	: 	type ID 
 	| 	type ID ':=' expr 
+	|	ID '.' ID ':=' expr
 	;
   
 type        
@@ -45,7 +46,7 @@ advDataType
 	;
 
 cmpDcl    	
-	: 	advType ID ':=' 'pin' NUMBER 
+	: 	advType ID ':=' 'pin' NUMBER ( ',' NUMBER)*
 	;
 
 advType    
@@ -190,13 +191,11 @@ fragment FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
 NUMBER 			: ('-')? (INTEGER | FLOAT) ;
 BOOL 			: ('true'|'false' | 'on' |'off'); 
 
-
 COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
 WS  			:   [ \t]+ 				-> channel(HIDDEN) ;
 NEWLINE			:  [\r\n];
 VALUE 			: NUMBER | BOOL | TEXT ;  
-
 
 fragment LETTER			: [a-zA-Z];
 fragment DIGIT 			: '0'..'9';
