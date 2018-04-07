@@ -13,11 +13,11 @@ setup{
   coffeeMachine tmp := pin 3, 2
   tmp.range := 18, 22
   coffeeMachine piston := pin 5
-  coffeeMachine rad = pin 6
+  coffeeMachine rad := pin 6
 }
 
 repeat{
-   loop until tmp.value >= tmp.low and tmp.value <= tmp.high{
+   loop until (tmp.value >= tmp.low and tmp.value <= tmp.high){
      call adjustTemperature with (none)
    }
 }

@@ -31,7 +31,8 @@ dcl
 varDcl        
 	: 	type ID 
 	| 	type ID ':=' expr 
-	|	ID '.' ID ':=' expr
+	|	type ID ':=' expr (',' expr)*
+	|	ID '.' ID ':=' expr (',' expr)*
 	;
   
 type        
@@ -110,8 +111,8 @@ iterative
 	;
 
 loop        
-	: 	'loop' NUMBER 'times' '{' (stmt)* '}'    
-	|   'loop' 'until' expr '{' (stmt)* '}' 
+	: 	'loop' NUMBER 'times' '{' NEWLINE*  (stmt)*  NEWLINE* '}'    
+	|   'loop' 'until' expr '{' NEWLINE* (stmt)* NEWLINE*  '}' 
 	;
 
 funcCall    
@@ -154,6 +155,7 @@ rType
 
 parameters    
 	:  	param ( ',' param)*  
+	| 	none
 	;
 
 param        
@@ -169,6 +171,7 @@ expr
   |		NUMBER																			# litNumExpr
   |		ID																				# idRefExpr
   |		TEXT																			# litTextExpr
+  |		ID '.' ID																		# idRefExpr
   |		funcCall																		# funcExpr
   |		'(' expr ')'																	# parenExpr
   |   	('!'|'not') expr																# unaryExpr
