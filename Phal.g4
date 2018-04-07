@@ -70,11 +70,11 @@ listCnt
 	;
 
 stmt        
-	: 	selective NEWLINE+  
-	|   iterative NEWLINE+ 
+	: 	selective  
+	|   iterative  
 	|   funcCall
 	|   assignment
-	|	returnStmt NEWLINE+
+	|	returnStmt 
 	;
 
 selective    
@@ -144,8 +144,8 @@ func
 	;
 
 funcCnt		
-	:	varDcl NEWLINE+ 
-	| 	stmt NEWLINE+
+	:	varDcl NEWLINE* 
+	| 	stmt NEWLINE*
 	;
 
 rType		
@@ -155,7 +155,7 @@ rType
 
 parameters    
 	:  	param ( ',' param)*  
-	| 	none
+	|   none
 	;
 
 param        

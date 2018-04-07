@@ -24,7 +24,7 @@ repeat{
 
 
 define adjustTemperature with (none) returnType none{
-  if(tmp.value <= tmp.low) then{ 			
+  if(tmp.value <= tmp.low) then{
      if(piston.extended is true){		
         piston.extended := false
         call wait with (20) 						
