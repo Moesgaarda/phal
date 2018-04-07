@@ -71,7 +71,7 @@ stmt
 	: 	selective NEWLINE+  
 	|   iterative NEWLINE+ 
 	|   funcCall
-	|   assignment NEWLINE+
+	|   assignment
 	|	returnStmt NEWLINE+
 	;
 
@@ -114,10 +114,10 @@ loop
 	;
 
 funcCall    
-	:  	'call' ID
+	:  	'call' ID 'with' '(' none ')'
 	| 	'call' ID 'with' '(' callCnt ')'
 	|    ID'.'ID'(' callCnt ')' 
-	|    ID'.'ID'(' 'none' ')';
+	|    ID'.'ID'(' none ')';
 
 callCnt        
 	: 	expr ( ',' expr)* 
@@ -179,7 +179,9 @@ expr
   |		expr ('and'|'&') expr															# infixExpr
   |		expr ('or'|'|') expr															# infixExpr 
   ;
-  
+ 
+
+none : 'none';
 
 TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
 ID 				: LETTER (LETTER | DIGIT)*;

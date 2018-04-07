@@ -502,6 +502,18 @@ public class PhalBaseListener implements PhalListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParenExpr(PhalParser.ParenExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNone(PhalParser.NoneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNone(PhalParser.NoneContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

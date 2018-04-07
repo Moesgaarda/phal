@@ -432,4 +432,14 @@ public interface PhalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParenExpr(PhalParser.ParenExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PhalParser#none}.
+	 * @param ctx the parse tree
+	 */
+	void enterNone(PhalParser.NoneContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PhalParser#none}.
+	 * @param ctx the parse tree
+	 */
+	void exitNone(PhalParser.NoneContext ctx);
 }
