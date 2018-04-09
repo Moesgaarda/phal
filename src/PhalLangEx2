@@ -8,7 +8,7 @@
 
 using radiatorcontrollerPh
 using pistonSG90
-
+ 
 setup{
   coffeeMachine tmp := pin 3, 2
   tmp.range := 18, 22
@@ -24,28 +24,38 @@ repeat{
 
 
 define adjustTemperature with (none) returnType none{
-  if(tmp.value <= tmp.low) then{
-     if(piston.extended is true){		
+if(tmp.value <= tmp.low) then
+{
+    	if(piston.extended = 5)then
+		{		
         piston.extended := false
         call wait with (20) 						
-     }
+     	}
 
-     if(rad is not on) then{					
-       rad := on
-       call wait with (300) # wait 5 minutes
-     }
+     	if(rad is not on) then
+		{					
+       		rad := on
+       		call wait with (300) # wait 5 minutes
+     	}
 
-     if(rad is on) then{
-       rad.temp := avg(tmp.range)
-       call wait with (300) # wait 5 minutes
-     }
-   }
+     	if(rad is on) then
+		{
+       		rad.temp := call avg with (tmp.range)
+       		call wait with (300) # wait 5 minutes
+     	}
 
-   if(tmp.value >= tmp.high) then{			
-      if(piston.extended is false) then{		 
-        if(rad is on) then{
-          rad := off
-        }    
-      piston.extended := true		
-    }
+   	}
+
+   	if(tmp.value >= tmp.high) then
+	{			
+     	if(piston.extended is false) then
+		{		 
+        	if(rad is on) then
+			{
+          		rad := off
+        	}    
+      		piston.extended := true		
+    	}
+	}
 }
+ 

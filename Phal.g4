@@ -6,7 +6,7 @@
 grammar Phal;
 
 program
-	:	NEWLINE* (include)* setup NEWLINE* repeat NEWLINE* (func)* EOF
+	:	NEWLINE* (include)* setup NEWLINE* repeat NEWLINE* (func)* NEWLINE* EOF
 	;
   
 include
@@ -32,7 +32,6 @@ varDcl
 	: 	type ID 
 	| 	type ID ':=' expr 
 	|	type ID ':=' expr (',' expr)*
-	|	ID '.' ID ':=' expr (',' expr)*
 	;
   
 type        
@@ -70,16 +69,16 @@ listCnt
 	;
 
 stmt        
-	: 	selective  
+	: 	selective  NEWLINE+
 	|   iterative  
-	|   funcCall
-	|   assignment
+	|   funcCall	
+	|   assignment	
 	|	returnStmt 
 	;
 
 selective    
-	: 	switchStmt   
-	|   ifStmt 
+	: 	ifStmt    
+	|   switchStmt
 	;
 
 switchStmt        
@@ -93,7 +92,7 @@ caseList
 	;
 
 caseStmt        
-	: 	'case' VALUE ':' '{'(stmt)*'}' NEWLINE+
+	: 	'case' VALUE ':' (stmt)* NEWLINE+
 	;
 
 defaultCase    
@@ -101,9 +100,9 @@ defaultCase
 	;
 
 ifStmt        
-	: 	'if' '(' expr ')' 'then' '{' NEWLINE* (stmt)* NEWLINE* '}'
-	|   'if' '(' expr ')' 'then' '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  '{'  NEWLINE* (stmt)* NEWLINE*  '}'
-	|   'if' '(' expr ')' 'then' '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  ifStmt  
+	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'
+	|   'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  '{'  NEWLINE* (stmt)* NEWLINE*  '}'
+	|   'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  ifStmt  
 	;
 
 iterative    
@@ -118,8 +117,7 @@ loop
 funcCall    
 	:  	'call' ID 'with' '(' none ')'
 	| 	'call' ID 'with' '(' callCnt ')'
-	|    ID'.'ID'(' callCnt ')' 
-	|    ID'.'ID'(' none ')';
+	;
 
 callCnt        
 	: 	expr ( ',' expr)* 
@@ -129,18 +127,21 @@ assignment
 	: 	ID ':=' expr NEWLINE+
 	| 	ID '+=' expr NEWLINE+
 	| 	ID '-=' expr NEWLINE+
+	|	ID '.' ID ':=' expr (',' expr)* NEWLINE+
+	|	ID '.' ID '+=' expr (',' expr)* NEWLINE+
+	|	ID '.' ID '-=' expr (',' expr)* NEWLINE+
 	;
 
 repeat    
-	: 	'repeat' NEWLINE* '{' NEWLINE* (repeatCnt)* NEWLINE* '}'  
+	: 	'repeat' NEWLINE* '{' NEWLINE* repeatCnt NEWLINE* '}'  
 	;
 
 repeatCnt
-	: 	stmt
+	: 	stmt*
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE? '{' NEWLINE* (funcCnt)* NEWLINE* returnStmt? '}' 
+	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType (NEWLINE*)? '{' NEWLINE* (funcCnt)* NEWLINE* returnStmt? '}' 
 	;
 
 funcCnt		
