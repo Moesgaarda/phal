@@ -31,7 +31,6 @@ dcl
 varDcl        
 	: 	type ID 
 	| 	type ID ':=' expr 
-	|	type ID ':=' expr (',' expr)*
 	;
   
 type        
@@ -73,7 +72,7 @@ stmt
 	: 	selective  NEWLINE+
 	|   iterative  NEWLINE+
 	|   funcCall	
-	|   assignment	
+	|   assignment NEWLINE+
 	|	returnStmt 
 	;
 
@@ -83,16 +82,16 @@ selective
 	;
 
 switchStmt        
-	:  	'switch' '(' expr ')' '{' caseList '}'   
+	:  	'switch' '(' expr ')' NEWLINE* '{'NEWLINE* caseList '}'   
 	;
 
  
 caseList    
-	: 	(caseStmt NEWLINE+)+ defaultCase 
+	: 	(caseStmt)+ defaultCase 
 	;
 
 caseStmt        
-	: 	'case' VALUE ':' (stmt)* NEWLINE+
+	: 	'case' expr ':' stmt*
 	;
 
 defaultCase    
@@ -110,8 +109,8 @@ iterative
 	;
 
 loop        
-	: 	'loop' NUMBER 'times' '{' NEWLINE*  (stmt)*  NEWLINE* '}'    
-	|   'loop' 'until' expr '{' NEWLINE* (stmt)* NEWLINE*  '}' 
+	: 	'loop' expr 'times' NEWLINE* '{' NEWLINE*  (stmt)*  NEWLINE* '}'    
+	|   'loop' 'until' expr NEWLINE* '{' NEWLINE* (stmt)* NEWLINE*  '}' 
 	;
 
 funcCall    
@@ -124,12 +123,12 @@ callCnt
 	;
 
 assignment    
-	: 	ID ':=' expr NEWLINE+
-	| 	ID '+=' expr NEWLINE+
-	| 	ID '-=' expr NEWLINE+
-	|	ID '.' ID ':=' expr (',' expr)* NEWLINE+
-	|	ID '.' ID '+=' expr (',' expr)* NEWLINE+
-	|	ID '.' ID '-=' expr (',' expr)* NEWLINE+
+	: 	ID ':=' expr 
+	| 	ID '+=' expr 
+	| 	ID '-=' expr 
+	|	ID '.' ID ':=' expr 
+	|	ID '.' ID '+=' expr 
+	|	ID '.' ID '-=' expr 
 	;
 
 repeat    
@@ -151,6 +150,7 @@ funcCnt
 
 rType		
 	: 	type 
+	|	advDataType
 	| 	'none'
 	;
 
