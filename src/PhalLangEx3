@@ -1,0 +1,59 @@
+using coffeeMaker
+using example2
+
+
+setup{
+  coffeeMachine coffee1 := pin 1, 2, 3
+  lightbulb light := pin 5
+  lightbulb lightFloor := pin 6
+  temperatureSensor tmpSensor := pin 9
+  
+
+
+  number num := 1
+  number num2 := 2
+  text lightStatus := "Lights are on!"
+  bool lightStatus := off
+}
+
+
+
+repeat{
+  loop 5 times{
+    light := on
+    light := off
+  }
+
+  loop until (temperaturSensor.reading > 20){
+    lights := on 
+	# Let us assume that the light provides us with a lot of heat
+    lightStatus := on
+  }
+
+  switch (swtTing){
+    case 1:
+      light := on
+      lightStatus := true
+    case 42:
+      coffee1 := on
+    default:
+      lightStatus := false
+  }  
+  
+}
+
+
+
+define ToggleMaker with (coffeeMachine cfm) returnType none{
+  if(cfm = on) then{
+    cfm := off 
+  }else if(cfm = off) then{
+    cfm := on
+  }else{
+    light := on
+  }
+}
+
+define GiveMe42 with (none) returnType number{
+  return 42
+}

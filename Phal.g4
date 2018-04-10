@@ -18,13 +18,13 @@ setup
 	;
 
 setupCnt    
-	: 	dcl 
+	: 	dcl NEWLINE+
 	| 	stmt 
 	;
 
 dcl         
-	: 	varDcl NEWLINE+   
-	|   cmpDcl NEWLINE+ 
+	: 	varDcl    
+	|   cmpDcl 
 	|   advDataType 
 	;
 
@@ -56,7 +56,7 @@ advType
 	;
 
 group        
-	: 	'group' ID '{' (ID NEWLINE+)+ '}' 
+	: 	'group' ID NEWLINE* '{' NEWLINE* (ID NEWLINE+)+ '}' 
 	;
 
 list        
@@ -70,7 +70,7 @@ listCnt
 
 stmt        
 	: 	selective  NEWLINE+
-	|   iterative  
+	|   iterative  NEWLINE+
 	|   funcCall	
 	|   assignment	
 	|	returnStmt 
@@ -82,8 +82,7 @@ selective
 	;
 
 switchStmt        
-	:  	'switch' '(' ID ')' '{' caseList '}'   
-	|   'switch' '(' VALUE ')' '{' caseList '}' 
+	:  	'switch' '(' expr ')' '{' caseList '}'   
 	;
 
  
@@ -141,7 +140,7 @@ repeatCnt
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType (NEWLINE*)? '{' NEWLINE* (funcCnt)* NEWLINE* returnStmt? '}' 
+	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* returnStmt? '}' 
 	;
 
 funcCnt		
