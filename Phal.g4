@@ -164,7 +164,7 @@ param
 	;
 
 returnStmt    
-	: 'return' (ID | VALUE | 'none') NEWLINE*
+	: 'return' (expr | 'none') NEWLINE*
 	;
 	
 expr
