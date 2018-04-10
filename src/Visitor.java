@@ -1,5 +1,8 @@
 
 public abstract class Visitor {
+	public void visit(ProgramNode node) {
+		node.accept(this);
+	}
 	public void visit(IncludeNode node) {
 		node.accept(this);
 	}
@@ -106,8 +109,10 @@ public abstract class Visitor {
 	public void visit(ParensExprNode node) {
 		node.accept(this);
 	}
-	
 	public void visit(FuncExprNode node) {
+		node.accept(this);
+	}
+	public void visit(IdNode node) {
 		node.accept(this);
 	}
 	
