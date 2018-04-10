@@ -6,7 +6,7 @@
 grammar Phal;
 
 program
-	:	NEWLINE* (include)* setup NEWLINE* repeat NEWLINE* (func)* NEWLINE* EOF
+	:	NEWLINE* (include)* setup NEWLINE* repeat NEWLINE* (func NEWLINE*)* NEWLINE* EOF
 	;
   
 include
@@ -38,6 +38,7 @@ type
 	: 	'number' 
 	|  	'text'  
 	|  	'bool' 
+	|   advType
 	;
   
 advDataType    
@@ -163,7 +164,7 @@ param
 	;
 
 returnStmt    
-	: 'return' (ID | VALUE | 'none') 
+	: 'return' (ID | VALUE | 'none') NEWLINE*
 	;
 	
 expr
