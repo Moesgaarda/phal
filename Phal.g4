@@ -91,11 +91,11 @@ caseList
 	;
 
 caseStmt        
-	: 	'case' expr ':' stmt*
+	: 	'case' expr ':' NEWLINE* stmt*
 	;
 
 defaultCase    
-	: 	'default' ':' (stmt)* NEWLINE+
+	: 	'default' ':' NEWLINE* (stmt)* NEWLINE+
 	;
 
 ifStmt        
