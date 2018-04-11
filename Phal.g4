@@ -37,12 +37,13 @@ type
 	: 	'number' 
 	|  	'text'  
 	|  	'bool' 
-	|   advType
+	|   'list'
+	|	'group'
 	;
   
 advDataType    
-	: 	group   
-	|   list 
+	: 	group  
+	|   list
 	;
 
 cmpDcl    	
@@ -60,22 +61,20 @@ group
 	;
 
 list        
-	: 	'list' type ID '{' listCnt ( ',' listCnt)* '}' 
+	: 	'list' type ID '{' expr ( ',' expr)* '}' 
 	;
 
-listCnt        
-	: 	ID 
-	| 	VALUE 
-	;
 
 stmt        
 	: 	selective  NEWLINE+
 	|   iterative  NEWLINE+
-	|   funcCall	
+	|   funcCall   NEWLINE+
 	|   assignment NEWLINE+
 	|	returnStmt 
 	;
 
+
+	
 selective    
 	: 	ifStmt    
 	|   switchStmt
@@ -99,9 +98,9 @@ defaultCase
 	;
 
 ifStmt        
-	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'
-	|   'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  '{'  NEWLINE* (stmt)* NEWLINE*  '}'
-	|   'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE*  '}' 'else'  ifStmt  
+	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}' NEWLINE*
+			('else if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}')* NEWLINE*
+			('else' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}')? 
 	;
 
 iterative    
@@ -109,13 +108,12 @@ iterative
 	;
 
 loop        
-	: 	'loop' expr 'times' NEWLINE* '{' NEWLINE*  (stmt)*  NEWLINE* '}'    
-	|   'loop' 'until' expr NEWLINE* '{' NEWLINE* (stmt)* NEWLINE*  '}' 
+	: 	'loop' expr 'times' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'    
+	|   'loop' 'until' expr (',' ('increase'|'decrease') ID 'by' NUMBER)? NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'
 	;
 
 funcCall    
-	:  	'call' ID 'with' '(' none ')'
-	| 	'call' ID 'with' '(' callCnt ')'
+	:  	'call' ID 'with' '(' (none | callCnt) ')'
 	;
 
 callCnt        
@@ -123,12 +121,11 @@ callCnt
 	;
 
 assignment    
-	: 	ID ':=' expr 
-	| 	ID '+=' expr 
-	| 	ID '-=' expr 
-	|	ID '.' ID ':=' expr 
-	|	ID '.' ID '+=' expr 
-	|	ID '.' ID '-=' expr 
+	: 	ID ('.' ID)? ':=' expr 
+	|	ID ('.' ID)? '+=' expr 
+	|	ID ('.' ID)? '-=' expr 
+	|	'add' expr (',' expr)* 'to' ID
+	|	'remove' 'element' expr (',' expr)* 'from' ID
 	;
 
 repeat    
@@ -176,6 +173,7 @@ expr
   |		funcCall																		# funcExpr
   |		'(' expr ')'																	# parenExpr
   |   	('!'|'not') expr																# unaryExpr
+  |  	 '-' expr                    												    # unaryExpr
   |		expr ('+'|'-') expr																# infixExpr
   |		expr ('*'|'/'|'%') expr															# infixExpr
   |		expr ('!='|'='| 'is' | 'is not') expr            								# infixExpr	
@@ -183,6 +181,7 @@ expr
   |		expr ('<='|'>='|'less than or equal to'|'greater than or equal to') expr		# infixExpr
   |		expr ('and'|'&') expr															# infixExpr
   |		expr ('or'|'|') expr															# infixExpr 
+  |		'get' 'element' expr (',' expr)* 'from' ID										# litAdvExpr
   ;
  
 
@@ -192,7 +191,7 @@ TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
 ID 				: LETTER (LETTER | DIGIT)*;
 fragment INTEGER 		: DIGIT+;
 fragment FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
-NUMBER 			: ('-')? (INTEGER | FLOAT) ;
+NUMBER 			: (INTEGER | FLOAT) ;
 BOOL 			: ('true'|'false' | 'on' |'off'); 
 
 COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;

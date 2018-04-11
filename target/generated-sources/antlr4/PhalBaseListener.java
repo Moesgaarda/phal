@@ -159,18 +159,6 @@ public class PhalBaseListener implements PhalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterListCnt(PhalParser.ListCntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitListCnt(PhalParser.ListCntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStmt(PhalParser.StmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -502,6 +490,18 @@ public class PhalBaseListener implements PhalListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParenExpr(PhalParser.ParenExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLitAdvExpr(PhalParser.LitAdvExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLitAdvExpr(PhalParser.LitAdvExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

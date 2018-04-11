@@ -127,16 +127,6 @@ public interface PhalListener extends ParseTreeListener {
 	 */
 	void exitList(PhalParser.ListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PhalParser#listCnt}.
-	 * @param ctx the parse tree
-	 */
-	void enterListCnt(PhalParser.ListCntContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PhalParser#listCnt}.
-	 * @param ctx the parse tree
-	 */
-	void exitListCnt(PhalParser.ListCntContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link PhalParser#stmt}.
 	 * @param ctx the parse tree
 	 */
@@ -432,6 +422,18 @@ public interface PhalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParenExpr(PhalParser.ParenExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code litAdvExpr}
+	 * labeled alternative in {@link PhalParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterLitAdvExpr(PhalParser.LitAdvExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code litAdvExpr}
+	 * labeled alternative in {@link PhalParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitLitAdvExpr(PhalParser.LitAdvExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PhalParser#none}.
 	 * @param ctx the parse tree

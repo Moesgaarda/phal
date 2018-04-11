@@ -29,11 +29,85 @@ group everything{
 	ts
 	numAndCoffee
 }
-list number lstNum {}
+list number lstNum {5,2,4,5,1,23,2,asd + dsa}
+add 2 to lstNum
+add 2,3,4,6,7,8,2+4 to lstNum
+
+lstNum += 23
+fuu.bar := true
+bar.foo := false
+remove element 4 from lstNum
+number a2 := get element 2 from lstNum
+if(2=2) then {
+} else if (2=2) then
+{ if(asd) then{ } else if(booleanV) then {}
+} 
+else then {
+	switch(a2){
+	case 1: s := "asd"
+	default: switch(a3){
+		case 123: a := a +2 -3 
+		default: 
+		}
+	}
+}
+switch(a3){
+		case 123: a := a +2 -3 
+		default: 
+}
+
+call MyFunc with (none)
 
 }
 
 repeat
 {
+add 2 to lstNum
+add 2,3,4,6,7,8,2+4 to lstNum
 
+lstNum += 23
+fuu.bar := true
+bar.foo := false
+remove element 4 from lstNum
+a2 := get element 2 from lstNum
+if(2=2) then {
+} else if (2=2) then
+{ if(asd) then{ } else if(booleanV) then {}
+} 
+
+else then {
+	switch(a2){
+	case 1: s := "asd"
+	default: switch(a3){
+		case 123: a := a +2 -3 
+		default: 
+		}
+	}
 }
+switch(a3){
+		case 123: a := a +2 -3 
+		default: 
+}
+
+call MyFunc with (none)
+call Myfunc2 with (a3)
+call Myfunc2 with (12)
+call Myfunc3 with (12, "asd")
+}
+
+define MyFunc with (none) returnType none
+{}
+
+define MyFunc2 with (number a) returnType bool{
+	a2 := 2
+	text t := "asdasd"
+	return true
+}
+define MyFunc3 with (number a, text t) returnType list{
+	a2 := 2
+	text t := "asdasd"
+	return lstNum
+}
+
+
+
