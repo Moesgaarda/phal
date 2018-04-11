@@ -49,7 +49,7 @@ define ToggleMaker with (coffeeMachine cfm) returnType none{
     cfm := off 
   }else if(cfm = off) then{
     cfm := on
-  }else{
+  }else then{
     light := on
   }
 }

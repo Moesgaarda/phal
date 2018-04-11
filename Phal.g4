@@ -39,6 +39,7 @@ type
 	|  	'bool' 
 	|   'list'
 	|	'group'
+	|	advType
 	;
   
 advDataType    
