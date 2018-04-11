@@ -67,7 +67,7 @@ public abstract class Visitor {
 	public void visit(FuncCallNode node) {
 		node.accept(this);
 	}
-	public void visit(CallNode node) {
+	public void visit(CallCntNode node) {
 		node.accept(this);
 	}
 	public void visit(AssignmentNode node) {
