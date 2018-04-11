@@ -29,6 +29,7 @@ group everything{
 	ts
 	numAndCoffee
 }
+
 list number lstNum {5,2,4,5,1,23,2,asd + dsa}
 add 2 to lstNum
 add 2,3,4,6,7,8,2+4 to lstNum
@@ -58,8 +59,13 @@ switch(a3){
 
 call MyFunc with (none)
 
+loop 4 times {x := 3
+}
+	
+loop until 2 +3 , increase asd by 4{
 }
 
+}
 repeat
 {
 add 2 to lstNum
