@@ -95,7 +95,7 @@ caseStmt
 	;
 
 defaultCase    
-	: 	'default' ':' NEWLINE* (stmt)* NEWLINE+
+	: 	'default' ':' NEWLINE* (stmt)*
 	;
 
 ifStmt        

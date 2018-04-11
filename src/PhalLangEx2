@@ -11,7 +11,6 @@ using pistonSG90
  
 setup{
   coffeeMachine tmp := pin 3, 2
-  tmp.range := 18, 22
   coffeeMachine piston := pin 5
   coffeeMachine rad := pin 6
 }

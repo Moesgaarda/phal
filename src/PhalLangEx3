@@ -36,10 +36,11 @@ repeat{
       lightStatus := true
     case 42:
       coffee1 := on
+    case 22:
+      coffee2 := true
     default:
-      lightStatus := false
+      a := hello + 2 
   }  
-  
 }
 
 
