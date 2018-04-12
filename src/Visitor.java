@@ -36,7 +36,6 @@ public abstract class Visitor {
 	public void visit(ListNode node) {
 		node.accept(this);
 	}
-
 	public void visit(SelectiveNode node) {
 		node.accept(this);
 	}
@@ -58,7 +57,10 @@ public abstract class Visitor {
 	public void visit(IterativeNode node) {
 		node.accept(this);
 	}
-	public void visit(LoopNode node) {
+	public void visit(LoopTimesNode node) {
+		node.accept(this);
+	}
+	public void visit(LoopUntilNode node) {
 		node.accept(this);
 	}
 	public void visit(FuncCallNode node) {
@@ -68,6 +70,9 @@ public abstract class Visitor {
 		node.accept(this);
 	}
 	public void visit(AssignmentNode node) {
+		node.accept(this);
+	}
+	public void visit(AdvTypeModifierNode node) {
 		node.accept(this);
 	}
 	public void visit(RepeatNode node) {
@@ -91,6 +96,9 @@ public abstract class Visitor {
 	public void visit(IdRefExprNode node) {
 		node.accept(this);
 	}
+	public void visit(NoneNode node) {
+		node.accept(this);
+	}
 	public void visit(LiteralExprNode node) {
 		node.accept(this);
 	}
@@ -112,6 +120,8 @@ public abstract class Visitor {
 	public void visit(LiteralAdvancedNode node) {
 		node.accept(this);
 	}
-	
+	public void visit(WaitNode node) {
+		node.accept(this);
+	}
 	
 }

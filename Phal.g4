@@ -6,7 +6,7 @@
 grammar Phal;
 
 program
-	:	NEWLINE* (include)* setup NEWLINE* repeat NEWLINE* (func NEWLINE*)* NEWLINE* EOF
+	:	NEWLINE* include* setup NEWLINE* repeat NEWLINE* (func NEWLINE*)* NEWLINE* EOF
 	;
   
 include
@@ -14,7 +14,7 @@ include
 	;
 
 setup        
-	: 	'setup' NEWLINE* '{' NEWLINE* (setupCnt)* NEWLINE* '}'
+	: 	'setup' NEWLINE* '{' NEWLINE* setupCnt* NEWLINE* '}'
 	;
 
 setupCnt    
@@ -73,13 +73,12 @@ stmt
 	|   assignment NEWLINE+
 	|	returnStmt NEWLINE*
 	|   waitStmt NEWLINE+
+	|	advTypeModifier NEWLINE+
 	;
 	
 waitStmt
 	:	'wait' expr 'seconds'
 	;
-
-
 
 	
 selective    
@@ -101,22 +100,26 @@ caseStmt
 	;
 
 defaultCase    
-	: 	'default' ':' NEWLINE* (stmt)*
+	: 	'default' ':' NEWLINE* stmt*
 	;
 
 ifStmt        
-	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}' NEWLINE*
-			('else if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}')* NEWLINE*
-			('else' 'then' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}')? 
+	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}' NEWLINE*
+			('else if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}')* NEWLINE*
+			('else' 'then' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}')? 
 	;
 
 iterative    
-	: 	loop 
+	: 	loopTimes
+	|	loopUntil 
 	;
 
-loop        
-	: 	'loop' expr 'times' NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'    
-	|   'loop' 'until' expr (',' ('increase'|'decrease') ID 'by' NUMBER)? NEWLINE* '{' NEWLINE* (stmt)* NEWLINE* '}'
+loopTimes        
+	: 	'loop' expr 'times' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}'    
+	;
+
+loopUntil
+	:   'loop' 'until' expr (',' ('increase'|'decrease') ID 'by' NUMBER)? NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}'
 	;
 
 funcCall    
@@ -130,21 +133,20 @@ callCnt
 assignment    
 	: 	ID ('.' ID)? ':=' expr 
 	|	ID ('.' ID)? '+=' expr 
-	|	ID ('.' ID)? '-=' expr 
-	|	'add' expr (',' expr)* 'to' ID
+	|	ID ('.' ID)? '-=' expr
+	;
+	
+advTypeModifier
+	:	'add' expr (',' expr)* 'to' ID
 	|	'remove' 'element' expr (',' expr)* 'from' ID
 	;
-
+	
 repeat    
-	: 	'repeat' NEWLINE* '{' NEWLINE* repeatCnt NEWLINE* '}'  
-	;
-
-repeatCnt
-	: 	stmt*
+	: 	'repeat' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}'  
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters? ')' 'returnType' (type | none) NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* returnStmt? '}' 
+	: 	'define' ID 'with' '(' parameters ')' 'returnType' (type | none) NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* returnStmt? '}' 
 	;
 
 funcCnt		
@@ -162,7 +164,7 @@ param
 	;
 
 returnStmt    
-	: 'return' (expr | 'none')
+	: 'return' expr
 	;
 	
 expr

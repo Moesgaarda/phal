@@ -267,13 +267,25 @@ public class PhalBaseListener implements PhalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLoop(PhalParser.LoopContext ctx) { }
+	@Override public void enterLoopTimes(PhalParser.LoopTimesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLoop(PhalParser.LoopContext ctx) { }
+	@Override public void exitLoopTimes(PhalParser.LoopTimesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoopUntil(PhalParser.LoopUntilContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoopUntil(PhalParser.LoopUntilContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -315,6 +327,18 @@ public class PhalBaseListener implements PhalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAdvTypeModifier(PhalParser.AdvTypeModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAdvTypeModifier(PhalParser.AdvTypeModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRepeat(PhalParser.RepeatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -322,18 +346,6 @@ public class PhalBaseListener implements PhalListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRepeat(PhalParser.RepeatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRepeatCnt(PhalParser.RepeatCntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRepeatCnt(PhalParser.RepeatCntContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

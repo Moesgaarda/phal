@@ -1,7 +1,22 @@
 import java.util.List;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 abstract class AstNode {
+	public AstNode() {}
 	abstract void accept(Visitor v);
+	public int lineNumber;
+	public int columnNumber; // :-)
+	
+	@Override 
+	public String toString() {
+		return "Location: l " + lineNumber + " : c " + columnNumber;
+	}
+	
+	public AstNode(ParserRuleContext ctx) {
+		lineNumber = ctx.start.getLine();
+		columnNumber = ctx.start.getCharPositionInLine();		
+	}
 }
 
 class ProgramNode extends AstNode{
@@ -61,23 +76,11 @@ class SetupCntNode extends AstNode{
 	}
 }
 
-class DclNode extends AstNode{
-	public VarDclNode varDclNode;
-	public CmpDclNode cmpDclNode;
-	public AdvDataTypeNode advDataTypeNode;
-	
-	public DclNode(VarDclNode varDclNode, CmpDclNode cmpDclNode, AdvDataTypeNode advDataTypeNode) {
-		this.varDclNode = varDclNode;
-		this.cmpDclNode = cmpDclNode;
-		this.advDataTypeNode = advDataTypeNode;
-	}
-	@Override
-	void accept(Visitor v) {
-		v.visit(this);
-	}
+abstract class DclNode extends AstNode{
+	abstract void accept(Visitor v);
 }
 
-class VarDclNode extends AstNode{
+class VarDclNode extends DclNode{
 	public IdNode idNode;
 	public List<ExprNode> exprNodes;
 	public TypeNode typeNode;
@@ -155,30 +158,14 @@ enum Type{
 	NONE
 }
 
-class AdvDataTypeNode extends AstNode{
-	// Denne kan vidst også laves abstract og så lade GroupNode og ListNode arve fra den.
-	public GroupNode groupNode;
-	public ListNode listNode;
-	
-	public AdvDataTypeNode(GroupNode groupNode) {
-		this.groupNode = groupNode;
-
-	}	
-	public AdvDataTypeNode(ListNode listNode) {
-		this.listNode = listNode;
-	}
-	
-	@Override
-	void accept(Visitor v) {
-		v.visit(this);
-	}
+abstract class AdvDataTypeNode extends AstNode{
+	abstract void accept(Visitor v);
 }
 
-class CmpDclNode extends AstNode{
+class CmpDclNode extends DclNode{
 	public AdvTypeNode advTypeNode;
 	public IdNode idNode;
 	public List<LiteralExprNode> literalExprNodes; 
-	// Dette er et number i CFGen, så getter på det skal være en LiteralExpr?
 	
 	public CmpDclNode(AdvTypeNode advTypeNode, IdNode idNode, List <LiteralExprNode> literalExprNodes) {
 		this.advTypeNode = advTypeNode;
@@ -192,20 +179,40 @@ class CmpDclNode extends AstNode{
 }
 
 class AdvTypeNode extends AstNode{
-	// Denne indeholder kun keywords i CFGen. What to write here?
+	public String type;
+	public Type Type;
+	
+	public AdvTypeNode(String type) throws Exception {
+		this.type = type;
+	
+		switch(this.type) {
+		case "lightbulb":
+			this.Type = Type.LIGHTBULB;
+			break;
+		case "motor":
+			this.Type = Type.MOTOR;
+			break;
+		case "temperaturesensor":
+			this.Type = Type.TEMPERATURESENSOR;
+			break;
+		default:
+			throw new Exception("Type is not an advanced data type");
+		}
+	}
+	
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
 	}
 }
 
-class GroupNode extends AstNode{
+class GroupNode extends AdvDataTypeNode{
 	public IdNode idNode;
-	public List<IdNode> idNodes;
+	public List<IdNode> memberIdNodes;
 	
-	public GroupNode(IdNode idNode, List<IdNode> idNodes) {
+	public GroupNode(IdNode idNode, List<IdNode> memberIdNodes) {
 		this.idNode = idNode;
-		this.idNodes = idNodes;
+		this.memberIdNodes = memberIdNodes;
 	}
 	
 	@Override
@@ -214,15 +221,15 @@ class GroupNode extends AstNode{
 	}
 }
 
-class ListNode extends AstNode{
+class ListNode extends AdvDataTypeNode{
 	public TypeNode typeNode;
 	public IdNode idNode;
-	public List<ExprNode> exprNodes; 
+	public List<ExprNode> memberExprNodes; 
 	
-	public ListNode(TypeNode typeNode, IdNode idNode, List<ExprNode> exprNodes) {
+	public ListNode(TypeNode typeNode, IdNode idNode, List<ExprNode> memberExprNodes) {
 		this.typeNode = typeNode;
 		this.idNode = idNode;
-		this.exprNodes = exprNodes;
+		this.memberExprNodes = memberExprNodes;
 	}
 	
 	@Override
@@ -233,6 +240,19 @@ class ListNode extends AstNode{
 
 abstract class StmtNode extends AstNode{
 	abstract void accept(Visitor v);
+}
+
+class WaitNode extends StmtNode{
+	public ExprNode exprNode;
+	
+	public WaitNode(ExprNode exprNode) {
+		this.exprNode = exprNode;
+	}
+	
+	@Override
+	void accept(Visitor v) {
+		v.visit(this);
+	}
 }
 
 abstract class SelectiveNode extends StmtNode{	
@@ -276,7 +296,7 @@ class CaseStmtNode extends AstNode{
 		this.exprNode = exprNode;
 		this.stmtNodes = stmtNodes;
 	}
-	// Hvis der ingen stmts er
+	// In case of no statements
 	public CaseStmtNode(ExprNode exprNode) {
 		this.exprNode = exprNode;
 	}
@@ -288,17 +308,12 @@ class CaseStmtNode extends AstNode{
 }
 
 class DefaultCaseNode extends AstNode{
-	public ExprNode exprNode;
 	public List<StmtNode> stmtNodes;
 	
-	public DefaultCaseNode(ExprNode exprNode, List<StmtNode> stmtNodes) {
-		this.exprNode = exprNode;
+	public DefaultCaseNode(List<StmtNode> stmtNodes) {
 		this.stmtNodes = stmtNodes;
 	}
-	// Hvis der ingen stmts er bruges denne constructor
-	public DefaultCaseNode(ExprNode exprNode) {
-		this.exprNode = exprNode;
-	}
+
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
@@ -306,46 +321,32 @@ class DefaultCaseNode extends AstNode{
 }
 
 class IfStmtNode extends SelectiveNode{
-	// Er sgu lidt i tvivl hvordan denne skal laves i forhold til vores CFG??
-	// Den her klasse skal højst sandsynligt laves om
+	public ExprNode ifNode;
+	public List<StmtNode> ifStmtNodes;
+	public List<ElseIfStmtNode> elifNodes;
+	public List<StmtNode> elseStmtNodes;
+	
+	public IfStmtNode(ExprNode ifNode, List<StmtNode> ifStmtNodes, 
+						List<ElseIfStmtNode> elifNodes, List<StmtNode> elseStmtNodes) {
+		this.ifNode = ifNode;
+		this.ifStmtNodes = ifStmtNodes;
+		this.elifNodes = elifNodes;
+		this.elseStmtNodes = elseStmtNodes;
+	}
+	
+	@Override
+	void accept(Visitor v) {
+		v.visit(this);
+	}
+}
+
+class ElseIfStmtNode extends SelectiveNode{
 	public ExprNode exprNode;
-	public List<StmtNode> ifBlockStmtNodes;
-	public List<StmtNode> elseBlockStmtNodes;
-	public IfStmtNode ifStmtNode;
+	public List<StmtNode> StmtNodes;
 	
-	// Hvis der kun er en if
-	public IfStmtNode(ExprNode exprNode, List<StmtNode> ifBlockStmtNodes) {
+	public ElseIfStmtNode(ExprNode exprNode, List<StmtNode> stmtNodes) {
 		this.exprNode = exprNode;
-		this.ifBlockStmtNodes = ifBlockStmtNodes;
-	}
-	
-	// Hvis der er en else block
-	public IfStmtNode(ExprNode exprNode, List<StmtNode> ifBlockStmtNodes, List<StmtNode> elseBlockStmtNodes) {
-		this.exprNode = exprNode;
-		this.ifBlockStmtNodes = ifBlockStmtNodes;
-		this.elseBlockStmtNodes = elseBlockStmtNodes;
-	}
-	
-	// Hvis det er en nested if-else
-	public IfStmtNode(ExprNode exprNode, List<StmtNode> ifBlockStmtNodes, 
-							List<StmtNode> elseBlockStmtNodes, IfStmtNode ifStmtNode) {
-		this.exprNode = exprNode;
-		this.ifBlockStmtNodes = ifBlockStmtNodes;
-		this.elseBlockStmtNodes = elseBlockStmtNodes;
-		this.ifStmtNode = ifStmtNode;
-	}
-	@Override
-	void accept(Visitor v) {
-		v.visit(this);
-	}
-}
-
-class IterativeNode extends StmtNode{
-	// Denne node virker lidt ligegyldig. Skal evt. ændres hvis det ændres i CFG'en.
-	public LoopNode loopNode;
-	
-	public IterativeNode(LoopNode loopNode) {
-		this.loopNode = loopNode;
+		this.StmtNodes = stmtNodes;
 	}
 	
 	@Override
@@ -354,14 +355,38 @@ class IterativeNode extends StmtNode{
 	}
 }
 
-class LoopNode extends AstNode{
-	// De to loops skal måske deles op i CFGen så vi kan lave forskellige nodes til dem.
+abstract class IterativeNode extends StmtNode{
+	abstract void accept(Visitor v);
+}
+
+
+
+class LoopTimesNode extends AstNode{
 	public ExprNode exprNode;
 	public List<StmtNode> stmtNodes;
 	
-	public LoopNode(ExprNode exprNode, List<StmtNode> stmtNodes) {
+	public LoopTimesNode(ExprNode exprNode, List<StmtNode> stmtNodes) {
 		this.exprNode = exprNode;
 		this.stmtNodes = stmtNodes;
+	}
+	
+	@Override
+	void accept(Visitor v) {
+		v.visit(this);
+	}
+}
+
+class LoopUntilNode extends AstNode{
+	public ExprNode exprNode;
+	public IdNode idNode;
+	public LiteralExprNode numberNode;
+	public List<StmtNode> stmtNodes;
+	
+	public LoopUntilNode(ExprNode exprNode, List<StmtNode> stmtNodes, IdNode idNode, LiteralExprNode numberNode) {
+		this.exprNode = exprNode;
+		this.stmtNodes = stmtNodes;
+		this.idNode = idNode;
+		this.numberNode = numberNode;
 	}
 	
 	@Override
@@ -372,15 +397,14 @@ class LoopNode extends AstNode{
 
 class FuncCallNode extends StmtNode{
 	public IdNode idNode;
-	public List<CallCntNode> callCntNodes; //Parametre
+	public CallCntNode callCntNode; // Parameters
 	
-	public FuncCallNode(IdNode idNode, List<CallCntNode> callCntNodes) {
+	public FuncCallNode(IdNode idNode, CallCntNode callCntNode) {
 		this.idNode = idNode;
-		this.callCntNodes = callCntNodes;
+		this.callCntNode = callCntNode;
 	}
-	
-	//Hvis der ingen parametre er
-	public FuncCallNode(IdNode idNode) {
+
+	public FuncCallNode(IdNode idNode, NoneNode noneNode) {
 		this.idNode = idNode;
 	}
 	
@@ -405,16 +429,39 @@ class CallCntNode extends AstNode{
 
 class AssignmentNode extends StmtNode{
 	public IdNode idNode;
+	public IdNode subIdNode;
 	public ExprNode exprNode;
 	
 	public AssignmentNode(IdNode idNode, ExprNode exprNode) {
 		this.idNode = idNode;
 		this.exprNode = exprNode;
 	}
+	
+	public AssignmentNode(IdNode idNode, ExprNode exprNode, IdNode subIdNode) {
+		this.idNode = idNode;
+		this.exprNode = exprNode;
+		this.subIdNode = subIdNode;
+	}
+	
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
 	}
+}
+
+class AdvTypeModifierNode extends StmtNode{
+	public List<ExprNode> exprNodes;
+	public IdNode idNode;
+	
+	AdvTypeModifierNode(List<ExprNode> exprNodes, IdNode idNode){
+		this.exprNodes = exprNodes;
+		this.idNode = idNode;
+	}
+	
+	@Override
+	void accept(Visitor v) {
+		v.visit(this);
+	}	
 }
 
 class RepeatNode extends AstNode{
@@ -437,6 +484,7 @@ class FuncNode extends AstNode{
 	public List<FuncCntNode> funcCntNodes;
 	public ReturnStmtNode returnStmtNode;
 	
+	// If all is set and returnType is not none
 	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
 					List<FuncCntNode> funcCntNodes, ReturnStmtNode returnStmtNode) {
 		this.idNode = idNode;
@@ -446,23 +494,19 @@ class FuncNode extends AstNode{
 		this.returnStmtNode = returnStmtNode;
 	}
 	
-	// Evt. Constructors til hvis der ingen retur stmt er eller ingen parametre er.
-	public FuncNode(IdNode idNode, TypeNode typeNode, 
-					List<FuncCntNode> funcCntNodes, ReturnStmtNode returnStmtNode) {
-		this.idNode = idNode;
-		this.typeNode = typeNode;
-		this.funcCntNodes = funcCntNodes;
-		this.returnStmtNode = returnStmtNode;
+	// If returnType is none
+	public FuncNode(IdNode idNode, ParametersNode parametersNode, NoneNode noneNode, 
+			List<FuncCntNode> funcCntNodes) {
+			this.idNode = idNode;
+			this.parametersNode = parametersNode;
+			this.funcCntNodes = funcCntNodes;
 	}
+	
+	// No return statement
 	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
 					List<FuncCntNode> funcCntNodes) {
 		this.idNode = idNode;
 		this.parametersNode = parametersNode;
-		this.typeNode = typeNode;
-		this.funcCntNodes = funcCntNodes;
-	}	
-	public FuncNode(IdNode idNode, TypeNode typeNode, List<FuncCntNode> funcCntNodes) {
-		this.idNode = idNode;
 		this.typeNode = typeNode;
 		this.funcCntNodes = funcCntNodes;
 	}	
@@ -493,9 +537,14 @@ class FuncCntNode extends AstNode{
 
 class ParametersNode extends AstNode{
 	public List<ParamNode> paramNodes;
+	public NoneNode noneNode;
 	
 	public ParametersNode(List<ParamNode> paramNodes) {
 		this.paramNodes = paramNodes;
+	}
+	
+	public ParametersNode(NoneNode noneNode) {
+		this.noneNode = noneNode;
 	}
 	
 	@Override
@@ -529,9 +578,17 @@ class ReturnStmtNode extends StmtNode{
 		v.visit(this);
 	}
 }
+
 abstract class ExprNode extends AstNode{
+	public ExprNode() {}	
+	public ExprNode(ParserRuleContext ctx) {
+		super(ctx);
+	}
+	
+	public Type type;
 	abstract void accept(Visitor v);
 }
+
 class IdRefExprNode extends ExprNode{
 	public IdNode idNode;
 	
@@ -543,10 +600,15 @@ class IdRefExprNode extends ExprNode{
 		v.visit(this);
 	}
 }
+
+class NoneNode extends AstNode{
+	void accept(Visitor v) {
+		v.visit(this);
+	}
+}
+
 class LiteralExprNode extends ExprNode{
 	public String literalExprNode; 
-	// Kan være en TEXT, NUMBER eller BOOL på streng-form.
-	// Der skal sikkert en type med på en eller anden måde.
 	public LiteralExprNode(String literalExprNode) {
 		this.literalExprNode = literalExprNode;
 	}
@@ -626,7 +688,5 @@ class LiteralAdvancedNode extends ExprNode
 		v.visit(this);
 		
 	}
-	
 }
-
 

@@ -217,15 +217,25 @@ public interface PhalListener extends ParseTreeListener {
 	 */
 	void exitIterative(PhalParser.IterativeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PhalParser#loop}.
+	 * Enter a parse tree produced by {@link PhalParser#loopTimes}.
 	 * @param ctx the parse tree
 	 */
-	void enterLoop(PhalParser.LoopContext ctx);
+	void enterLoopTimes(PhalParser.LoopTimesContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PhalParser#loop}.
+	 * Exit a parse tree produced by {@link PhalParser#loopTimes}.
 	 * @param ctx the parse tree
 	 */
-	void exitLoop(PhalParser.LoopContext ctx);
+	void exitLoopTimes(PhalParser.LoopTimesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PhalParser#loopUntil}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoopUntil(PhalParser.LoopUntilContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PhalParser#loopUntil}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoopUntil(PhalParser.LoopUntilContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PhalParser#funcCall}.
 	 * @param ctx the parse tree
@@ -257,6 +267,16 @@ public interface PhalListener extends ParseTreeListener {
 	 */
 	void exitAssignment(PhalParser.AssignmentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PhalParser#advTypeModifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdvTypeModifier(PhalParser.AdvTypeModifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PhalParser#advTypeModifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdvTypeModifier(PhalParser.AdvTypeModifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PhalParser#repeat}.
 	 * @param ctx the parse tree
 	 */
@@ -266,16 +286,6 @@ public interface PhalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRepeat(PhalParser.RepeatContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PhalParser#repeatCnt}.
-	 * @param ctx the parse tree
-	 */
-	void enterRepeatCnt(PhalParser.RepeatCntContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PhalParser#repeatCnt}.
-	 * @param ctx the parse tree
-	 */
-	void exitRepeatCnt(PhalParser.RepeatCntContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PhalParser#func}.
 	 * @param ctx the parse tree
