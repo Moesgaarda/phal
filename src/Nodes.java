@@ -102,6 +102,17 @@ class TypeNode extends AstNode{
 		v.visit(this);
 	}
 }
+enum Type{
+	NUMBER,
+	TEXT,
+	BOOL,
+	NONE,
+	GROUP,
+	LIST,
+	LIGHTBULB,
+	MOTOR,
+	TEMPERATURESENSOR
+}
 
 class AdvDataTypeNode extends AstNode{
 	// Denne kan vidst også laves abstract og så lade GroupNode og ListNode arve fra den.
@@ -165,30 +176,14 @@ class GroupNode extends AstNode{
 class ListNode extends AstNode{
 	public TypeNode typeNode;
 	public IdNode idNode;
-	public List<ListCntNode> listCntNodes;
+	public List<ExprNode> exprNodes; 
 	
-	public ListNode(TypeNode typeNode, IdNode idNode, List<ListCntNode> listCntNodes) {
+	public ListNode(TypeNode typeNode, IdNode idNode, List<ExprNode> exprNodes) {
 		this.typeNode = typeNode;
 		this.idNode = idNode;
-		this.listCntNodes = listCntNodes;
+		this.exprNodes = exprNodes;
 	}
 	
-	@Override
-	void accept(Visitor v) {
-		v.visit(this);
-	}
-}
-
-class ListCntNode extends AstNode{
-	public IdNode idNode;
-	public LiteralExprNode literalExprNode;
-	
-	public ListCntNode(IdNode idNode) {
-		this.idNode = idNode;
-	}
-	public ListCntNode(LiteralExprNode literalExprNode) {
-		this.literalExprNode = literalExprNode;
-	}
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
@@ -599,6 +594,16 @@ class IdNode extends ExprNode{
 	void accept(Visitor v) {
 		v.visit(this);
 	}
+}
+class LiteralAdvancedNode extends ExprNode
+{
+
+	@Override
+	void accept(Visitor v) {
+		v.visit(this);
+		
+	}
+	
 }
 
 

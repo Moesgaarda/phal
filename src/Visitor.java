@@ -36,9 +36,6 @@ public abstract class Visitor {
 	public void visit(ListNode node) {
 		node.accept(this);
 	}
-	public void visit(ListCntNode node) {
-		node.accept(this);
-	}
 
 	public void visit(SelectiveNode node) {
 		node.accept(this);
@@ -113,6 +110,9 @@ public abstract class Visitor {
 		node.accept(this);
 	}
 	public void visit(IdNode node) {
+		node.accept(this);
+	}
+	public void visit(LiteralAdvancedNode node) {
 		node.accept(this);
 	}
 	

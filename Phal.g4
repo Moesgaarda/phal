@@ -53,7 +53,7 @@ cmpDcl
 
 advType    
 	: 	'lightbulb'  
-	|  	'coffeeMachine'   
+	|  	'motor'   
 	|  	'temperatureSensor' 
 	;
 
