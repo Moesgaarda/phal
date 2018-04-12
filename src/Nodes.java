@@ -80,14 +80,17 @@ class DclNode extends AstNode{
 class VarDclNode extends AstNode{
 	public IdNode idNode;
 	public List<ExprNode> exprNodes;
+	public TypeNode typeNode;
 	
-	public VarDclNode(IdNode idNode) {
+	public VarDclNode(IdNode idNode, TypeNode typeNode) {
 		this.idNode = idNode;
+		this.typeNode = typeNode;
 	}
 	
-	public VarDclNode(IdNode idNode, List<ExprNode> exprNodes) {
+	public VarDclNode(IdNode idNode, List<ExprNode> exprNodes, TypeNode typeNode) {
 		this.idNode = idNode;
 		this.exprNodes = exprNodes;
+		this.typeNode = typeNode;
 	}
 	
 	@Override
@@ -97,21 +100,59 @@ class VarDclNode extends AstNode{
 }
 
 class TypeNode extends AstNode{
+	public String type;
+	public Type Type;
+	
+	public TypeNode(String type) {
+		this.type = type;
+	
+		switch(this.type) {
+		case "number":
+			this.Type = Type.NUMBER;
+			break;
+		case "text":
+			this.Type = Type.TEXT;
+			break;
+		case "bool":
+			this.Type = Type.BOOL;
+			break;
+		case "group":
+			this.Type = Type.GROUP;
+			break;
+		case "list":
+			this.Type = Type.LIST;
+			break;
+		case "lightbulb":
+			this.Type = Type.LIGHTBULB;
+			break;
+		case "motor":
+			this.Type = Type.MOTOR;
+			break;
+		case "temperaturesensor":
+			this.Type = Type.TEMPERATURESENSOR;
+			break;
+		case "none":
+			this.Type = Type.NONE;
+			break;
+		}
+	}
+	
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
 	}
 }
+
 enum Type{
 	NUMBER,
 	TEXT,
 	BOOL,
-	NONE,
 	GROUP,
 	LIST,
 	LIGHTBULB,
 	MOTOR,
-	TEMPERATURESENSOR
+	TEMPERATURESENSOR,
+	NONE
 }
 
 class AdvDataTypeNode extends AstNode{
@@ -392,37 +433,37 @@ class RepeatNode extends AstNode{
 class FuncNode extends AstNode{
 	public IdNode idNode;
 	public ParametersNode parametersNode;
-	public RTypeNode rTypeNode;
+	public TypeNode typeNode;
 	public List<FuncCntNode> funcCntNodes;
 	public ReturnStmtNode returnStmtNode;
 	
-	public FuncNode(IdNode idNode, ParametersNode parametersNode, RTypeNode rTypeNode, 
+	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
 					List<FuncCntNode> funcCntNodes, ReturnStmtNode returnStmtNode) {
 		this.idNode = idNode;
 		this.parametersNode = parametersNode;
-		this.rTypeNode = rTypeNode;
+		this.typeNode = typeNode;
 		this.funcCntNodes = funcCntNodes;
 		this.returnStmtNode = returnStmtNode;
 	}
 	
 	// Evt. Constructors til hvis der ingen retur stmt er eller ingen parametre er.
-	public FuncNode(IdNode idNode, RTypeNode rTypeNode, 
+	public FuncNode(IdNode idNode, TypeNode typeNode, 
 					List<FuncCntNode> funcCntNodes, ReturnStmtNode returnStmtNode) {
 		this.idNode = idNode;
-		this.rTypeNode = rTypeNode;
+		this.typeNode = typeNode;
 		this.funcCntNodes = funcCntNodes;
 		this.returnStmtNode = returnStmtNode;
 	}
-	public FuncNode(IdNode idNode, ParametersNode parametersNode, RTypeNode rTypeNode, 
+	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
 					List<FuncCntNode> funcCntNodes) {
 		this.idNode = idNode;
 		this.parametersNode = parametersNode;
-		this.rTypeNode = rTypeNode;
+		this.typeNode = typeNode;
 		this.funcCntNodes = funcCntNodes;
 	}	
-	public FuncNode(IdNode idNode, RTypeNode rTypeNode, List<FuncCntNode> funcCntNodes) {
+	public FuncNode(IdNode idNode, TypeNode typeNode, List<FuncCntNode> funcCntNodes) {
 		this.idNode = idNode;
-		this.rTypeNode = rTypeNode;
+		this.typeNode = typeNode;
 		this.funcCntNodes = funcCntNodes;
 	}	
 	
@@ -443,24 +484,6 @@ class FuncCntNode extends AstNode{
 	public FuncCntNode(StmtNode stmtNode) {
 		this.stmtNode = stmtNode;
 	}
-	
-	@Override
-	void accept(Visitor v) {
-		v.visit(this);
-	}
-}
-
-class RTypeNode extends AstNode{
-	public TypeNode typeNode;
-	public AdvDataTypeNode advDataTypeNode;
-	
-	public RTypeNode(TypeNode typeNode) {
-		this.typeNode = typeNode;
-	}
-	public RTypeNode(AdvDataTypeNode advDataTypeNode) {
-		this.advDataTypeNode = advDataTypeNode;
-	}
-	public RTypeNode() {}
 	
 	@Override
 	void accept(Visitor v) {

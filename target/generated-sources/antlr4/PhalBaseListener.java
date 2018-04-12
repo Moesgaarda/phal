@@ -171,6 +171,18 @@ public class PhalBaseListener implements PhalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterWaitStmt(PhalParser.WaitStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWaitStmt(PhalParser.WaitStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSelective(PhalParser.SelectiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -346,18 +358,6 @@ public class PhalBaseListener implements PhalListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFuncCnt(PhalParser.FuncCntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRType(PhalParser.RTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRType(PhalParser.RTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

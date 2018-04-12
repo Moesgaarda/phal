@@ -71,8 +71,14 @@ stmt
 	|   iterative  NEWLINE+
 	|   funcCall   NEWLINE+
 	|   assignment NEWLINE+
-	|	returnStmt 
+	|	returnStmt NEWLINE*
+	|   waitStmt NEWLINE+
 	;
+	
+waitStmt
+	:	'wait' expr 'seconds'
+	;
+
 
 
 	
@@ -138,18 +144,12 @@ repeatCnt
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters? ')' 'returnType' rType NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* returnStmt? '}' 
+	: 	'define' ID 'with' '(' parameters? ')' 'returnType' (type | none) NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* returnStmt? '}' 
 	;
 
 funcCnt		
 	:	varDcl NEWLINE* 
 	| 	stmt NEWLINE*
-	;
-
-rType		
-	: 	type 
-	|	advDataType
-	| 	'none'
 	;
 
 parameters    
@@ -162,7 +162,7 @@ param
 	;
 
 returnStmt    
-	: 'return' (expr | 'none') NEWLINE*
+	: 'return' (expr | 'none')
 	;
 	
 expr

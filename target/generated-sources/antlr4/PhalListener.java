@@ -137,6 +137,16 @@ public interface PhalListener extends ParseTreeListener {
 	 */
 	void exitStmt(PhalParser.StmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PhalParser#waitStmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterWaitStmt(PhalParser.WaitStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PhalParser#waitStmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitWaitStmt(PhalParser.WaitStmtContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PhalParser#selective}.
 	 * @param ctx the parse tree
 	 */
@@ -286,16 +296,6 @@ public interface PhalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFuncCnt(PhalParser.FuncCntContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PhalParser#rType}.
-	 * @param ctx the parse tree
-	 */
-	void enterRType(PhalParser.RTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PhalParser#rType}.
-	 * @param ctx the parse tree
-	 */
-	void exitRType(PhalParser.RTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PhalParser#parameters}.
 	 * @param ctx the parse tree

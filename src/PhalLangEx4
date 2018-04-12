@@ -11,7 +11,7 @@ text t := "This is a string"
 bool b := true
 
 lightbulb lb := pin 1
-coffeeMachine cm := pin 2,3,4
+motor cm := pin 2,3,4
 temperatureSensor ts := pin 5
 
 group numAndCoffee{

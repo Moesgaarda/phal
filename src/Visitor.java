@@ -79,9 +79,6 @@ public abstract class Visitor {
 	public void visit(FuncCntNode node) {
 		node.accept(this);
 	}
-	public void visit(RTypeNode node) {
-		node.accept(this);
-	}
 	public void visit(ParametersNode node) {
 		node.accept(this);
 	}
