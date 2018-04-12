@@ -187,7 +187,6 @@ expr
   |		'get' 'element' expr (',' expr)* 'from' ID										# litAdvExpr
   ;
  
-
 none : 'none';
 
 TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
@@ -201,7 +200,6 @@ COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;
 WS  			:   [ \t]+ 				-> channel(HIDDEN) ;
 NEWLINE			:  [\r\n];
-VALUE 			: NUMBER | BOOL | TEXT ;  
 
 fragment LETTER			: [a-zA-Z];
 fragment DIGIT 			: '0'..'9';

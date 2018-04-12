@@ -2,6 +2,9 @@ import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import enums.InfixOperator;
+import enums.UnaryOperator;
+
 abstract class AstNode {
 	public AstNode() {}
 	abstract void accept(Visitor v);
@@ -609,8 +612,9 @@ class NoneNode extends AstNode{
 
 class LiteralExprNode extends ExprNode{
 	public String literalExprNode; 
-	public LiteralExprNode(String literalExprNode) {
+	public LiteralExprNode(String literalExprNode, Type type) {
 		this.literalExprNode = literalExprNode;
+		this.type = type;
 	}
 	@Override
 	void accept(Visitor v) {
@@ -621,10 +625,11 @@ class LiteralExprNode extends ExprNode{
 class InfixExprNode extends ExprNode{
 	public ExprNode leftExprNode;
 	public ExprNode rightExprNode;
-	// Der skal muligvis operator med her, så der kan skelnes mellem hvilken InfixExpr det er.
+	public InfixOperator infixOperator;
 	
-	public InfixExprNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+	public InfixExprNode(ExprNode leftExprNode, InfixOperator infixOp, ExprNode rightExprNode) {
 		this.leftExprNode = leftExprNode;
+		this.infixOperator = infixOp;
 		this.rightExprNode = rightExprNode;
 	}
 	@Override
@@ -635,9 +640,10 @@ class InfixExprNode extends ExprNode{
 
 class UnaryExprNode extends ExprNode{
 	public ExprNode exprNode;
-	// Der skal muligvis operator med her, så der kan skelnes mellem hvilken UnaryExpr det er.
-	public UnaryExprNode(ExprNode exprNode) {
+	public UnaryOperator unaryOperator;
+	public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator) {
 		this.exprNode = exprNode;
+		this.unaryOperator = unaryOperator;
 	}
 	@Override
 	void accept(Visitor v) {
@@ -671,10 +677,17 @@ class ParensExprNode extends ExprNode{
 
 class IdNode extends ExprNode{
 	public String id;
+	public String subId;
 	
 	public IdNode(String id) {
 		this.id = id;
 	}
+	
+	public IdNode(String id, String subId) {
+		this.id = id;
+		this.subId = subId;
+	}
+	
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
@@ -682,11 +695,16 @@ class IdNode extends ExprNode{
 }
 class LiteralAdvancedNode extends ExprNode
 {
-
+	public List<ExprNode> exprNodes;
+	public IdNode idNode;
+	
+	public LiteralAdvancedNode(List<ExprNode> exprNodes, IdNode idNode) {
+		this.exprNodes = exprNodes;
+		this.idNode = idNode;
+	}
+		
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
-		
 	}
 }
-
