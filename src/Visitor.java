@@ -1,127 +1,297 @@
 
 public abstract class Visitor {
 	public void visit(ProgramNode node) {
-		node.accept(this);
+		if(node.includeNodes != null) 
+		{
+			for(IncludeNode include: node.includeNodes) 
+			{
+				include.accept(this);
+			}
+		}
+		node.setupNode.accept(this);
+		node.repeatNode.accept(this);
+		if(node.funcNodes != null) 
+		{
+			for(FuncNode func: node.funcNodes) 
+			{
+				func.accept(this);
+			}
+		}
 	}
+	
 	public void visit(IncludeNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
 	}
 	public void visit(SetupNode node) {
-		node.accept(this);
+		if(node.setupCntNodes != null) 
+		{
+			for(SetupCntNode setup: node.setupCntNodes) 
+			{
+				setup.accept(this);
+			}
+		}
 	}
 	public void visit(SetupCntNode node) {
-		node.accept(this);
+		if(node.dclNode != null) 
+		{
+			node.dclNode.accept(this);
+			
+		}
+		else if (node.stmtNode != null)
+		{
+			node.stmtNode.accept(this);
+		} 
+			
 	}
 	public void visit(DclNode node) {
 		node.accept(this);
 	}
 	public void visit(VarDclNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
+		node.typeNode.accept(this);
+		if(node.exprNodes != null)
+		{
+			for(ExprNode expr: node.exprNodes)
+			{
+				expr.accept(this);
+			}
+		}
 	}
 	public void visit(TypeNode node) {
-		node.accept(this);
 	}
 	public void visit(AdvDataTypeNode node) {
 		node.accept(this);
 	}
 	public void visit(CmpDclNode node) {
-		node.accept(this);
+		node.advTypeNode.accept(this);
+		node.idNode.accept(this);
+		for(LiteralExprNode num: node.literalExprNodes)
+		{
+			num.accept(this);
+		}
 	}
 	public void visit(AdvTypeNode node) {
-		node.accept(this);
 	}
 	public void visit(GroupNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
+		for(IdNode member: node.memberIdNodes) 
+		{
+			member.accept(this);
+		}
 	}
 	public void visit(ListNode node) {
+		node.idNode.accept(this);
+		node.typeNode.accept(this);
+		if(node.memberExprNodes != null)
+		{
+			for(ExprNode expr: node.memberExprNodes)
+			{
+				expr.accept(this);
+			}
+		}
+	}
+	public void visit(StmtNode node) {
 		node.accept(this);
 	}
+	public void visit(WaitNode node) {
+		node.exprNode.accept(this);
+	}
+	
 	public void visit(SelectiveNode node) {
 		node.accept(this);
 	}
 	public void visit(SwitchStmtNode node) {
-		node.accept(this);
+		node.exprNode.accept(this);
+		node.caseListNode.accept(this);
 	}
 	public void visit(CaseListNode node) {
-		node.accept(this);
+		for(CaseStmtNode caseStmt: node.caseStmtNodes)
+		{
+			caseStmt.accept(this);
+		}
+		node.defaultCaseNode.accept(this);
 	}
 	public void visit(CaseStmtNode node) {
-		node.accept(this);
+		node.exprNode.accept(this);
+		if(node.stmtNodes != null)
+		{
+			for(StmtNode stmt : node.stmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
 	}
 	public void visit(DefaultCaseNode node) {
-		node.accept(this);
+		if(node.stmtNodes != null)
+		{
+			for(StmtNode stmt : node.stmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
 	}
 	public void visit(IfStmtNode node) {
-		node.accept(this);
+		node.ifNode.accept(this);
+		if(node.ifStmtNodes != null)
+		{
+			for(StmtNode stmt : node.ifStmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
+		if(node.elifNodes != null)
+		{
+			for(ElseIfStmtNode elseIfStmt : node.elifNodes)
+			{
+				elseIfStmt.accept(this);
+			}
+		}
+		if(node.elseStmtNodes != null)
+		{
+			for(StmtNode elseStmt : node.elseStmtNodes)
+			{
+				elseStmt.accept(this);
+			}
+		}
+	}
+	public void visit(ElseIfStmtNode node) {
+		node.exprNode.accept(this);
+		if(node.stmtNodes != null)
+		{
+			for(StmtNode stmt : node.stmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
 	}
 	public void visit(IterativeNode node) {
 		node.accept(this);
 	}
 	public void visit(LoopTimesNode node) {
-		node.accept(this);
+		node.exprNode.accept(this);
+		if(node.stmtNodes != null)
+		{
+			for(StmtNode stmt : node.stmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
 	}
 	public void visit(LoopUntilNode node) {
-		node.accept(this);
+		node.exprNode.accept(this);
+		if(node.idNode != null && node.numberNode != null) {
+			node.idNode.accept(this);
+			node.numberNode.accept(this);
+		}
+		if(node.stmtNodes != null)
+		{
+			for(StmtNode stmt : node.stmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
+		
+		
 	}
 	public void visit(FuncCallNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
+		node.callCntNode.accept(this);
 	}
 	public void visit(CallCntNode node) {
-		node.accept(this);
+		for(ExprNode expr: node.exprNodes)
+		{
+			expr.accept(this);
+		}
 	}
 	public void visit(AssignmentNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
+		if(node.subIdNode != null)
+		{
+			node.subIdNode.accept(this);
+		}
+		node.exprNode.accept(this);
 	}
 	public void visit(AdvTypeModifierNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
+		for(ExprNode expr: node.exprNodes)
+		{
+			expr.accept(this);
+		}
+		
 	}
 	public void visit(RepeatNode node) {
-		node.accept(this);
+		if(node.stmtNodes != null) {
+			for(StmtNode stmt : node.stmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
 	}
 	public void visit(FuncNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
+		node.parametersNode.accept(this);
+		node.typeNode.accept(this);
+		node.returnStmtNode.accept(this);
+		if(node.funcCntNodes != null)
+		{
+			for(FuncCntNode funcCnt : node.funcCntNodes) 
+			{
+				funcCnt.accept(this);
+			}
+		}
 	}
 	public void visit(FuncCntNode node) {
-		node.accept(this);
+		node.varDclNode.accept(this);
+		node.stmtNode.accept(this);
 	}
 	public void visit(ParametersNode node) {
-		node.accept(this);
+		node.noneNode.accept(this);
+		for(ParamNode param: node.paramNodes)
+		{
+			param.accept(this);			
+		}
 	}
 	public void visit(ParamNode node) {
-		node.accept(this);
+		node.typeNode.accept(this);
+		node.idNode.accept(this);
 	}
 	public void visit(ReturnStmtNode node) {
+		node.exprNode.accept(this);
+	}
+	public void visit(ExprNode node) {
 		node.accept(this);
 	}
 	public void visit(IdRefExprNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
 	}
 	public void visit(NoneNode node) {
 		node.accept(this);
 	}
 	public void visit(LiteralExprNode node) {
-		node.accept(this);
 	}
 	public void visit(InfixExprNode node) {
-		node.accept(this);
-	}
-	public void visit(UnaryExprNode node) {
-		node.accept(this);
-	}
-	public void visit(ParensExprNode node) {
-		node.accept(this);
+		node.leftExprNode.accept(this);
+		node.rightExprNode.accept(this);
 	}
 	public void visit(FuncExprNode node) {
-		node.accept(this);
+		node.funcCallNode.accept(this);
 	}
+	public void visit(ParensExprNode node) {
+		node.exprNode.accept(this);
+	}
+	public void visit(UnaryExprNode node) {
+		node.exprNode.accept(this);
+	}
+	
 	public void visit(IdNode node) {
-		node.accept(this);
 	}
 	public void visit(LiteralAdvancedNode node) {
-		node.accept(this);
+		node.idNode.accept(this);
+		for(ExprNode expr: node.exprNodes)
+		{
+			expr.accept(this);
+		}
 	}
-	public void visit(WaitNode node) {
-		node.accept(this);
-	}
+
 	
 }

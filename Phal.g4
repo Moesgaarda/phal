@@ -62,7 +62,7 @@ group
 	;
 
 list        
-	: 	'list' type ID '{' expr ( ',' expr)* '}' 
+	: 	'list' type ID '{' (expr ( ',' expr)*)? '}' 
 	;
 
 
@@ -152,6 +152,7 @@ func
 funcCnt		
 	:	varDcl NEWLINE* 
 	| 	stmt NEWLINE*
+	|	list NEWLINE+
 	;
 
 parameters    

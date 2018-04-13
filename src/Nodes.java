@@ -69,8 +69,10 @@ class SetupCntNode extends AstNode{
 	public DclNode dclNode;
 	public StmtNode stmtNode;
 	
-	public SetupCntNode(DclNode dclNode, StmtNode stmtNode) {
+	public SetupCntNode(DclNode dclNode) {
 		this.dclNode = dclNode;
+	}
+	public SetupCntNode(StmtNode stmtNode) {
 		this.stmtNode = stmtNode;
 	}
 	@Override
@@ -345,11 +347,11 @@ class IfStmtNode extends SelectiveNode{
 
 class ElseIfStmtNode extends SelectiveNode{
 	public ExprNode exprNode;
-	public List<StmtNode> StmtNodes;
+	public List<StmtNode> stmtNodes;
 	
 	public ElseIfStmtNode(ExprNode exprNode, List<StmtNode> stmtNodes) {
 		this.exprNode = exprNode;
-		this.StmtNodes = stmtNodes;
+		this.stmtNodes = stmtNodes;
 	}
 	
 	@Override
@@ -479,7 +481,7 @@ class RepeatNode extends AstNode{
 		v.visit(this);
 	}
 }
-
+// ER det nødvendigt at have alle disse constructors? enten flere eller færre?!?
 class FuncNode extends AstNode{
 	public IdNode idNode;
 	public ParametersNode parametersNode;
