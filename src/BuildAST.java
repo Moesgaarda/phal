@@ -8,8 +8,9 @@ public class BuildAST extends PhalBaseVisitor {
 		RepeatNode repeatNode = null;
 		List<FuncNode> funcNodes = null;
 		
+		// Få den til at visit alle de ting vi skal bruge i *metodeNavnets* konstruktor
 		
-		return null;
+		return new ProgramNode(includeNodes, setupNode, repeatNode,funcNodes);
 		
 	}
 	@Override public AstNode visitInclude(PhalParser.IncludeContext ctx) 
