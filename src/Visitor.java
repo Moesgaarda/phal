@@ -1,7 +1,7 @@
 
 public abstract class Visitor {
 	public void visit(ProgramNode node) {
-		if(node.includeNodes != null) 
+		if(node.includeNodes.isEmpty()) 
 		{
 			for(IncludeNode include: node.includeNodes) 
 			{

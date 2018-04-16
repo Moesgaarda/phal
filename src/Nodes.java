@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import enums.InfixOperator;
 import enums.UnaryOperator;
 
+//TODO tilføj ctx constructor til mange af klasserne så vi det bliver nemmere at diagnotisere programmet
 abstract class AstNode {
 	public AstNode() {}
 	abstract void accept(Visitor v);

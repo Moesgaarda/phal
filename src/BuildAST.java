@@ -1,39 +1,71 @@
+import java.util.LinkedList;
 import java.util.List;
 
-public class BuildAST extends PhalBaseVisitor {
+public class BuildAST extends PhalBaseVisitor<AstNode> {
 	@Override
-	public AstNode visitProgram(PhalParser.ProgramContext context) {
-		List<IncludeNode> includeNodes = null;
+	public AstNode visitProgram(PhalParser.ProgramContext ctx) {
+		List<IncludeNode> includeNodes = new LinkedList<>();
 		SetupNode setupNode = null;
 		RepeatNode repeatNode = null;
-		List<FuncNode> funcNodes = null;
+		List<FuncNode> funcNodes = new LinkedList<>();
 		
-		// Få den til at visit alle de ting vi skal bruge i *metodeNavnets* konstruktor
-		
+		for(PhalParser.IncludeContext include: ctx.include()) 
+		{
+			includeNodes.add((IncludeNode) visit(include));
+		}
+		if(ctx.setup() != null)
+		{
+			setupNode = (SetupNode)visit(ctx.setup());
+		}
+		if(ctx.repeat() != null)
+		{
+			repeatNode = (RepeatNode)visit(ctx.repeat());
+		}
+		for(PhalParser.FuncContext func: ctx.func()) 
+		{
+			funcNodes.add((FuncNode) visit(func));
+		}
 		return new ProgramNode(includeNodes, setupNode, repeatNode,funcNodes);
 		
 	}
 	@Override public AstNode visitInclude(PhalParser.IncludeContext ctx) 
 	{
-		return visitChildren(ctx); 
+		return new IncludeNode((IdNode) visit(ctx.ID()));
 	}
 	
 	@Override public AstNode visitSetup(PhalParser.SetupContext ctx) 
 	{ 
-		return visitChildren(ctx);
+		List<SetupCntNode> setupCnts = new LinkedList<>();
+		for(PhalParser.SetupCntContext setupCnt: ctx.setupCnt()) 
+		{
+			setupCnts.add((SetupCntNode) visit(setupCnt));
+		}
+		return new SetupNode(setupCnts);
 	}
 
 	@Override public AstNode visitSetupCnt(PhalParser.SetupCntContext ctx) 
 	{ 
-		return visitChildren(ctx);
+		DclNode dclNode = null;
+		StmtNode stmtNode = null;
+		if(ctx.dcl() != null)
+		{
+			return new SetupCntNode((DclNode)visit(ctx.dcl()));
+		}
+		else if(ctx.stmt() != null)
+		{
+			return new SetupCntNode((StmtNode)visit(ctx.stmt()));
+		}
+		//TODO exception throw her?
+		return null;
 	}
-	@Override public AstNode visitDcl(PhalParser.DclContext ctx) 
-	{ 
-		return visitChildren(ctx);
-	}
+
 	@Override public AstNode visitVarDcl(PhalParser.VarDclContext ctx) 
 	{ 
-		return visitChildren(ctx);
+		IdNode idNode = null;
+		List<ExprNode> exprNodes = new LinkedList<>();
+		TypeNode typeNode;
+		
+		
 	}
 	@Override public AstNode visitType(PhalParser.TypeContext ctx)  
 	{ 
