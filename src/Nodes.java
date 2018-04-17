@@ -521,15 +521,6 @@ class FuncNode extends AstNode{
 			this.funcCntNodes = funcCntNodes;
 	}
 	
-	// No return statement
-	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
-					List<FuncCntNode> funcCntNodes) {
-		this.idNode = idNode;
-		this.parametersNode = parametersNode;
-		this.typeNode = typeNode;
-		this.funcCntNodes = funcCntNodes;
-	}	
-	
 	@Override
 	void accept(Visitor v) {
 		v.visit(this);
@@ -621,6 +612,7 @@ class IdRefExprNode extends ExprNode{
 }
 
 class NoneNode extends AstNode{
+	public NoneNode() {}
 	void accept(Visitor v) {
 		v.visit(this);
 	}
