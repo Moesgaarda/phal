@@ -49,12 +49,9 @@ public abstract class Visitor {
 	public void visit(VarDclNode node) {
 		node.idNode.accept(this);
 		node.typeNode.accept(this);
-		if(node.exprNodes != null)
+		if(node.exprNode != null)
 		{
-			for(ExprNode expr: node.exprNodes)
-			{
-				expr.accept(this);
-			}
+			node.exprNode.accept(this);
 		}
 	}
 	public void visit(TypeNode node) {
@@ -131,31 +128,19 @@ public abstract class Visitor {
 		}
 	}
 	public void visit(IfStmtNode node) {
-		node.ifNode.accept(this);
-		if(node.ifStmtNodes != null)
+		node.ifExprNode.accept(this);
+		node.ifBlock.accept(this);
+		if(node.elseIfStmts != null)
 		{
-			for(StmtNode stmt : node.ifStmtNodes)
+			for(ElseIfStmtNode elseIfStmts: node.elseIfStmts)
 			{
-				stmt.accept(this);
+				elseIfStmts.accept(this);
 			}
 		}
-		if(node.elifNodes != null)
-		{
-			for(ElseIfStmtNode elseIfStmt : node.elifNodes)
-			{
-				elseIfStmt.accept(this);
-			}
-		}
-		if(node.elseStmtNodes != null)
-		{
-			for(StmtNode elseStmt : node.elseStmtNodes)
-			{
-				elseStmt.accept(this);
-			}
-		}
+		node.elseBlock.accept(this);
 	}
-	public void visit(ElseIfStmtNode node) {
-		node.exprNode.accept(this);
+	public void visit(BlockNode node)
+	{
 		if(node.stmtNodes != null)
 		{
 			for(StmtNode stmt : node.stmtNodes)
@@ -163,6 +148,11 @@ public abstract class Visitor {
 				stmt.accept(this);
 			}
 		}
+	}
+	
+	public void visit(ElseIfStmtNode node) {
+		node.exprNode.accept(this);
+		node.block.accept(this);
 	}
 	public void visit(IterativeNode node) {
 		node.accept(this);

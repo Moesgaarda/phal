@@ -88,7 +88,7 @@ abstract class DclNode extends AstNode{
 
 class VarDclNode extends DclNode{
 	public IdNode idNode;
-	public List<ExprNode> exprNodes;
+	public ExprNode exprNode;
 	public TypeNode typeNode;
 	
 	public VarDclNode(IdNode idNode, TypeNode typeNode) {
@@ -96,9 +96,9 @@ class VarDclNode extends DclNode{
 		this.typeNode = typeNode;
 	}
 	
-	public VarDclNode(IdNode idNode, List<ExprNode> exprNodes, TypeNode typeNode) {
+	public VarDclNode(IdNode idNode, ExprNode exprNode, TypeNode typeNode) {
 		this.idNode = idNode;
-		this.exprNodes = exprNodes;
+		this.exprNode = exprNode;
 		this.typeNode = typeNode;
 	}
 	
@@ -327,17 +327,16 @@ class DefaultCaseNode extends AstNode{
 }
 
 class IfStmtNode extends SelectiveNode{
-	public ExprNode ifNode;
-	public List<StmtNode> ifStmtNodes;
-	public List<ElseIfStmtNode> elifNodes;
-	public List<StmtNode> elseStmtNodes;
+	public ExprNode ifExprNode;
+	public BlockNode ifBlock;
+	public List<ElseIfStmtNode> elseIfStmts;
+	public BlockNode elseBlock;
 	
-	public IfStmtNode(ExprNode ifNode, List<StmtNode> ifStmtNodes, 
-						List<ElseIfStmtNode> elifNodes, List<StmtNode> elseStmtNodes) {
-		this.ifNode = ifNode;
-		this.ifStmtNodes = ifStmtNodes;
-		this.elifNodes = elifNodes;
-		this.elseStmtNodes = elseStmtNodes;
+	public IfStmtNode(ExprNode ifExprNode, BlockNode ifBlock, List<ElseIfStmtNode> elseIfStmts, BlockNode elseBlock) {
+		this.ifExprNode = ifExprNode;
+		this.ifBlock = ifBlock;
+		this.elseIfStmts = elseIfStmts;
+		this.elseBlock = elseBlock;
 	}
 	
 	@Override
@@ -345,14 +344,28 @@ class IfStmtNode extends SelectiveNode{
 		v.visit(this);
 	}
 }
+class BlockNode extends StmtNode
+{
+	public List<StmtNode> stmtNodes;
+	
+	public BlockNode(List<StmtNode> stmtNodes)
+	{
+		this.stmtNodes = stmtNodes;
+	}
+	@Override
+	void accept(Visitor v) {
+		v.visit(this);
+	}
+	
+}
 
 class ElseIfStmtNode extends SelectiveNode{
 	public ExprNode exprNode;
-	public List<StmtNode> stmtNodes;
+	public BlockNode block;
 	
-	public ElseIfStmtNode(ExprNode exprNode, List<StmtNode> stmtNodes) {
+	public ElseIfStmtNode(ExprNode exprNode, BlockNode block) {
 		this.exprNode = exprNode;
-		this.stmtNodes = stmtNodes;
+		this.block = block;
 	}
 	
 	@Override

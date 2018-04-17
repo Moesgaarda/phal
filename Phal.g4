@@ -104,11 +104,14 @@ defaultCase
 	;
 
 ifStmt        
-	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}' NEWLINE*
-			('else if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}')* NEWLINE*
-			('else' 'then' NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}')? 
+	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* block NEWLINE* '}' NEWLINE*
+			('else if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* block NEWLINE* '}')* NEWLINE*
+			('else' 'then' NEWLINE* '{' NEWLINE* block NEWLINE* '}')? 
 	;
 
+block
+	: stmt*
+	;
 iterative    
 	: 	loopTimes
 	|	loopUntil 
