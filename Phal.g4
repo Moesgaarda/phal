@@ -149,7 +149,7 @@ repeat
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters ')' 'returnType' (type | none) NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* returnStmt? '}' 
+	: 	'define' ID 'with' '(' parameters ')' 'returnType' (type | none) NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* '}' 
 	;
 
 funcCnt		

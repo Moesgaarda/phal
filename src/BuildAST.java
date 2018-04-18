@@ -302,13 +302,11 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		}
 		ParametersNode paramNode = (ParametersNode)visit(ctx.parameters());
 		List<FuncCntNode> funcCntNodes = new LinkedList<>();
-		ReturnStmtNode returnStmtNode = null;
 		if(typeNode.Type == Type.NONE){
 			return new FuncNode(idNode, paramNode, new NoneNode(), funcCntNodes);
 		}
-		
-		returnStmtNode = (ReturnStmtNode)visit(ctx.returnStmt());		
-		return new FuncNode(idNode, paramNode, typeNode, funcCntNodes, returnStmtNode);
+	
+		return new FuncNode(idNode, paramNode, typeNode, funcCntNodes);
 	}
 	
 	

@@ -1,5 +1,8 @@
 find ud af:
-	strava har en function i visitoren der visitor childrene i stedet for accept. why doe?
-
+	FuncNnode:
+		flere returnstmt
+		return ligger under funcCnt. Skal den det eller skal vi rykke den???
+	
+	
 Fiks eventuelt:
 	unaryOperator der hedder NOT burde nok hedder NEGATION eller NEGATE 

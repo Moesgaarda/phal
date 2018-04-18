@@ -488,22 +488,20 @@ class RepeatNode extends AstNode{
 		v.visit(this);
 	}
 }
-// ER det nødvendigt at have alle disse constructors? enten flere eller færre?!?
+// TODO Har fjernet returnStmtNode da de ligger unde funccnt, hvis problemer opstår overvej at ændre det igen
 class FuncNode extends AstNode{
 	public IdNode idNode;
 	public ParametersNode parametersNode;
 	public TypeNode typeNode = null;
 	public List<FuncCntNode> funcCntNodes;
-	public ReturnStmtNode returnStmtNode;
 	
 	// If all is set and returnType is not none
 	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
-					List<FuncCntNode> funcCntNodes, ReturnStmtNode returnStmtNode) {
+					List<FuncCntNode> funcCntNodes) {
 		this.idNode = idNode;
 		this.parametersNode = parametersNode;
 		this.typeNode = typeNode;
 		this.funcCntNodes = funcCntNodes;
-		this.returnStmtNode = returnStmtNode;
 	}
 	
 	// If returnType is none

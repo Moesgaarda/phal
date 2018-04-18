@@ -13,7 +13,7 @@ public class MainClass {
 
 	public static void main(String args[]) 
 	{
-		String fileName = "..\\Phal\\src\\AstTester1";
+		String fileName = "..\\Phal\\src\\PhalLangEx4";
         File file = new File(fileName);
         FileInputStream fis = null;
 		
@@ -28,12 +28,16 @@ public class MainClass {
 			System.out.println(cst.toStringTree());
 			BuildAST astBuilder = new BuildAST();
 			astBuilder.visit(cst);
+
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 		}
+	
 		
 	}
+	
+
 }

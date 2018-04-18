@@ -219,7 +219,6 @@ public abstract class Visitor {
 		node.idNode.accept(this);
 		node.parametersNode.accept(this);
 		node.typeNode.accept(this);
-		node.returnStmtNode.accept(this);
 		if(node.funcCntNodes != null)
 		{
 			for(FuncCntNode funcCnt : node.funcCntNodes) 
