@@ -89,7 +89,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	@Override 
 	public AstNode visitCmpDcl(PhalParser.CmpDclContext ctx)  
 	{ 
-		AdvTypeNode advTypeNode = (AdvTypeNode)visit(ctx.advType());
+		AdvTypeNode advTypeNode = new AdvTypeNode(ctx.advType().getText());
 		IdNode idNode = new IdNode(ctx.ID().getText());
 		List<LiteralExprNode> literalExprNodes = new LinkedList<>();
 		

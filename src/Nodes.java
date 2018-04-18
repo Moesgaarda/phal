@@ -189,7 +189,7 @@ class AdvTypeNode extends AstNode{
 	public String type;
 	public Type Type;
 	
-	public AdvTypeNode(String type) throws Exception {
+	public AdvTypeNode(String type){
 		this.type = type;
 	
 		switch(this.type) {
@@ -203,7 +203,8 @@ class AdvTypeNode extends AstNode{
 			this.Type = Type.TEMPERATURESENSOR;
 			break;
 		default:
-			throw new Exception("Type is not an advanced data type");
+			//TODO maybe add exception
+			System.out.println("got an adv type that doesn't exist @ Nodes L 207");
 		}
 	}
 	
