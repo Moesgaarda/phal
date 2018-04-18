@@ -6,3 +6,4 @@ find ud af:
 	
 Fiks eventuelt:
 	unaryOperator der hedder NOT burde nok hedder NEGATION eller NEGATE 
+	Tilføj include og func node, for at gøre prettyprinter pænere.

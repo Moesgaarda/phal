@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -24,10 +25,10 @@ abstract class AstNode {
 }
 
 class ProgramNode extends AstNode{
-	public List<IncludeNode> includeNodes;
 	public SetupNode setupNode;
 	public RepeatNode repeatNode;
 	public List<FuncNode> funcNodes;
+	public List<IncludeNode> includeNodes = new LinkedList<>();
 	
 	public ProgramNode(List<IncludeNode> includeNodes, SetupNode setupNode, RepeatNode repeatNode, List<FuncNode> funcNodes) {
 		this.includeNodes = includeNodes;

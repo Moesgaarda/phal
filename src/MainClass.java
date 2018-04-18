@@ -13,7 +13,7 @@ public class MainClass {
 
 	public static void main(String args[]) 
 	{
-		String fileName = "..\\Phal\\src\\PhalLangEx4";
+		String fileName = "..\\P4\\src\\PhalLangEx4";
         File file = new File(fileName);
         FileInputStream fis = null;
 		
@@ -28,6 +28,9 @@ public class MainClass {
 			System.out.println(cst.toStringTree());
 			BuildAST astBuilder = new BuildAST();
 			astBuilder.visit(cst);
+			
+			PrettyPrinter pp = new PrettyPrinter();
+			pp.visit((ProgramNode) astBuilder.visitProgram(cst));
 
 			
 		} catch (Exception e) {
