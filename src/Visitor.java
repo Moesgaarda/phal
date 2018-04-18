@@ -34,6 +34,7 @@ public abstract class Visitor {
 	public void visit(SetupCntNode node) {
 		if(node.dclNode != null) 
 		{
+			
 			node.dclNode.accept(this);
 			
 		}
@@ -55,6 +56,7 @@ public abstract class Visitor {
 		}
 	}
 	public void visit(TypeNode node) {
+		
 	}
 	public void visit(AdvDataTypeNode node) {
 		node.accept(this);
@@ -195,10 +197,6 @@ public abstract class Visitor {
 	}
 	public void visit(AssignmentNode node) {
 		node.idNode.accept(this);
-		if(node.subIdNode != null)
-		{
-			node.subIdNode.accept(this);
-		}
 		node.exprNode.accept(this);
 	}
 	public void visit(AdvTypeModifierNode node) {

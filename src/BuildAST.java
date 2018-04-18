@@ -59,6 +59,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 
 		if(ctx.dcl() != null)
 		{
+			//System.out.println("\n \n" + ctx.dcl().getText());
 			return new SetupCntNode((DclNode)visit(ctx.dcl()));
 		}
 		else if(ctx.stmt() != null)
@@ -254,19 +255,21 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	}
 	@Override public AstNode visitAssignment(PhalParser.AssignmentContext ctx)  
 	{ 
-		IdNode idNode = (IdNode)visit(ctx.ID(0));
-		IdNode subIdNode = null;
+		IdNode idNode = null;
 		ExprNode exprNode = (ExprNode)visit(ctx.expr());
+		String id = ctx.ID(0).getText();
 		
 		if(ctx.ID(1) != null) {
-			return new AssignmentNode(idNode, exprNode, subIdNode);
+			String subId = ctx.ID(1).getText();
+			idNode = new IdNode(id, subId);
+			return new AssignmentNode(idNode, exprNode);
 		}
-		
+		idNode = new IdNode(id);
 		return new AssignmentNode(idNode, exprNode);
 	}
 	@Override public AstNode visitAdvTypeModifier(PhalParser.AdvTypeModifierContext ctx)  
 	{ 
-		IdNode idNode = (IdNode)visit(ctx.ID());
+		IdNode idNode = new IdNode(ctx.ID().getText());
 		List<ExprNode> exprNodes = new LinkedList<>();
 		
 		for(PhalParser.ExprContext expr : ctx.expr()) {
@@ -287,12 +290,19 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	}
 	@Override public AstNode visitFunc(PhalParser.FuncContext ctx)  
 	{ 
-		IdNode idNode = (IdNode)visit(ctx.ID());
-		TypeNode typeNode = (TypeNode)visit(ctx.type());
+		IdNode idNode = new IdNode(ctx.ID().getText());
+		TypeNode typeNode = null;
+		if(ctx.type() != null)
+		{
+			typeNode = new TypeNode(ctx.type().getText());
+		}
+		else
+		{
+			typeNode = new TypeNode("none");
+		}
 		ParametersNode paramNode = (ParametersNode)visit(ctx.parameters());
 		List<FuncCntNode> funcCntNodes = new LinkedList<>();
 		ReturnStmtNode returnStmtNode = null;
-		
 		if(typeNode.Type == Type.NONE){
 			return new FuncNode(idNode, paramNode, new NoneNode(), funcCntNodes);
 		}
@@ -300,6 +310,8 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		returnStmtNode = (ReturnStmtNode)visit(ctx.returnStmt());		
 		return new FuncNode(idNode, paramNode, typeNode, funcCntNodes, returnStmtNode);
 	}
+	
+	
 	@Override public AstNode visitFuncCnt(PhalParser.FuncCntContext ctx)  
 	{ 
 		if(ctx.varDcl() != null)
@@ -307,6 +319,8 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		else
 			return new FuncCntNode((StmtNode)visit(ctx.stmt()));
 	}
+	
+	
 	@Override public AstNode visitParameters(PhalParser.ParametersContext ctx) 
 	{ 
 		if(ctx.none() != null)
@@ -319,13 +333,15 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			return new ParametersNode(paramNodes);
 		}
 	}
+	
+	
 	@Override public AstNode visitParam(PhalParser.ParamContext ctx)  
 	{ 
 		TypeNode type = null;
 		IdNode idNode = null;
 
-		type = (TypeNode)visit(ctx.type());
-		idNode = (IdNode)visit(ctx.ID());
+		type = new TypeNode(ctx.type().getText()); 
+		idNode = new IdNode(ctx.ID().getText());
 			
 		return new ParamNode(type, idNode);
 	}

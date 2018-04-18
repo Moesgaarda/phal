@@ -13,7 +13,7 @@ public class MainClass {
 
 	public static void main(String args[]) 
 	{
-		String fileName = "..\\P4\\src\\PhalLangEx4";
+		String fileName = "..\\Phal\\src\\AstTester1";
         File file = new File(fileName);
         FileInputStream fis = null;
 		
@@ -26,6 +26,8 @@ public class MainClass {
 			PhalParser.ProgramContext cst = parser.program();
 			
 			System.out.println(cst.toStringTree());
+			BuildAST astBuilder = new BuildAST();
+			astBuilder.visit(cst);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

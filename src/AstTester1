@@ -1,0 +1,27 @@
+
+setup
+{
+	number a := 2
+}
+repeat
+{
+
+
+}
+
+define MyFunc with (none) returnType none{}
+
+define MyFunc2 with (number a) returnType bool{
+	a2 := 2
+	text t := "asdasd"
+	return true
+}
+define MyFunc3 with (number a, text t) returnType list{
+	a2 := 2
+	text t := "asdasd"
+	a3 := get element 2 from asd
+	return lstNum
+}
+
+
+

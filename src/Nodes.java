@@ -164,7 +164,7 @@ enum Type{
 	NONE
 }
 
-abstract class AdvDataTypeNode extends AstNode{
+abstract class AdvDataTypeNode extends DclNode{
 	abstract void accept(Visitor v);
 }
 
@@ -448,18 +448,11 @@ class CallCntNode extends AstNode{
 
 class AssignmentNode extends StmtNode{
 	public IdNode idNode;
-	public IdNode subIdNode;
 	public ExprNode exprNode;
 	
 	public AssignmentNode(IdNode idNode, ExprNode exprNode) {
 		this.idNode = idNode;
 		this.exprNode = exprNode;
-	}
-	
-	public AssignmentNode(IdNode idNode, ExprNode exprNode, IdNode subIdNode) {
-		this.idNode = idNode;
-		this.exprNode = exprNode;
-		this.subIdNode = subIdNode;
 	}
 	
 	@Override
@@ -499,7 +492,7 @@ class RepeatNode extends AstNode{
 class FuncNode extends AstNode{
 	public IdNode idNode;
 	public ParametersNode parametersNode;
-	public TypeNode typeNode;
+	public TypeNode typeNode = null;
 	public List<FuncCntNode> funcCntNodes;
 	public ReturnStmtNode returnStmtNode;
 	
@@ -519,6 +512,7 @@ class FuncNode extends AstNode{
 			this.idNode = idNode;
 			this.parametersNode = parametersNode;
 			this.funcCntNodes = funcCntNodes;
+			this.typeNode = new TypeNode("none");
 	}
 	
 	@Override
@@ -613,6 +607,7 @@ class IdRefExprNode extends ExprNode{
 
 class NoneNode extends AstNode{
 	public NoneNode() {}
+	@Override
 	void accept(Visitor v) {
 		v.visit(this);
 	}
