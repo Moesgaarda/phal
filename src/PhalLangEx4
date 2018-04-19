@@ -107,6 +107,7 @@ define MyFunc with (none) returnType none
 define MyFunc2 with (number a) returnType bool{
 	a2 := 2
 	text t := "asdasd"
+	wait 2.5 seconds
 	return true
 }
 define MyFunc3 with (number a, text t) returnType list{

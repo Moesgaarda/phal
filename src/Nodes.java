@@ -199,7 +199,7 @@ class AdvTypeNode extends AstNode{
 		case "motor":
 			this.Type = Type.MOTOR;
 			break;
-		case "temperaturesensor":
+		case "temperatureSensor":
 			this.Type = Type.TEMPERATURESENSOR;
 			break;
 		default:
