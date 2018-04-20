@@ -64,10 +64,35 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		}
 		else if(ctx.stmt() != null)
 		{
+			
 			return new SetupCntNode((StmtNode)visit(ctx.stmt()));
+		}
+		else
+		{
+			System.out.println("THIS REALLY SHOULDN*T HAPPEN");
 		}
 		//TODO exception throw her?
 		return null;
+	}
+	@Override public AstNode visitDcl(PhalParser.DclContext ctx)
+	{
+		if(ctx.varDcl() != null)
+		{
+			return visit(ctx.varDcl());
+		}
+		else if(ctx.cmpDcl() != null)
+		{
+			return visit(ctx.cmpDcl());
+		}
+		else if(ctx.advDataType() != null)
+		{
+			return visit(ctx.advDataType());
+		}
+		else
+		{
+			System.out.println("Unknown declaration type, [Building AST]");
+			return null;
+		}
 	}
 
 	@Override public AstNode visitVarDcl(PhalParser.VarDclContext ctx) 
@@ -85,6 +110,25 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			return new VarDclNode(idNode, typeNode);
 		}
 	}
+
+	@Override
+	public AstNode visitAdvDataType(PhalParser.AdvDataTypeContext ctx)
+	{
+		if(ctx.group() != null)
+		{
+			return visit(ctx.group());
+		}
+		else if(ctx.list() != null)
+		{
+			return visit(ctx.list());
+		}
+		else
+		{
+			System.out.println("Unknown advanced datatype, [Building AST]");
+			return null;
+		}
+	}
+	
 
 	@Override 
 	public AstNode visitCmpDcl(PhalParser.CmpDclContext ctx)  
@@ -127,12 +171,65 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	return new ListNode(typeNode, idNode, memberExprNodes);
 	}
 
+	@Override
+	public AstNode visitStmt(PhalParser.StmtContext ctx) 
+	{
+		if(ctx.selective() != null)
+		{
+			return visit(ctx.selective());
+		}
+		else if(ctx.iterative() != null)
+		{
+			return visit(ctx.iterative());
+		}
+		else if(ctx.funcCall() != null) 
+		{
+			return visit(ctx.funcCall());
+		}
+		else if(ctx.assignment() != null) 
+		{
+			return visit(ctx.assignment());
+		}
+		else if(ctx.returnStmt() != null) 
+		{
+			return visit(ctx.returnStmt());
+		}
+		else if(ctx.waitStmt() != null) 
+		{
+			return visit(ctx.waitStmt());
+		}
+		else if(ctx.advTypeModifier() != null) 
+		{
+			return visit(ctx.advTypeModifier());
+		}
+		else
+		{
+			System.out.println("Stmt was of no known type. [Building AST]");
+			return null;
+		}
+	}
+
 	@Override public AstNode visitWaitStmt(PhalParser.WaitStmtContext ctx)  
 	{ 
 		ExprNode exprNode = (ExprNode) visit(ctx.expr());
 		return new WaitNode(exprNode);
 	}
-
+	@Override public AstNode visitSelective(PhalParser.SelectiveContext ctx)
+	{
+		if(ctx.ifStmt() != null)
+		{
+			return visit(ctx.ifStmt());
+		}
+		else if(ctx.switchStmt() != null)
+		{
+			return visit(ctx.switchStmt());
+		}
+		else
+		{
+			System.out.println("Unkown selective type, [Building AST]");
+			return null;
+		}
+	}
 	@Override public AstNode visitSwitchStmt(PhalParser.SwitchStmtContext ctx)  
 	{ 
 		ExprNode exprNode = (ExprNode)visit(ctx.expr());
@@ -183,18 +280,58 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		BlockNode ifBlockNode = (BlockNode) visit(ctx.block(0));
 		
 		List<ElseIfStmtNode> elifNodes = new LinkedList<>();
-		
-		// gets the elseIf blocks (hint the -1)
+		BlockNode elseBlockNode = null;
+		// gets the blocks 
+		//TODO HVAD VIS DER IKKE ER NOGEN ELSE?!
 		int count = ctx.block().size();
-		for(int i = 1; i < count - 1;i++)
+		for(int i = 1; i < count;i++)
 		{
-			elifNodes.add(new ElseIfStmtNode((ExprNode)visit(ctx.expr(i)),(BlockNode)visit(ctx.block(i))));
+			if(i == count - 1) { // TODO bedre expr her til at være sikker på den finder else kun i if-stmt hvor der faktisk er en else
+				elseBlockNode = (BlockNode) visit(ctx.block(i));
+			}
+			else
+			{
+				BlockNode bn = (BlockNode)visit(ctx.block(i));
+				ExprNode en  = (ExprNode)visit(ctx.expr(i));
+				elifNodes.add(new ElseIfStmtNode(en,bn));
+			}
+			
 		}
 		
 		
-		BlockNode elseBlockNode = (BlockNode) visit(ctx.block(count -1));
+		
 		
 		return new IfStmtNode(exprNode, ifBlockNode, elifNodes,elseBlockNode);
+	}
+	@Override public AstNode visitBlock(PhalParser.BlockContext ctx)
+	{
+		List<StmtNode> stmtNodes = new LinkedList<>();
+		if(ctx.stmt() != null)
+		{
+			for(PhalParser.StmtContext stmt: ctx.stmt())
+			{
+				stmtNodes.add((StmtNode)visit(stmt));
+			}
+		}
+		return new BlockNode(stmtNodes);
+	}
+	
+	@Override
+	public AstNode visitIterative(PhalParser.IterativeContext ctx)
+	{
+		if(ctx.loopTimes() != null)
+		{
+			return visit(ctx.loopTimes());
+		}
+		else if(ctx.loopUntil() != null)
+		{
+			return visit(ctx.loopUntil());
+		}
+		else
+		{
+			System.out.println("Unkown loop type, [Building AST]");
+			return null;
+		}
 	}
 	
 	@Override public AstNode visitLoopTimes(PhalParser.LoopTimesContext ctx)  
@@ -353,6 +490,8 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		
 		return new ReturnStmtNode(exprNode);
 	}
+	
+	
 	@Override public AstNode visitInfixExpr(PhalParser.InfixExprContext ctx)  
 	{ 
 		ExprNode leftExprNode = (ExprNode)visit(ctx.expr(0));

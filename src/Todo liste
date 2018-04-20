@@ -3,6 +3,12 @@ find ud af:
 		flere returnstmt
 		return ligger under funcCnt. Skal den det eller skal vi rykke den???
 	
+	stmt bugger ibuild ast, visiter et child efter alt er kørt og returnere null?
+	--block også
+	
+	har muligvis fundet noget af fejlen
+	
+	ifstmt, tjel måde at finde enud af når det skal være en else og når det er en if-else
 	
 Fiks eventuelt:
 	unaryOperator der hedder NOT burde nok hedder NEGATION eller NEGATE 

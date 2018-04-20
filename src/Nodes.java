@@ -199,12 +199,12 @@ class AdvTypeNode extends AstNode{
 		case "motor":
 			this.Type = Type.MOTOR;
 			break;
-		case "temperaturesensor":
+		case "temperatureSensor":
 			this.Type = Type.TEMPERATURESENSOR;
 			break;
 		default:
 			//TODO maybe add exception
-			System.out.println("got an adv type that doesn't exist @ Nodes L 207");
+			System.out.println("got an adv type that doesn't exist @ Nodes L 207 : " + type );
 		}
 	}
 	
@@ -382,7 +382,7 @@ abstract class IterativeNode extends StmtNode{
 
 
 
-class LoopTimesNode extends AstNode{
+class LoopTimesNode extends IterativeNode{
 	public ExprNode exprNode;
 	public List<StmtNode> stmtNodes;
 	
@@ -397,7 +397,7 @@ class LoopTimesNode extends AstNode{
 	}
 }
 
-class LoopUntilNode extends AstNode{
+class LoopUntilNode extends IterativeNode{
 	public ExprNode exprNode;
 	public IdNode idNode;
 	public LiteralExprNode numberNode;

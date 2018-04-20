@@ -31,6 +31,7 @@ group everything{
 }
 
 list number lstNum {5,2,4,5,1,23,2,asd + dsa}
+a := 2
 add 2 to lstNum
 add 2,3,4,6,7,8,2+4 to lstNum
 
