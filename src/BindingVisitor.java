@@ -14,11 +14,13 @@ public class BindingVisitor extends Visitor {
 	private void closeScope() {
 		symbolTable.pop();
 	}
-	private void bindIdNodeToDeclaration(IdNode node) {
+	private void bindIdNodeToDeclaration(IdNode idNode) {
 		
 		for(int i = symbolTable.size() - 1; i >= 0; i--)
 		{
-			
+			if(symbolTable.get(i).containsKey(idNode.id)) {
+				
+			}
 		}
 	}
 }

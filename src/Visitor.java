@@ -151,6 +151,15 @@ public abstract class Visitor {
 			}
 		}
 	}
+	public void visit(ElseBlockNode node) {
+		if(node.stmtNodes != null)
+		{
+			for(StmtNode stmt : node.stmtNodes)
+			{
+				stmt.accept(this);
+			}
+		}
+	}
 	
 	public void visit(ElseIfStmtNode node) {
 		node.exprNode.accept(this);

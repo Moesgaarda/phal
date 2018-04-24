@@ -282,21 +282,17 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		BlockNode ifBlockNode = (BlockNode) visit(ctx.block(0));
 		
 		List<ElseIfStmtNode> elifNodes = new LinkedList<>();
-		BlockNode elseBlockNode = null;
+		ElseBlockNode elseBlockNode = (ElseBlockNode) visit(ctx.elseBlock());
 		// gets the blocks 
 		//TODO HVAD VIS DER IKKE ER NOGEN ELSE?!
 		int count = ctx.block().size();
 		for(int i = 1; i < count;i++)
 		{
-			if(i == count - 1) { // TODO bedre expr her til at være sikker på den finder else kun i if-stmt hvor der faktisk er en else
-				elseBlockNode = (BlockNode) visit(ctx.block(i));
-			}
-			else
-			{
-				BlockNode bn = (BlockNode)visit(ctx.block(i));
-				ExprNode en  = (ExprNode)visit(ctx.expr(i));
-				elifNodes.add(new ElseIfStmtNode(en,bn));
-			}
+
+			BlockNode bn = (BlockNode)visit(ctx.block(i));
+			ExprNode en  = (ExprNode)visit(ctx.expr(i));
+			elifNodes.add(new ElseIfStmtNode(en,bn));
+
 			
 		}
 		
@@ -316,6 +312,18 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			}
 		}
 		return new BlockNode(stmtNodes);
+	}
+	@Override public AstNode visitElseBlock(PhalParser.ElseBlockContext ctx)
+	{
+		List<StmtNode> stmtNodes = new LinkedList<>();
+		if(ctx.stmt() != null)
+		{
+			for(PhalParser.StmtContext stmt: ctx.stmt())
+			{
+				stmtNodes.add((StmtNode)visit(stmt));
+			}
+		}
+		return new ElseBlockNode(stmtNodes);
 	}
 	
 	@Override

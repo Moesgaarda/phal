@@ -334,9 +334,10 @@ class IfStmtNode extends SelectiveNode{
 	public ExprNode ifExprNode;
 	public BlockNode ifBlock;
 	public List<ElseIfStmtNode> elseIfStmts;
-	public BlockNode elseBlock;
+	public ElseBlockNode elseBlock;
 	
-	public IfStmtNode(ExprNode ifExprNode, BlockNode ifBlock, List<ElseIfStmtNode> elseIfStmts, BlockNode elseBlock) {
+	public IfStmtNode(ExprNode ifExprNode, BlockNode ifBlock, 
+			List<ElseIfStmtNode> elseIfStmts, ElseBlockNode elseBlock) {
 		this.ifExprNode = ifExprNode;
 		this.ifBlock = ifBlock;
 		this.elseIfStmts = elseIfStmts;
@@ -353,6 +354,20 @@ class BlockNode extends StmtNode
 	public List<StmtNode> stmtNodes;
 	
 	public BlockNode(List<StmtNode> stmtNodes)
+	{
+		this.stmtNodes = stmtNodes;
+	}
+	@Override
+	void accept(Visitor v) {
+		v.visit(this);
+	}
+	
+}
+class ElseBlockNode extends StmtNode
+{
+	public List<StmtNode> stmtNodes;
+	
+	public ElseBlockNode(List<StmtNode> stmtNodes)
 	{
 		this.stmtNodes = stmtNodes;
 	}

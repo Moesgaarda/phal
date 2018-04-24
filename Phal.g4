@@ -106,12 +106,17 @@ defaultCase
 ifStmt        
 	: 	'if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* block NEWLINE* '}' NEWLINE*
 			('else if' '(' expr ')' 'then' NEWLINE* '{' NEWLINE* block NEWLINE* '}')* NEWLINE*
-			('else' 'then' NEWLINE* '{' NEWLINE* block NEWLINE* '}')? 
+			('else' 'then' NEWLINE* '{' NEWLINE* elseBlock NEWLINE* '}')? 
 	;
 
 block
 	: stmt*
 	;
+
+elseBlock
+	: stmt*
+	;
+	
 iterative    
 	: 	loopTimes
 	|	loopUntil 

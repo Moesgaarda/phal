@@ -217,6 +217,16 @@ public interface PhalListener extends ParseTreeListener {
 	 */
 	void exitBlock(PhalParser.BlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PhalParser#elseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseBlock(PhalParser.ElseBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PhalParser#elseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseBlock(PhalParser.ElseBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PhalParser#iterative}.
 	 * @param ctx the parse tree
 	 */
