@@ -280,9 +280,13 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		ExprNode exprNode = (ExprNode) visit(ctx.expr(0));
 		// Gets the if block
 		BlockNode ifBlockNode = (BlockNode) visit(ctx.block(0));
-		
+		ElseBlockNode elseBlockNode = null;
 		List<ElseIfStmtNode> elifNodes = new LinkedList<>();
-		ElseBlockNode elseBlockNode = (ElseBlockNode) visit(ctx.elseBlock());
+		if(ctx.elseBlock() != null)
+		{
+			elseBlockNode = (ElseBlockNode) visit(ctx.elseBlock());
+		}
+		
 		// gets the blocks 
 		//TODO HVAD VIS DER IKKE ER NOGEN ELSE?!
 		int count = ctx.block().size();
