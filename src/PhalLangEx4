@@ -41,6 +41,7 @@ bar.foo := false
 remove element 4 from lstNum
 number a2 := get element 2 from lstNum
 if(2=2) then {
+a := 2
 } else if (2=2) then
 { if(asd) then{ } else if(booleanV) then {}
 } 
@@ -64,6 +65,8 @@ loop 4 times {x := 3
 }
 	
 loop until 2 +3 , increase asd by 4{
+asd := 6
+sdf += 2
 }
 
 }
@@ -94,6 +97,12 @@ else then {
 switch(a3){
 		case 123: a := a +2 -3 
 		default: 
+}
+
+if (3=3) then {
+	lul := 2
+} else then {
+	lul := 3
 }
 
 call MyFunc with (none)

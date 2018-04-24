@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import enums.AdvancedTypeModifierOperator;
 import enums.AssignementOperator;
 import enums.InfixOperator;
 import enums.LoopUntilOperator;
@@ -448,12 +449,22 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	{ 
 		IdNode idNode = new IdNode(ctx.ID().getText());
 		List<ExprNode> exprNodes = new LinkedList<>();
-		
+		AdvancedTypeModifierOperator advancedTypeModifierOperator;
+		switch(getOperatorSymbol(ctx.children, "add", "remove")) {
+			case "add" :
+				advancedTypeModifierOperator = AdvancedTypeModifierOperator.ADD;
+				break;
+			case "remove" :
+				advancedTypeModifierOperator = AdvancedTypeModifierOperator.REMOVE;
+				break;
+			default:
+				return null;
+		}
 		for(PhalParser.ExprContext expr : ctx.expr()) {
 			exprNodes.add((ExprNode)visit(expr));
 		}
 		
-		return new AdvTypeModifierNode(exprNodes, idNode);
+		return new AdvTypeModifierNode(exprNodes, idNode, advancedTypeModifierOperator);
 	}
 	@Override public AstNode visitRepeat(PhalParser.RepeatContext ctx) 
 	{ 
