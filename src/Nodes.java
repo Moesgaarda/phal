@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import enums.InfixOperator;
 import enums.UnaryOperator;
+import enums.AssignementOperator;
 
 //TODO tilføj ctx constructor til mange af klasserne så vi det bliver nemmere at diagnotisere programmet
 abstract class AstNode {
@@ -451,10 +452,12 @@ class CallCntNode extends AstNode{
 class AssignmentNode extends StmtNode{
 	public IdNode idNode;
 	public ExprNode exprNode;
+	public AssignementOperator assignementOperator;
 	
-	public AssignmentNode(IdNode idNode, ExprNode exprNode) {
+	public AssignmentNode(IdNode idNode, ExprNode exprNode, AssignementOperator assignementOperator) {
 		this.idNode = idNode;
 		this.exprNode = exprNode;
+		this.assignementOperator = assignementOperator;
 	}
 	
 	@Override
