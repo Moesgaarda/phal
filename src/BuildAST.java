@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import enums.AssignementOperator;
 import enums.InfixOperator;
+import enums.LoopUntilOperator;
 import enums.UnaryOperator;
 
 
@@ -354,6 +355,18 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		IdNode idNode = new IdNode(ctx.ID().getText());
 		LiteralExprNode numberNode = new LiteralExprNode(ctx.NUMBER().getText(),Type.NUMBER);
 		List<StmtNode> stmtNodes = new LinkedList<>();
+		LoopUntilOperator loopOperator;
+		switch(getOperatorSymbol(ctx.children, "increase", "decrease")) {
+		case "increase":
+			loopOperator = LoopUntilOperator.INCREASE;
+			break;
+		case "decrease":
+			loopOperator =  LoopUntilOperator.DECREASE;
+			break;
+		default:
+			return null;
+	}
+		
 		
 		if(ctx.stmt() != null)
 		{
@@ -362,7 +375,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 				stmtNodes.add((StmtNode) visit(stmt));
 			}
 		}
-		return new LoopUntilNode(exprNode, stmtNodes, idNode, numberNode);
+		return new LoopUntilNode(exprNode, stmtNodes, idNode, numberNode, loopOperator);
 	}
 	@Override public AstNode visitFuncCall(PhalParser.FuncCallContext ctx)  
 	{ 

@@ -4,6 +4,7 @@ import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import enums.InfixOperator;
+import enums.LoopUntilOperator;
 import enums.UnaryOperator;
 import enums.AssignementOperator;
 
@@ -403,12 +404,15 @@ class LoopUntilNode extends IterativeNode{
 	public IdNode idNode;
 	public LiteralExprNode numberNode;
 	public List<StmtNode> stmtNodes;
+	public LoopUntilOperator loopOperator;
 	
-	public LoopUntilNode(ExprNode exprNode, List<StmtNode> stmtNodes, IdNode idNode, LiteralExprNode numberNode) {
+	public LoopUntilNode(ExprNode exprNode, List<StmtNode> stmtNodes, 
+			IdNode idNode, LiteralExprNode numberNode, LoopUntilOperator loopOperator) {
 		this.exprNode = exprNode;
 		this.stmtNodes = stmtNodes;
 		this.idNode = idNode;
 		this.numberNode = numberNode;
+		this.loopOperator = loopOperator;
 	}
 	
 	@Override
