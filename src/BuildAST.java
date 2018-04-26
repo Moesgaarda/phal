@@ -44,7 +44,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	}
 	@Override public AstNode visitInclude(PhalParser.IncludeContext ctx) 
 	{
-		return new IncludeNode(new IdNode(ctx.ID().getText()));
+		return new IncludeNode(new IdNode(ctx.ID().getText()), ctx);
 	}
 	
 	@Override public AstNode visitSetup(PhalParser.SetupContext ctx) 
@@ -106,11 +106,11 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		{
 			ExprNode exprNode = (ExprNode)visit(ctx.expr());
 			
-			return new VarDclNode(idNode,exprNode, typeNode);
+			return new VarDclNode(idNode,exprNode, typeNode, ctx);
 		}
 		else
 		{
-			return new VarDclNode(idNode, typeNode);
+			return new VarDclNode(idNode, typeNode, ctx);
 		}
 	}
 
@@ -146,7 +146,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		{
 			literalExprNodes.add(new LiteralExprNode(number.getText(),Type.NUMBER));
 		}
-		return new CmpDclNode(advTypeNode, idNode, literalExprNodes);
+		return new CmpDclNode(advTypeNode, idNode, literalExprNodes, ctx);
 
 	}
 	@Override public AstNode visitGroup(PhalParser.GroupContext ctx)  
@@ -160,7 +160,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			//TODO might need to check for null
 			memberIdNodes.add(new IdNode(ctx.ID(i).getText()));
 		}
-		return new GroupNode(idNode, memberIdNodes);
+		return new GroupNode(idNode, memberIdNodes, ctx);
 	}
 	@Override public AstNode visitList(PhalParser.ListContext ctx)  
 	{ 
@@ -171,7 +171,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		{
 			memberExprNodes.add((ExprNode)visit(expr));
 		}
-	return new ListNode(typeNode, idNode, memberExprNodes);
+	return new ListNode(typeNode, idNode, memberExprNodes, ctx);
 	}
 
 	@Override
@@ -215,7 +215,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	@Override public AstNode visitWaitStmt(PhalParser.WaitStmtContext ctx)  
 	{ 
 		ExprNode exprNode = (ExprNode) visit(ctx.expr());
-		return new WaitNode(exprNode);
+		return new WaitNode(exprNode, ctx);
 	}
 	@Override public AstNode visitSelective(PhalParser.SelectiveContext ctx)
 	{
@@ -237,7 +237,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	{ 
 		ExprNode exprNode = (ExprNode)visit(ctx.expr());
 		CaseListNode caseListNode = (CaseListNode) visit(ctx.caseList());
-		return new SwitchStmtNode(exprNode, caseListNode);
+		return new SwitchStmtNode(exprNode, caseListNode, ctx);
 		
 	}
 	@Override public AstNode visitCaseList(PhalParser.CaseListContext ctx)  
@@ -261,7 +261,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 				stmtNodes.add((StmtNode) visit(caseStmt));
 			}
 		}
-		return new CaseStmtNode(exprNode, stmtNodes);
+		return new CaseStmtNode(exprNode, stmtNodes, ctx);
 	}
 	@Override public AstNode visitDefaultCase(PhalParser.DefaultCaseContext ctx)  
 	{ 
@@ -273,7 +273,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 				stmtNodes.add((StmtNode) visit(stmt));
 			}
 		}
-		return new DefaultCaseNode(stmtNodes);
+		return new DefaultCaseNode(stmtNodes, ctx);
 	}
 	@Override public AstNode visitIfStmt(PhalParser.IfStmtContext ctx)  
 	{ 
@@ -398,12 +398,12 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		if(ctx.callCnt() != null)
 		{
 			callCntNode = (CallCntNode)visit(ctx.callCnt());
-			return new FuncCallNode(idNode, callCntNode);
+			return new FuncCallNode(idNode, callCntNode, ctx);
 		}
 		else
 		{
 			noneNode = (NoneNode)visit(ctx.none());
-			return new FuncCallNode(idNode, noneNode);
+			return new FuncCallNode(idNode, noneNode, ctx);
 		}
 		
 	}
@@ -415,7 +415,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			exprNodes.add((ExprNode)visit(expr));
 		}
 		
-		return new CallCntNode(exprNodes);
+		return new CallCntNode(exprNodes, ctx);
 	}
 	@Override public AstNode visitAssignment(PhalParser.AssignmentContext ctx)  
 	{ 
@@ -440,10 +440,10 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		if(ctx.ID(1) != null) {
 			String subId = ctx.ID(1).getText();
 			idNode = new IdNode(id, subId);
-			return new AssignmentNode(idNode, exprNode, assignementOperator);
+			return new AssignmentNode(idNode, exprNode, assignementOperator, ctx);
 		}
 		idNode = new IdNode(id);
-		return new AssignmentNode(idNode, exprNode,assignementOperator);
+		return new AssignmentNode(idNode, exprNode,assignementOperator, ctx);
 	}
 	@Override public AstNode visitAdvTypeModifier(PhalParser.AdvTypeModifierContext ctx)  
 	{ 
@@ -464,7 +464,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			exprNodes.add((ExprNode)visit(expr));
 		}
 		
-		return new AdvTypeModifierNode(exprNodes, idNode, advancedTypeModifierOperator);
+		return new AdvTypeModifierNode(exprNodes, idNode, advancedTypeModifierOperator, ctx);
 	}
 	@Override public AstNode visitRepeat(PhalParser.RepeatContext ctx) 
 	{ 
@@ -497,10 +497,10 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			}
 		}
 		if(typeNode.Type == Type.NONE){
-			return new FuncNode(idNode, paramNode, new NoneNode(), funcCntNodes);
+			return new FuncNode(idNode, paramNode, new NoneNode(), funcCntNodes, ctx);
 		}
 	
-		return new FuncNode(idNode, paramNode, typeNode, funcCntNodes);
+		return new FuncNode(idNode, paramNode, typeNode, funcCntNodes, ctx);
 	}
 	
 	
@@ -535,7 +535,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		type = new TypeNode(ctx.type().getText()); 
 		idNode = new IdNode(ctx.ID().getText());
 			
-		return new ParamNode(type, idNode);
+		return new ParamNode(type, idNode, ctx);
 	}
 	@Override public AstNode visitReturnStmt(PhalParser.ReturnStmtContext ctx)  
 	{ 
@@ -545,7 +545,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			exprNode = (ExprNode)visit(ctx.expr());
 		}
 		
-		return new ReturnStmtNode(exprNode);
+		return new ReturnStmtNode(exprNode, ctx);
 	}
 	
 	
@@ -609,7 +609,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			return null;
 	}
 		
-		return new InfixExprNode(leftExprNode, infixOperator, rightExprNode); 
+		return new InfixExprNode(leftExprNode, infixOperator, rightExprNode, ctx); 
 	}
 	@Override public AstNode visitIdRefExpr(PhalParser.IdRefExprContext ctx)  
 	{ 
@@ -655,7 +655,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 				return null;
 		}
 		
-		return new UnaryExprNode(exprNode, unaryOperator);
+		return new UnaryExprNode(exprNode, unaryOperator, ctx);
 	}
 	@Override public AstNode visitLitNumExpr(PhalParser.LitNumExprContext ctx)  
 	{ 
@@ -676,7 +676,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		{
 			exprNode = (ExprNode)visit(ctx.expr());
 		}
-		return new ParensExprNode(exprNode);
+		return new ParensExprNode(exprNode, ctx);
 	}
 	@Override public AstNode visitLitAdvExpr(PhalParser.LitAdvExprContext ctx)  
 	{ 
@@ -687,7 +687,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			exprNodes.add((ExprNode)visit(exp));
 		}
 		
-		return new LiteralAdvancedNode(exprNodes, idNode);
+		return new LiteralAdvancedNode(exprNodes, idNode, ctx);
 	}
 	@Override public AstNode visitNone(PhalParser.NoneContext ctx) 
 	{ 

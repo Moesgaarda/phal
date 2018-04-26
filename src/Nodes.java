@@ -9,7 +9,7 @@ import enums.UnaryOperator;
 import enums.AssignementOperator;
 import enums.AdvancedTypeModifierOperator;
 
-//TODO tilføj ctx constructor til mange af klasserne så vi det bliver nemmere at diagnotisere programmet
+//TODO tilfï¿½j ctx constructor til mange af klasserne sï¿½ vi det bliver nemmere at diagnotisere programmet
 abstract class AstNode {
 	public AstNode() {}
 	abstract void accept(Visitor v);
@@ -48,7 +48,8 @@ class ProgramNode extends AstNode{
 class IncludeNode extends AstNode{
 	public IdNode idNode;
 	
-	public IncludeNode(IdNode idNode) {
+	public IncludeNode(IdNode idNode, PhalParser.IncludeContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 	}
 	
@@ -88,6 +89,13 @@ class SetupCntNode extends AstNode{
 
 abstract class DclNode extends AstNode{
 	public IdNode idNode;
+	public DclNode() {
+		
+	}
+	public DclNode(ParserRuleContext ctx) {
+		super(ctx);
+	}
+	
 	abstract void accept(Visitor v);
 }
 
@@ -96,12 +104,14 @@ class VarDclNode extends DclNode{
 	public ExprNode exprNode;
 	public TypeNode typeNode;
 	
-	public VarDclNode(IdNode idNode, TypeNode typeNode) {
+	public VarDclNode(IdNode idNode, TypeNode typeNode, PhalParser.VarDclContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 		this.typeNode = typeNode;
 	}
 	
-	public VarDclNode(IdNode idNode, ExprNode exprNode, TypeNode typeNode) {
+	public VarDclNode(IdNode idNode, ExprNode exprNode, TypeNode typeNode, PhalParser.VarDclContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 		this.exprNode = exprNode;
 		this.typeNode = typeNode;
@@ -170,6 +180,12 @@ enum Type{
 }
 
 abstract class AdvDataTypeNode extends DclNode{
+	public AdvDataTypeNode() {
+		
+	}
+	public AdvDataTypeNode(ParserRuleContext ctx) {
+		super(ctx);
+	}
 	abstract void accept(Visitor v);
 }
 
@@ -177,7 +193,8 @@ class CmpDclNode extends DclNode{
 	public AdvTypeNode advTypeNode;
 	public List<LiteralExprNode> literalExprNodes; 
 	
-	public CmpDclNode(AdvTypeNode advTypeNode, IdNode idNode, List <LiteralExprNode> literalExprNodes) {
+	public CmpDclNode(AdvTypeNode advTypeNode, IdNode idNode, List <LiteralExprNode> literalExprNodes, PhalParser.CmpDclContext ctx) {
+		super(ctx);
 		this.advTypeNode = advTypeNode;
 		this.idNode = idNode;
 		this.literalExprNodes = literalExprNodes;
@@ -220,7 +237,8 @@ class AdvTypeNode extends AstNode{
 class GroupNode extends AdvDataTypeNode{
 	public List<IdNode> memberIdNodes;
 	
-	public GroupNode(IdNode idNode, List<IdNode> memberIdNodes) {
+	public GroupNode(IdNode idNode, List<IdNode> memberIdNodes, PhalParser.GroupContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 		this.memberIdNodes = memberIdNodes;
 	}
@@ -235,7 +253,8 @@ class ListNode extends AdvDataTypeNode{
 	public TypeNode typeNode;
 	public List<ExprNode> memberExprNodes; 
 	
-	public ListNode(TypeNode typeNode, IdNode idNode, List<ExprNode> memberExprNodes) {
+	public ListNode(TypeNode typeNode, IdNode idNode, List<ExprNode> memberExprNodes, PhalParser.ListContext ctx) {
+		super(ctx);
 		this.typeNode = typeNode;
 		this.idNode = idNode;
 		this.memberExprNodes = memberExprNodes;
@@ -248,13 +267,20 @@ class ListNode extends AdvDataTypeNode{
 }
 
 abstract class StmtNode extends AstNode{
+	public StmtNode() {
+		
+	}
+	public StmtNode(ParserRuleContext ctx) {
+		super(ctx);
+	}
 	abstract void accept(Visitor v);
 }
 
 class WaitNode extends StmtNode{
 	public ExprNode exprNode;
 	
-	public WaitNode(ExprNode exprNode) {
+	public WaitNode(ExprNode exprNode, PhalParser.WaitStmtContext ctx) {
+		super(ctx);
 		this.exprNode = exprNode;
 	}
 	
@@ -265,6 +291,13 @@ class WaitNode extends StmtNode{
 }
 
 abstract class SelectiveNode extends StmtNode{	
+	public SelectiveNode() {
+		
+	}
+	public SelectiveNode(ParserRuleContext ctx) {
+		super(ctx);
+	}
+	
 	abstract void accept(Visitor v);
 }
 
@@ -272,7 +305,8 @@ class SwitchStmtNode extends SelectiveNode{
 	public ExprNode exprNode;
 	public CaseListNode caseListNode;
 	
-	public SwitchStmtNode(ExprNode exprNode, CaseListNode caseListNode) {
+	public SwitchStmtNode(ExprNode exprNode, CaseListNode caseListNode, PhalParser.SwitchStmtContext ctx) {
+		super(ctx);
 		this.exprNode = exprNode;
 		this.caseListNode = caseListNode;
 	}
@@ -301,12 +335,14 @@ class CaseStmtNode extends AstNode{
 	public ExprNode exprNode;
 	public List<StmtNode> stmtNodes;
 	
-	public CaseStmtNode(ExprNode exprNode, List<StmtNode> stmtNodes) {
+	public CaseStmtNode(ExprNode exprNode, List<StmtNode> stmtNodes, PhalParser.CaseStmtContext ctx) {
+		super(ctx);
 		this.exprNode = exprNode;
 		this.stmtNodes = stmtNodes;
 	}
 	// In case of no statements
-	public CaseStmtNode(ExprNode exprNode) {
+	public CaseStmtNode(ExprNode exprNode, PhalParser.CaseStmtContext ctx) {
+		super(ctx);
 		this.exprNode = exprNode;
 	}
 	
@@ -319,7 +355,8 @@ class CaseStmtNode extends AstNode{
 class DefaultCaseNode extends AstNode{
 	public List<StmtNode> stmtNodes;
 	
-	public DefaultCaseNode(List<StmtNode> stmtNodes) {
+	public DefaultCaseNode(List<StmtNode> stmtNodes, PhalParser.DefaultCaseContext ctx) {
+		super(ctx);
 		this.stmtNodes = stmtNodes;
 	}
 
@@ -439,12 +476,14 @@ class FuncCallNode extends StmtNode{
 	public IdNode idNode;
 	public CallCntNode callCntNode; // Parameters
 	
-	public FuncCallNode(IdNode idNode, CallCntNode callCntNode) {
+	public FuncCallNode(IdNode idNode, CallCntNode callCntNode, PhalParser.FuncCallContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 		this.callCntNode = callCntNode;
 	}
 
-	public FuncCallNode(IdNode idNode, NoneNode noneNode) {
+	public FuncCallNode(IdNode idNode, NoneNode noneNode, PhalParser.FuncCallContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 	}
 	
@@ -457,7 +496,8 @@ class FuncCallNode extends StmtNode{
 class CallCntNode extends AstNode{
 	public List<ExprNode> exprNodes;
 	
-	public CallCntNode(List<ExprNode> exprNodes) {
+	public CallCntNode(List<ExprNode> exprNodes, PhalParser.CallCntContext ctx) {
+		super(ctx);
 		this.exprNodes = exprNodes;
 	}
 	
@@ -472,7 +512,8 @@ class AssignmentNode extends StmtNode{
 	public ExprNode exprNode;
 	public AssignementOperator assignementOperator;
 	
-	public AssignmentNode(IdNode idNode, ExprNode exprNode, AssignementOperator assignementOperator) {
+	public AssignmentNode(IdNode idNode, ExprNode exprNode, AssignementOperator assignementOperator, PhalParser.AssignmentContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 		this.exprNode = exprNode;
 		this.assignementOperator = assignementOperator;
@@ -490,7 +531,9 @@ class AdvTypeModifierNode extends StmtNode{
 	public AdvancedTypeModifierOperator advancedTypeModifierOperator;
 	
 	AdvTypeModifierNode(List<ExprNode> exprNodes, IdNode idNode, 
-						AdvancedTypeModifierOperator advancedTypeModifierOperator){
+						AdvancedTypeModifierOperator advancedTypeModifierOperator,
+						PhalParser.AdvTypeModifierContext ctx){
+		super(ctx);
 		this.exprNodes = exprNodes;
 		this.idNode = idNode;
 		this.advancedTypeModifierOperator = advancedTypeModifierOperator;
@@ -514,7 +557,7 @@ class RepeatNode extends AstNode{
 		v.visit(this);
 	}
 }
-// TODO Har fjernet returnStmtNode da de ligger unde funccnt, hvis problemer opstår overvej at ændre det igen
+// TODO Har fjernet returnStmtNode da de ligger unde funccnt, hvis problemer opstï¿½r overvej at ï¿½ndre det igen
 class FuncNode extends AstNode{
 	public IdNode idNode;
 	public ParametersNode parametersNode;
@@ -523,7 +566,8 @@ class FuncNode extends AstNode{
 	
 	// If all is set and returnType is not none
 	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
-					List<FuncCntNode> funcCntNodes) {
+					List<FuncCntNode> funcCntNodes, PhalParser.FuncContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 		this.parametersNode = parametersNode;
 		this.typeNode = typeNode;
@@ -532,7 +576,8 @@ class FuncNode extends AstNode{
 	
 	// If returnType is none
 	public FuncNode(IdNode idNode, ParametersNode parametersNode, NoneNode noneNode, 
-			List<FuncCntNode> funcCntNodes) {
+			List<FuncCntNode> funcCntNodes, PhalParser.FuncContext ctx) {
+			super(ctx);
 			this.idNode = idNode;
 			this.parametersNode = parametersNode;
 			this.funcCntNodes = funcCntNodes;
@@ -585,7 +630,8 @@ class ParamNode extends AstNode{
 	public TypeNode typeNode;
 	public IdNode idNode;
 	
-	public ParamNode(TypeNode typeNode, IdNode idNode) {
+	public ParamNode(TypeNode typeNode, IdNode idNode, PhalParser.ParamContext ctx) {
+		super(ctx);
 		this.typeNode = typeNode;
 		this.idNode = idNode;
 	}
@@ -598,7 +644,8 @@ class ParamNode extends AstNode{
 class ReturnStmtNode extends StmtNode{
 	public ExprNode exprNode;
 
-	public ReturnStmtNode(ExprNode exprNode) {
+	public ReturnStmtNode(ExprNode exprNode, PhalParser.ReturnStmtContext ctx) {
+		super(ctx);
 		this.exprNode = exprNode;
 	}
 	@Override
@@ -620,7 +667,8 @@ abstract class ExprNode extends AstNode{
 class IdRefExprNode extends ExprNode{
 	public IdNode idNode;
 	
-	public IdRefExprNode(IdNode idNode) {
+	public IdRefExprNode(IdNode idNode, PhalParser.IdRefExprContext ctx) {
+		super(ctx);
 		this.idNode = idNode;
 	}
 	@Override
@@ -654,7 +702,8 @@ class InfixExprNode extends ExprNode{
 	public ExprNode rightExprNode;
 	public InfixOperator infixOperator;
 	
-	public InfixExprNode(ExprNode leftExprNode, InfixOperator infixOp, ExprNode rightExprNode) {
+	public InfixExprNode(ExprNode leftExprNode, InfixOperator infixOp, ExprNode rightExprNode, PhalParser.InfixExprContext ctx) {
+		super(ctx);
 		this.leftExprNode = leftExprNode;
 		this.infixOperator = infixOp;
 		this.rightExprNode = rightExprNode;
@@ -668,7 +717,8 @@ class InfixExprNode extends ExprNode{
 class UnaryExprNode extends ExprNode{
 	public ExprNode exprNode;
 	public UnaryOperator unaryOperator;
-	public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator) {
+	public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator, PhalParser.UnaryExprContext ctx) {
+		super(ctx);
 		this.exprNode = exprNode;
 		this.unaryOperator = unaryOperator;
 	}
@@ -693,7 +743,8 @@ class FuncExprNode extends ExprNode{
 class ParensExprNode extends ExprNode{
 	public ExprNode exprNode;
 	
-	public ParensExprNode(ExprNode exprNode) {
+	public ParensExprNode(ExprNode exprNode, PhalParser.ParenExprContext ctx) {
+		super(ctx);
 		this.exprNode = exprNode;
 	}
 	@Override
@@ -725,7 +776,8 @@ class LiteralAdvancedNode extends ExprNode
 	public List<ExprNode> exprNodes;
 	public IdNode idNode;
 	
-	public LiteralAdvancedNode(List<ExprNode> exprNodes, IdNode idNode) {
+	public LiteralAdvancedNode(List<ExprNode> exprNodes, IdNode idNode, PhalParser.LitAdvExprContext ctx) {
+		super(ctx);
 		this.exprNodes = exprNodes;
 		this.idNode = idNode;
 	}
