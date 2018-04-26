@@ -86,11 +86,12 @@ class SetupCntNode extends AstNode{
 }
 
 abstract class DclNode extends AstNode{
+	public IdNode idNode;
 	abstract void accept(Visitor v);
 }
 
 class VarDclNode extends DclNode{
-	public IdNode idNode;
+
 	public ExprNode exprNode;
 	public TypeNode typeNode;
 	
