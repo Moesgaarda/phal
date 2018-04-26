@@ -3,7 +3,7 @@ public class PrettyPrinter extends Visitor{
 	int indention = 0;
 	
 	private String indent() {
-		return new String(new char[indention]).replace("\0", "    ");
+		return new String(new char[indention]).replace("\0", "|   ");
 	}
 	
 	private void printl(String input) {
@@ -37,11 +37,9 @@ public class PrettyPrinter extends Visitor{
 			indention--;
 		}
 		if(node.stmtNode != null) {
-			indention++;
 			printl("Statement");
 			indention++;
 				visit(node.stmtNode);
-			indention--;
 			indention--;
 		}
 	}
@@ -52,7 +50,7 @@ public class PrettyPrinter extends Visitor{
 		if(node.exprNode != null) {
 			printl(node.typeNode.type);
 			printl(node.idNode.id);
-			printl("=");
+			printl(":=");
 			visit(node.exprNode);
 		}
 	else {
@@ -104,7 +102,7 @@ public class PrettyPrinter extends Visitor{
 			indention--;
 	}
 	@Override public void visit(StmtNode node) {
-		printl("I am in visit(StmtNode)");
+		super.visit(node);
 	}
 	@Override public void visit(WaitNode node) {
 		printl("Wait");
@@ -116,46 +114,160 @@ public class PrettyPrinter extends Visitor{
 		printl("Selective");
 	}
 	@Override public void visit(SwitchStmtNode node) {
-		printl("Switch");
+		printl("switch");
+		printl("(");
+		visit(node.exprNode);
+		printl(")");
+		printl("{");
+
+		indention++;
+		visit(node.caseListNode);
+		indention--;
+		printl("}");
+		
 	}
 	@Override public void visit(CaseListNode node) {
-		printl("CaseList");
+		for(CaseStmtNode caseNode : node.caseStmtNodes) {
+			visit(caseNode);
+		}
+		visit(node.defaultCaseNode);
 	}
 	@Override public void visit(CaseStmtNode node) {
-		printl("CaseStmt");
+		printl("case");
+		visit(node.exprNode);
+		printl(" :");
+		for(StmtNode stmt : node.stmtNodes) {
+			visit(stmt);
+		}
 	}
 	@Override public void visit(DefaultCaseNode node) {
-		printl("Default case");
+		printl("default");
+		printl(":");
+		for(StmtNode stmt : node.stmtNodes) {
+			visit(stmt);
+		}
 	}
 	@Override public void visit(IfStmtNode node) {
-		printl("If!");
+		printl("If");
+		printl("(");
+		visit(node.ifExprNode);
+		printl(")");
+		printl("{");
+		indention++;
+		visit(node.ifBlock);
+		indention--;
+		printl("}");
+			for(ElseIfStmtNode stmt : node.elseIfStmts) {
+				visit(stmt);
+			}
+			if(node.elseBlock != null) {
+				printl("else");
+				printl("{");
+				indention++;
+				visit(node.elseBlock);
+				indention--;
+				printl("}");
+			}
+		
 	}
 	@Override public void visit(BlockNode node) {
-		printl("BlockNode!");
+		for(StmtNode stmt : node.stmtNodes) {
+			visit(stmt);
+		}
 	}
 	@Override public void visit(ElseIfStmtNode node) {
-		printl("ElifNode");
+		printl("else if");
+		printl("(");
+		visit(node.exprNode);
+		printl(")");
+		printl("{");
+		indention++;
+		visit(node.block);
+		indention--;
+		printl("}");
 	}
 	@Override public void visit(IterativeNode node) {
 		printl("IterNode");
 	}
 	@Override public void visit(LoopTimesNode node) {
-		printl("LoopTimesNode");
+		printl("loop");
+		visit(node.exprNode);
+		printl("times");
+		printl("{");
+		indention++;
+		for(StmtNode stmt : node.stmtNodes) {
+			visit(stmt);
+		}
+		indention--;
+		printl("}");
+		
 	}
 	@Override public void visit(LoopUntilNode node) {
-		printl("LoopUntilNode");
+		printl("loop");
+		printl("until");
+		visit(node.exprNode);
+		printl(node.loopOperator.toString());
+		visit(node.idNode);
+		printl("by");
+		visit(node.numberNode);
+		printl("{");
+		indention++;
+		for(StmtNode stmt : node.stmtNodes) {
+			visit(stmt);
+		}
+		indention--;
+		printl("}");
+		
 	}
 	@Override public void visit(FuncCallNode node) {
-		printl("FuncCallNode");
+		printl("call");
+		visit(node.idNode);
+		printl("with");
+		printl("(");
+		indention++;
+		if(node.callCntNode != null) {
+			visit(node.callCntNode);
+		}else {
+			printl("none");
+		}
+		indention--;
+		printl(")");
 	}
 	@Override public void visit(CallCntNode node) {
-		printl("CallCntNode");
+		for(ExprNode expr : node.exprNodes) {
+			visit(expr);
+		}
 	}
 	@Override public void visit(AssignmentNode node) {
-		printl("AssignemntNode");
+		visit(node.idNode);
+		printl(node.assignementOperator.toString());
+		visit(node.exprNode);
+		
 	}
 	@Override public void visit(AdvTypeModifierNode node) {
-		printl("AdvTypeModifierNode");
+		switch(node.advancedTypeModifierOperator) {
+			case ADD:
+				printl("add");
+				indention++;
+				for(ExprNode expr : node.exprNodes) {
+					visit(expr);
+				}
+				indention--;
+				printl("to");
+				visit(node.idNode);
+				break;
+			case REMOVE:
+				printl("remove");
+				printl("element");
+				indention++;
+				for(ExprNode expr : node.exprNodes) {
+					visit(expr);
+				}
+				indention--;
+				printl("from");
+				visit(node.idNode);
+				break;
+		}
 	}
 	@Override public void visit(RepeatNode node) {
 		printl("");
@@ -171,16 +283,28 @@ public class PrettyPrinter extends Visitor{
 	@Override public void visit(FuncNode node) {
 		printl("Function");
 		indention++;
-		super.visit(node);		
-		
-		for(FuncCntNode func : node.funcCntNodes) {
-			visit(func);
+		printl("define");
+		visit(node.idNode);
+		printl("with");
+		printl("(");
+		visit(node.parametersNode);
+		printl(")");
+		printl("returnType");
+		visit(node.typeNode);
+		printl("{");
+		indention++;
+		for(FuncCntNode cnt : node.funcCntNodes) {
+			visit(cnt);
 		}
-		
+		indention--;
+		printl("}");
 		indention--;
 	}
 	@Override public void visit(FuncCntNode node) {
-		printl("i am here PLS");
+		if(node.varDclNode != null)
+			visit(node.varDclNode);
+		else
+			visit(node.stmtNode);
 	}
 	@Override public void visit(ParametersNode node) {
 		if(node.noneNode != null) {
@@ -210,8 +334,16 @@ public class PrettyPrinter extends Visitor{
 		printl(node.literalExprNode);
 	}
 	@Override public void visit(InfixExprNode node) {
+		printl("Expr");
+		indention++;
+		visit(node.leftExprNode);
+		
 		printl(node.infixOperator.toString());
+		
+		visit(node.rightExprNode);
+		indention--;
 	}
+
 	@Override public void visit(FuncExprNode node) {
 		printl("FuncExprNode");
 	}
@@ -228,6 +360,13 @@ public class PrettyPrinter extends Visitor{
 			printl(node.id);
 	}
 	@Override public void visit(LiteralAdvancedNode node) {
-		printl("LitAdvNode");
+		printl("get");
+		printl("element");
+		for(ExprNode expr : node.exprNodes) {
+			visit(expr);
+		}
+		printl("from");
+		visit(node.idNode);
+		printl("");
 	}
 }

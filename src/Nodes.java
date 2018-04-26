@@ -7,6 +7,7 @@ import enums.InfixOperator;
 import enums.LoopUntilOperator;
 import enums.UnaryOperator;
 import enums.AssignementOperator;
+import enums.AdvancedTypeModifierOperator;
 
 //TODO tilføj ctx constructor til mange af klasserne så vi det bliver nemmere at diagnotisere programmet
 abstract class AstNode {
@@ -489,10 +490,13 @@ class AssignmentNode extends StmtNode{
 class AdvTypeModifierNode extends StmtNode{
 	public List<ExprNode> exprNodes;
 	public IdNode idNode;
+	public AdvancedTypeModifierOperator advancedTypeModifierOperator;
 	
-	AdvTypeModifierNode(List<ExprNode> exprNodes, IdNode idNode){
+	AdvTypeModifierNode(List<ExprNode> exprNodes, IdNode idNode, 
+						AdvancedTypeModifierOperator advancedTypeModifierOperator){
 		this.exprNodes = exprNodes;
 		this.idNode = idNode;
+		this.advancedTypeModifierOperator = advancedTypeModifierOperator;
 	}
 	
 	@Override
