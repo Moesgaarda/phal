@@ -175,7 +175,6 @@ abstract class AdvDataTypeNode extends DclNode{
 
 class CmpDclNode extends DclNode{
 	public AdvTypeNode advTypeNode;
-	public IdNode idNode;
 	public List<LiteralExprNode> literalExprNodes; 
 	
 	public CmpDclNode(AdvTypeNode advTypeNode, IdNode idNode, List <LiteralExprNode> literalExprNodes) {
@@ -219,7 +218,6 @@ class AdvTypeNode extends AstNode{
 }
 
 class GroupNode extends AdvDataTypeNode{
-	public IdNode idNode;
 	public List<IdNode> memberIdNodes;
 	
 	public GroupNode(IdNode idNode, List<IdNode> memberIdNodes) {
@@ -235,7 +233,6 @@ class GroupNode extends AdvDataTypeNode{
 
 class ListNode extends AdvDataTypeNode{
 	public TypeNode typeNode;
-	public IdNode idNode;
 	public List<ExprNode> memberExprNodes; 
 	
 	public ListNode(TypeNode typeNode, IdNode idNode, List<ExprNode> memberExprNodes) {
