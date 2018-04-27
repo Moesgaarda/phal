@@ -32,6 +32,7 @@ public class SymbolTable {
 		{
 			MainClass.CompileErrors.add(new NotDeclaredError(
 					node.columnNumber, node.lineNumber, node.idNode.id));
+
 		}
 		else
 		{

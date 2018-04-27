@@ -11,6 +11,6 @@ public class TypeError extends Error{
     }
     @Override
     public String toString() {
-        return lineNumber + ": " + "expected type " + expectedType + ", got " + actualType;
+        return "line " + lineNumber + ": " + "expected type " + expectedType + ", got " + actualType;
     }
 }
