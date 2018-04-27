@@ -10,6 +10,6 @@ public class FunctionNotDeclaredError extends Error {
 	
 	@Override
 	public String toString() {
-		return lineNumber + ": Function " + functionName + " used but never declared";
+		return "Line: " + lineNumber + ": Function " + functionName + " used but never declared";
 	}
 }

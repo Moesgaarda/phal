@@ -24,6 +24,7 @@ public class BindingVisitor extends Visitor {
 		{
 			for(FuncNode func: node.funcNodes) {
 				func.accept(this);
+				//TODO kunne rykkes sammen med løkken her over
 			}
 		}
 	}

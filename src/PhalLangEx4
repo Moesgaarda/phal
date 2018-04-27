@@ -111,13 +111,15 @@ if (3=3) then {
 } else then {
 	lul := 3
 }
-
+call asdasdasdihfisdygdsyguasduy223 with (none)
 call MyFunc with (none)
-call Myfunc2 with (a3)
-call Myfunc2 with (12)
-call Myfunc3 with (12, "asd")
+call MyFunc2 with (a3)
+call MyFunc2 with (12)
+call MyFunc3 with (12, "asd")
+call MyFunc with (none)
 }
-
+define asdasdasdihfisdygdsyguasduy223 with (none) returnType none
+{}
 define MyFunc with (none) returnType none
 {}
 

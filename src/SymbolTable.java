@@ -19,8 +19,6 @@ public class SymbolTable {
 		{
 			MainClass.CompileErrors.add(new RedeclarationError(
 					node.columnNumber, node.lineNumber, node.idNode.id));
-			System.out.println("ALREADY DECLARED YOU BITCH PLZ ADD ERROR");
-			//TODO ADD ERROR INSTEAD OR RETURN
 		}
 		else
 		{
@@ -28,12 +26,12 @@ public class SymbolTable {
 		}
 
 	}
-	//TODO SKAL ÆNDRES DA DER IKKE SKAL TJEKKES FOR OM DEN ER DER MEN OMVENDT
+
 	public void addAssignmentToSymbolTable(AssignmentNode node) {
 		if(!symbolTable.peek().containsKey(node.idNode.id))
 		{
-			System.out.println("NOT DECLARED YOU BITCH PLZ ADD ERROR :" + node.idNode.id);
-			//TODO ADD ERROR INSTEAD OR RETURN
+			MainClass.CompileErrors.add(new NotDeclaredError(
+					node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 		else
 		{
@@ -44,8 +42,9 @@ public class SymbolTable {
 	public void addParamToSymbolTable(ParamNode node) {
 		if(symbolTable.peek().containsKey(node.idNode.id))
 		{
-			System.out.println("Parameter already exist YOU BITCH PLZ ADD ERROR :" + node.idNode.id);
-			//TODO ADD ERROR INSTEAD OR RETURN
+			MainClass.CompileErrors.add(new RedeclarationError(
+					node.columnNumber, node.lineNumber, node.idNode.id));
+
 		}
 		else
 		{
@@ -59,8 +58,8 @@ public class SymbolTable {
 	public void addToFuncMap(FuncNode node) {
 		if(functionMap.containsKey(node.idNode.id))
 		{
-			System.out.println("ALREADY DECLARED YOU BITCH PLZ ADD ERROR");
-			//TODO ADD ERROR INSTEAD OR RETURN
+			MainClass.CompileErrors.add(new RedeclarationError(
+					node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 		else
 		{
