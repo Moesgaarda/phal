@@ -23,15 +23,14 @@ public class MainClass {
         File file = new File(fileName);
         AstNode ast = ASTBuilder(new FileInputStream(file));
 					
-		BindingVisitor BV = new BindingVisitor();
-		BV.visit((ProgramNode) ast);	
+		TypeChecking(ast);	
 	}
 	
-	public static void Typechecking(AstNode ast) {
+	public static void TypeChecking(AstNode ast) {
 		BindingVisitor bv = new BindingVisitor();
 		bv.visit((ProgramNode) ast);
-		
-		if(!CompileErrors.isEmpty()) {
+		List<CompilerError.Error> CompileErrorslocal = CompileErrors;
+		if(!CompileErrorslocal.isEmpty()) {
 			PrintErrorsAndExit();
 		}
 	}
