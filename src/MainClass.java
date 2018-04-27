@@ -22,7 +22,8 @@ public class MainClass {
 		String fileName = "..\\Phal\\src\\PhalLangEx4";
         File file = new File(fileName);
         AstNode ast = ASTBuilder(new FileInputStream(file));
-					
+		PrettyPrinter pp = new PrettyPrinter();
+		pp.visit((ProgramNode)ast);
 		TypeChecking(ast);	
 	}
 	

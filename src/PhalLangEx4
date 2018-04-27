@@ -117,6 +117,7 @@ call MyFunc2 with (a3)
 call MyFunc2 with (12)
 call MyFunc3 with (12, "asd")
 call MyFunc with (none)
+call ThisFuncDontExist with (none)
 }
 define asdasdasdihfisdygdsyguasduy223 with (none) returnType none
 {}
