@@ -9,9 +9,9 @@ public enum UnaryOperator{
 		String stringRep = "";
 		switch (this) {
 			case NOT:
-				stringRep = "-";
-			case NEGATIVE:
 				stringRep = "!";
+			case NEGATIVE:
+				stringRep = "-";
 			default:
 				stringRep = this.toString();
 		}
