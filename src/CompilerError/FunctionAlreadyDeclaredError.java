@@ -11,6 +11,6 @@ public class FunctionAlreadyDeclaredError  extends Error {
 	
 	@Override
 	public String toString() {
-		return "Line " + lineNumber + ": function with name " + functionName + " already declared";
+		return "Line: " + lineNumber + ":" + columnNumber + " - Function " + functionName + " already declared";
 	}
 }
