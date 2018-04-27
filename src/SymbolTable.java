@@ -32,7 +32,8 @@ public class SymbolTable {
 	public void addAssignmentToSymbolTable(AssignmentNode node) {
 		if(!symbolTable.peek().containsKey(node.idNode.id))
 		{
-			System.out.println("NOT DECLARED YOU BITCH PLZ ADD ERROR :" + node.idNode.id);
+			//System.out.println("NOT DECLARED YOU BITCH PLZ ADD ERROR :" + node.idNode.id);
+			MainClass.CompileErrors.add(new VariableUndeclared(node.columnNumber, node.lineNumber, node.idNode.id));
 			//TODO ADD ERROR INSTEAD OR RETURN
 		}
 		else

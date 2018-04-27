@@ -29,8 +29,7 @@ public class MainClass {
 	public static void TypeChecking(AstNode ast) {
 		BindingVisitor bv = new BindingVisitor();
 		bv.visit((ProgramNode) ast);
-		List<CompilerError.Error> CompileErrorslocal = CompileErrors;
-		if(!CompileErrorslocal.isEmpty()) {
+		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
 		}
 	}

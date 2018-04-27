@@ -9,6 +9,6 @@ public class VariableUndeclared extends Error{
 	
 	@Override
 	public String toString() {
-		return lineNumber +": variable " + id + "undeclared";
+		return "line " + lineNumber +": variable " + id + " used but never declared";
 	}
 }
