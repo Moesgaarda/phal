@@ -517,12 +517,17 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	{ 
 		if(ctx.none() != null)
 			return new ParametersNode(new NoneNode());
-		else {
+		else if(ctx.param() != null) {
 			List<ParamNode> paramNodes = new LinkedList<>();
 			for(PhalParser.ParamContext param: ctx.param()) {
 				paramNodes.add((ParamNode)visit(param));
 			}
 			return new ParametersNode(paramNodes);
+		}
+		else {
+			//TODO ERROR MESSAGE
+			System.out.println("This really shouldn't happen");
+			return null;
 		}
 	}
 	

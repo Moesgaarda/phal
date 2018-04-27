@@ -9,6 +9,7 @@ number i := 1
 number j := 2
 text t := "This is a string"
 bool b := true
+number a
 
 lightbulb lb := pin 1
 motor cm := pin 2,3,4
@@ -36,10 +37,12 @@ add 2 to lstNum
 add 2,3,4,6,7,8,2+4 to lstNum
 
 lstNum += 23
-fuu.bar := true
-bar.foo := false
+bool bar := true
+bool foo := false
 remove element 4 from lstNum
 number a2 := get element 2 from lstNum
+text s
+number x
 if(2=2) then {
 a := 2
 } else if (2=2) then
@@ -63,13 +66,17 @@ call MyFunc with (none)
 
 loop 4 times {x := 3
 }
-	
+number asd
+number sdf
 loop until 2 +3 , increase asd by 4{
 asd := 6
 sdf += 2
 }
-
+number lul
+bool fuu
 }
+
+
 repeat
 {
 add 2 to lstNum
@@ -114,16 +121,17 @@ call Myfunc3 with (12, "asd")
 define MyFunc with (none) returnType none
 {}
 
-define MyFunc2 with (number a) returnType bool{
+define MyFunc2 with (number a2) returnType bool{
 	a2 := 2
 	text t := "asdasd"
 	wait 2.5 seconds
 	return true
 }
 define MyFunc3 with (number a, text t) returnType list{
-	a2 := 2
-	text t := "asdasd"
-	a3 := get element 2 from asd
+	a := 3
+	number a2 := 2
+	text t2 := "asdasd"
+	number a3 := get element 2 from asd
 	return lstNum
 }
 

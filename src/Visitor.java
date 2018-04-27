@@ -139,7 +139,11 @@ public abstract class Visitor {
 				elseIfStmts.accept(this);
 			}
 		}
-		node.elseBlock.accept(this);
+		if(node.elseBlock != null)
+		{
+			node.elseBlock.accept(this);
+		}
+
 	}
 	public void visit(BlockNode node)
 	{
@@ -196,7 +200,11 @@ public abstract class Visitor {
 	}
 	public void visit(FuncCallNode node) {
 		node.idNode.accept(this);
-		node.callCntNode.accept(this);
+		if(node.callCntNode != null)
+		{
+			node.callCntNode.accept(this);
+		}
+
 	}
 	public void visit(CallCntNode node) {
 		for(ExprNode expr: node.exprNodes)
@@ -237,15 +245,35 @@ public abstract class Visitor {
 		}
 	}
 	public void visit(FuncCntNode node) {
-		node.varDclNode.accept(this);
-		node.stmtNode.accept(this);
+		if(node.varDclNode != null) {
+			node.varDclNode.accept(this);
+		}
+		else if(node.stmtNode != null) {
+			node.stmtNode.accept(this);
+		}
+		else if(node.listNode != null)
+		{
+			node.listNode.accept(this);
+		}
+		else {
+			//TODO MAKE ERROR!
+		}
 	}
 	public void visit(ParametersNode node) {
-		node.noneNode.accept(this);
-		for(ParamNode param: node.paramNodes)
-		{
-			param.accept(this);			
+		if(node.noneNode != null) {
+			node.noneNode.accept(this);
 		}
+		else if (node.paramNodes != null ) {
+			for(ParamNode param: node.paramNodes)
+			{
+				param.accept(this);			
+			}
+		}
+		else {
+			//TODO ERROR
+			System.out.println("THIS SHOULDN*T HAPPEN [VISITOR PARAMETER]");
+		}
+
 	}
 	public void visit(ParamNode node) {
 		node.typeNode.accept(this);
@@ -261,7 +289,6 @@ public abstract class Visitor {
 		node.idNode.accept(this);
 	}
 	public void visit(NoneNode node) {
-		node.accept(this);
 	}
 	public void visit(LiteralExprNode node) {
 	}

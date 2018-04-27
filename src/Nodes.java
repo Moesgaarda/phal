@@ -593,6 +593,7 @@ class FuncNode extends AstNode{
 class FuncCntNode extends AstNode{
 	public VarDclNode varDclNode;
 	public StmtNode stmtNode;
+	public ListNode listNode;
 	
 	public FuncCntNode(VarDclNode varDclNode) {
 		this.varDclNode = varDclNode;
@@ -600,6 +601,10 @@ class FuncCntNode extends AstNode{
 	
 	public FuncCntNode(StmtNode stmtNode) {
 		this.stmtNode = stmtNode;
+	}
+	public FuncCntNode(ListNode listNode)
+	{
+		this.listNode = listNode;
 	}
 	
 	@Override
