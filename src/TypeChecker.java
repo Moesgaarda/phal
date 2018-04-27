@@ -1,3 +1,4 @@
+import CompilerError.*;
 
 public class TypeChecker extends Visitor{
 
@@ -148,6 +149,8 @@ public class TypeChecker extends Visitor{
 		
 		checkActualAndFormalParams(funcExprNode, funcExprNode.funcCallNode.callCntNode, formalParams);
 		
+		funcExprNode.type = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).typeNode.Type;
+		
 	}
 	
 	public void visit(FuncCallNode funcCallNode) {
@@ -159,9 +162,12 @@ public class TypeChecker extends Visitor{
 	}
 	
 	private void checkActualAndFormalParams(AstNode node, CallCntNode actualParams, ParametersNode formalParams) {
+		int actualParamsCount = actualParams.exprNodes.size();
+		int formalParamsCount = formalParams.paramNodes.size();
+		
 		if(actualParams != null && formalParams != null) {
-			int actualParamsCount = actualParams.exprNodes.size();
-			if(actualParamsCount == formalParams.paramNodes.size()) {
+			
+			if(actualParamsCount == formalParamsCount) {
 				// Check if types match
 				if(actualParamsCount != 0) {
 					for(int i = 0; i < actualParamsCount; i++) {
@@ -169,20 +175,25 @@ public class TypeChecker extends Visitor{
 						TypeNode formalParamType = formalParams.paramNodes.get(i).typeNode;
 						
 						if(formalParamType.Type != actualParamExpr.type) {
-							// Error. The types doesn't match
+							MainClass.CompileErrors.add(new ParameterMismatchError(node.columnNumber, 
+									node.lineNumber, actualParamExpr.type.toString(), formalParamType.Type.toString()));
 							
 						}
 					}
 				}
 			}
 			else {
-				// ERROR. Mismatch in amount of params
+				MainClass.CompileErrors.add(new ParameterAmountError(node.columnNumber, 
+								node.lineNumber, actualParamsCount, formalParamsCount));
+				
 			}
 		}
 		else if(actualParams != null || formalParams != null) {
-			// If it reaches here, one is null and the other isn't which means an error. Mismatch in amount of params
+			MainClass.CompileErrors.add(new ParameterAmountError(node.columnNumber, 
+					 		node.lineNumber, actualParamsCount, formalParamsCount));
 		}
 		
+		// both
 		
 	}
 
