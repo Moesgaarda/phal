@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import enums.InfixOperator;
 import enums.LoopUntilOperator;
 import enums.UnaryOperator;
-import enums.AssignementOperator;
+import enums.AssignmentOperator;
 import enums.AdvancedTypeModifierOperator;
 
 
@@ -510,13 +510,13 @@ class CallCntNode extends AstNode{
 class AssignmentNode extends StmtNode{
 	public IdNode idNode;
 	public ExprNode exprNode;
-	public AssignementOperator assignementOperator;
+	public AssignmentOperator assignmentOperator;
 	
-	public AssignmentNode(IdNode idNode, ExprNode exprNode, AssignementOperator assignementOperator, PhalParser.AssignmentContext ctx) {
+	public AssignmentNode(IdNode idNode, ExprNode exprNode, AssignmentOperator assignmentOperator, PhalParser.AssignmentContext ctx) {
 		super(ctx);
 		this.idNode = idNode;
 		this.exprNode = exprNode;
-		this.assignementOperator = assignementOperator;
+		this.assignmentOperator = assignmentOperator;
 	}
 	
 	@Override

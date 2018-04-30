@@ -1,6 +1,6 @@
 package enums;
 
-public enum AssignementOperator {
+public enum AssignmentOperator {
 	EQUALS,
 	PLUSEQUALS,
 	MINUSEQUALS;

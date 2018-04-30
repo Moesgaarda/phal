@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import enums.AdvancedTypeModifierOperator;
-import enums.AssignementOperator;
+import enums.AssignmentOperator;
 import enums.InfixOperator;
 import enums.LoopUntilOperator;
 import enums.UnaryOperator;
@@ -413,16 +413,16 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		IdNode idNode = null;
 		ExprNode exprNode = (ExprNode)visit(ctx.expr());
 		String id = ctx.ID(0).getText();
-		AssignementOperator assignementOperator;
+		AssignmentOperator assignmentOperator;
 		switch(getOperatorSymbol(ctx.children, ":=", "+=", "-=")) {
 			case ":=":
-				assignementOperator = AssignementOperator.EQUALS;
+				assignmentOperator = AssignmentOperator.EQUALS;
 				break;
 			case "+=":
-				assignementOperator =  AssignementOperator.PLUSEQUALS;
+				assignmentOperator =  AssignmentOperator.PLUSEQUALS;
 				break;
 			case "-=":
-				assignementOperator = AssignementOperator.MINUSEQUALS;
+				assignmentOperator = AssignmentOperator.MINUSEQUALS;
 				break;
 			default:
 				return null;
@@ -431,10 +431,10 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		if(ctx.ID(1) != null) {
 			String subId = ctx.ID(1).getText();
 			idNode = new IdNode(id, subId);
-			return new AssignmentNode(idNode, exprNode, assignementOperator, ctx);
+			return new AssignmentNode(idNode, exprNode, assignmentOperator, ctx);
 		}
 		idNode = new IdNode(id);
-		return new AssignmentNode(idNode, exprNode,assignementOperator, ctx);
+		return new AssignmentNode(idNode, exprNode,assignmentOperator, ctx);
 	}
 	@Override public AstNode visitAdvTypeModifier(PhalParser.AdvTypeModifierContext ctx)  
 	{ 
