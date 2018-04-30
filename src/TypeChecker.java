@@ -209,20 +209,89 @@ public class TypeChecker extends Visitor{
 		typeCheckAssignment(assNode);
 	}
 	
-	private void typeCheckAssignment(AssignmentNode node) {
-		
-		switch(node.assignmentOperator) {
-			case EQUALS:
-		}
-		if(node.idNode.type != node.exprNode.type) {
-			MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, node.exprNode.type.toString(), node.idNode.type.toString()));
-		}
-		else if(node.assignmentOperator == AssignmentOperator.PLUSEQUALS) {
-			if() {
+	public void visit(AdvTypeModifierNode node) {
+		// først checkes om det er en liste
+		if(st.)
+		// Derefter checkes om typen af alle expressions er af samme type som listen.
+		for(int i = 0; i < node.exprNodes.size(); i++) {
+			if(node.idNode.type != node.exprNodes.get(i).type) {
+				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
+											node.exprNodes.get(i).type.toString(), node.idNode.type.toString()));
 				
 			}
 		}
 	}
-
 	
+	private void typeCheckAssignment(AssignmentNode node) {
+		// Lister og Groups? Hvordan skal det tjekkes?
+		if(node.idNode.type != node.exprNode.type) {
+			if(node.idNode.type != Type.GROUP) { // Er dette nødvendigt? Kan en group indgå i assignment?
+				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
+											node.exprNode.type.toString(), node.idNode.type.toString()));
+			}
+		}
+		
+		switch(node.assignmentOperator) {
+			case EQUALS:
+				break;
+				
+			case PLUSEQUALS:
+			case MINUSEQUALS:
+				if(node.idNode.type != Type.NUMBER || node.exprNode.type != Type.NUMBER) {
+					if(st.getEntryInSymbolTable(node.idNode.id)) { // tjek om id'et er en liste
+						
+					}
+					else {
+						// ERROR
+					}
+				}
+				break;			
+		}
+	}
+	
+	public void visit(LiteralAdvancedNode node) {
+		for(int i = 0; i < node.exprNodes.size(); i++) {
+			if(node.idNode.type != node.exprNodes.get(i).type) {
+				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
+											node.exprNodes.get(i).type.toString(), node.idNode.type.toString()));
+			}
+		}
+		node.type = node.idNode.type;
+	}
+	
+	public void visit(ParensExprNode node) {
+		node.
+	}
+	
+	public void visit(IdRefExprNode node) {
+		
+	}
+	
+	public void visit(ListNode node) {
+		
+	}
+
+	public void visit(SwitchStmtNode node) {
+		
+	}
+	
+	public void visit(CaseStmtNode node) {
+		
+	}
+	
+	public void visit(IfStmtNode node) {
+		
+	}
+	
+	public void visit(ElseIfStmtNode node) {
+		
+	}
+	
+	public void visit(LoopTimesNode node) {
+		
+	}
+	
+	public void visit(LoopUntilNode node) {
+		
+	}
 }
