@@ -256,7 +256,7 @@ public abstract class Visitor {
 			node.listNode.accept(this);
 		}
 		else {
-			//TODO MAKE ERROR!
+			System.out.println("THIS REALLY SHOULDN't HAPPEN HOW DID YOU GET HERE? GOD HELP US ALL[VISITOR FuncCntNode]");
 		}
 	}
 	public void visit(ParametersNode node) {
@@ -270,7 +270,6 @@ public abstract class Visitor {
 			}
 		}
 		else {
-			//TODO ERROR
 			System.out.println("THIS SHOULDN*T HAPPEN [VISITOR PARAMETER]");
 		}
 

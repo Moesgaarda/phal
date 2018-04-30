@@ -2,7 +2,7 @@ import CompilerError.*;
 
 public class TypeChecker extends Visitor{
 
-	public boolean typeErrorInCountered = false;
+	public boolean typeErrorEnCountered = false;
 	private SymbolTable st;
 	
 	public TypeChecker(SymbolTable st) {
@@ -31,6 +31,7 @@ public class TypeChecker extends Visitor{
 				}
 				else {
 					// Error
+					//TODO Altså hvad type fejl er det her?? type error men med NUMBER eller TEXT
 				}
 				break;
 		
@@ -42,7 +43,8 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
-					// ERROR
+					MainClass.CompileErrors.add(new TypeError(
+							infixNode.columnNumber, infixNode.lineNumber,??,Type.NUMBER.toString()));
 				}
 				break;
 			
@@ -52,7 +54,8 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
-					// ERROR
+					MainClass.CompileErrors.add(new TypeError(
+							infixNode.columnNumber, infixNode.lineNumber,??,Type.BOOL.toString()));
 				}
 				break;
 		
@@ -68,12 +71,13 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
-					// ERROR
+					MainClass.CompileErrors.add(new TypeError(
+							infixNode.columnNumber, infixNode.lineNumber,??,Type.BOOL.toString()));
 				}
 				break;
 			default:
-				// ERROR ?
-			
+				System.out.println("This should never happen [TypeChecker infixNode]");
+				typeErrorEnCountered = true;
 
 		}
 	}
@@ -101,14 +105,14 @@ public class TypeChecker extends Visitor{
 	
 	public void visit(UnaryExprNode unaryNode) {
 		visit(unaryNode.exprNode);
-		
 		switch(unaryNode.unaryOperator) {
 			case NOT:
 				if(correctType(unaryNode, Type.BOOL)) {
 					unaryNode.type = Type.BOOL;
 				}
 				else {
-					// ERROR
+					MainClass.CompileErrors.add(new TypeError(
+							unaryNode.columnNumber, unaryNode.lineNumber,??,Type.BOOL.toString()));
 				}
 				break;
 				
@@ -117,12 +121,14 @@ public class TypeChecker extends Visitor{
 					unaryNode.type = Type.NUMBER;
 				}
 				else {
-					// ERROR
+					MainClass.CompileErrors.add(new TypeError(
+							unaryNode.columnNumber, unaryNode.lineNumber,??,Type.NUMBER.toString()));
 				}
 				break;
 				
 			default: 
-				// ERROR
+				System.out.println("This should never happen [TypeChecker UnaryNode]");
+				typeErrorEnCountered = true;
 				
 		}
 	}

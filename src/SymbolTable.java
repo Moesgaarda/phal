@@ -68,10 +68,7 @@ public class SymbolTable {
 		}
 
 	}
-	public void removeFromFuncMap(FuncNode node) {
-		functionMap.remove(node.idNode.id);
-		//TODO måske tilføje noget der kigger på om den eksisterede i forvejen?
-	}
+
 	public FuncNode getFunctionFromFuncMap(FuncCallNode node) {
 		FuncNode func = functionMap.get(node.idNode.id);
 

@@ -9,7 +9,7 @@ import enums.UnaryOperator;
 import enums.AssignementOperator;
 import enums.AdvancedTypeModifierOperator;
 
-//TODO tilf�j ctx constructor til mange af klasserne s� vi det bliver nemmere at diagnotisere programmet
+
 abstract class AstNode {
 	public AstNode() {}
 	abstract void accept(Visitor v);
@@ -223,8 +223,8 @@ class AdvTypeNode extends AstNode{
 			this.Type = Type.TEMPERATURESENSOR;
 			break;
 		default:
-			//TODO maybe add exception
-			System.out.println("got an adv type that doesn't exist @ Nodes L 207 : " + type );
+
+			System.out.println("got an adv type that doesn't exist @ Nodes AdvTypeNode");
 		}
 	}
 	
@@ -557,7 +557,7 @@ class RepeatNode extends AstNode{
 		v.visit(this);
 	}
 }
-// TODO Har fjernet returnStmtNode da de ligger unde funccnt, hvis problemer opst�r overvej at �ndre det igen
+
 class FuncNode extends AstNode{
 	public IdNode idNode;
 	public ParametersNode parametersNode;
@@ -660,12 +660,11 @@ class ReturnStmtNode extends StmtNode{
 }
 
 abstract class ExprNode extends AstNode{
+	public Type type;
 	public ExprNode() {}	
 	public ExprNode(ParserRuleContext ctx) {
 		super(ctx);
 	}
-	
-	public Type type;
 	abstract void accept(Visitor v);
 }
 

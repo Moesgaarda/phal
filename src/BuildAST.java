@@ -72,9 +72,8 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		}
 		else
 		{
-			System.out.println("THIS REALLY SHOULDN*T HAPPEN");
+			System.out.println("THIS REALLY SHOULDN*T HAPPEN[Build ast visitSetupCnt]");
 		}
-		//TODO exception throw her?
 		return null;
 	}
 	@Override public AstNode visitDcl(PhalParser.DclContext ctx)
@@ -140,8 +139,6 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		IdNode idNode = new IdNode(ctx.ID().getText());
 		List<LiteralExprNode> literalExprNodes = new LinkedList<>();
 		
-
-		//TODO If stuff breaks, this might be why
 		for(TerminalNode number: ctx.NUMBER())
 		{
 			literalExprNodes.add(new LiteralExprNode(number.getText(),Type.NUMBER));
@@ -157,7 +154,6 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		int count = ctx.ID().size();
 		for(int i = 1; i < count; i++) // Starts at 1 since id 0 is the group name
 		{
-			//TODO might need to check for null
 			memberIdNodes.add(new IdNode(ctx.ID(i).getText()));
 		}
 		return new GroupNode(idNode, memberIdNodes, ctx);
@@ -281,28 +277,23 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		ExprNode exprNode = (ExprNode) visit(ctx.expr(0));
 		// Gets the if block
 		BlockNode ifBlockNode = (BlockNode) visit(ctx.block(0));
+		
+		//Gets the ElseBlock
 		ElseBlockNode elseBlockNode = null;
-		List<ElseIfStmtNode> elifNodes = new LinkedList<>();
 		if(ctx.elseBlock() != null)
 		{
 			elseBlockNode = (ElseBlockNode) visit(ctx.elseBlock());
 		}
 		
-		// gets the blocks 
-		//TODO HVAD VIS DER IKKE ER NOGEN ELSE?!
+		// gets the elseIf blocks 
+		List<ElseIfStmtNode> elifNodes = new LinkedList<>();
 		int count = ctx.block().size();
 		for(int i = 1; i < count;i++)
 		{
-
 			BlockNode bn = (BlockNode)visit(ctx.block(i));
 			ExprNode en  = (ExprNode)visit(ctx.expr(i));
 			elifNodes.add(new ElseIfStmtNode(en,bn));
-
-			
 		}
-		
-		
-		
 		
 		return new IfStmtNode(exprNode, ifBlockNode, elifNodes,elseBlockNode);
 	}
@@ -525,8 +516,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 			return new ParametersNode(paramNodes);
 		}
 		else {
-			//TODO ERROR MESSAGE
-			System.out.println("This really shouldn't happen");
+			System.out.println("This really shouldn't happen [Build ast visit parameters]");
 			return null;
 		}
 	}
