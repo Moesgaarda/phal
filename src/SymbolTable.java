@@ -53,6 +53,9 @@ public class SymbolTable {
 		}
 
 	}
+	public void getEntryInSymbolTable(String key) {
+		
+	}
 	
 	
 	/*FuncMap methods*/

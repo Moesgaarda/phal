@@ -30,7 +30,7 @@ abstract class AstNode {
 class ProgramNode extends AstNode{
 	public SetupNode setupNode;
 	public RepeatNode repeatNode;
-	public List<FuncNode> funcNodes;
+	public List<FuncNode> funcNodes = new LinkedList<>();;
 	public List<IncludeNode> includeNodes = new LinkedList<>();
 	
 	public ProgramNode(List<IncludeNode> includeNodes, SetupNode setupNode, RepeatNode repeatNode, List<FuncNode> funcNodes) {
