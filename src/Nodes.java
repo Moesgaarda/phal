@@ -777,12 +777,12 @@ class IdNode extends ExprNode{
 }
 class LiteralAdvancedNode extends ExprNode
 {
-	public List<ExprNode> exprNodes;
+	public ExprNode exprNode;
 	public IdNode idNode;
 	
-	public LiteralAdvancedNode(List<ExprNode> exprNodes, IdNode idNode, PhalParser.LitAdvExprContext ctx) {
+	public LiteralAdvancedNode(ExprNode exprNode, IdNode idNode, PhalParser.LitAdvExprContext ctx) {
 		super(ctx);
-		this.exprNodes = exprNodes;
+		this.exprNode = exprNode;
 		this.idNode = idNode;
 	}
 		

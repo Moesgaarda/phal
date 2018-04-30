@@ -673,16 +673,13 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		}
 		return new ParensExprNode(exprNode, ctx);
 	}
-	@Override public AstNode visitLitAdvExpr(PhalParser.LitAdvExprContext ctx)  
+	@Override 
+	public AstNode visitLitAdvExpr(PhalParser.LitAdvExprContext ctx)  
 	{ 
-		List<ExprNode> exprNodes = new LinkedList<>();
+		ExprNode exprNode = (ExprNode)visit(ctx.expr());
 		IdNode idNode = new IdNode(ctx.ID().getText());
 		
-		for(PhalParser.ExprContext exp: ctx.expr()) {
-			exprNodes.add((ExprNode)visit(exp));
-		}
-		
-		return new LiteralAdvancedNode(exprNodes, idNode, ctx);
+		return new LiteralAdvancedNode(exprNode, idNode, ctx);
 	}
 	@Override public AstNode visitNone(PhalParser.NoneContext ctx) 
 	{ 

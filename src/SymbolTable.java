@@ -1,5 +1,7 @@
 import java.util.HashMap;
 import CompilerError.*;
+import Warnings.*;
+
 import java.util.Stack;
 
 public class SymbolTable {
@@ -54,9 +56,23 @@ public class SymbolTable {
 
 	}
 	public void getEntryInSymbolTable(String key) {
+		//TODO IMPLEMENT
 		
 	}
-	
+	/*
+	 * Checkstop of stack (current scope)
+	 * 
+	 * */
+	public void checkVariablesAreUsed() {
+		for(AstNode node : symbolTable.peek().values()) {
+			if(node instanceof DclNode) {
+				MainClass.CompileWarnings.add(
+						new NotUsedWarning(
+								node.columnNumber, node.lineNumber, ((DclNode) node).idNode.id));
+			}
+		}
+		
+	}
 	
 	/*FuncMap methods*/
 	public void addToFuncMap(FuncNode node) {

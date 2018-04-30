@@ -1,5 +1,5 @@
 import CompilerError.*;
-
+//TODO TILFØJ TJEK OM TING BLIVER BRUGT
 public class BindingVisitor extends Visitor {
 	public SymbolTable ST = new SymbolTable();
 	
@@ -20,6 +20,7 @@ public class BindingVisitor extends Visitor {
 		/*Creates ST*/
 		node.setupNode.accept(this);
 		node.repeatNode.accept(this);
+		ST.checkVariablesAreUsed();
 		if(node.funcNodes != null)
 		{
 			for(FuncNode func: node.funcNodes) {
@@ -42,6 +43,7 @@ public class BindingVisitor extends Visitor {
 				funcCnt.accept(this);
 			}
 		}
+		ST.checkVariablesAreUsed();
 		ST.closeScope();
 	}
 	@Override

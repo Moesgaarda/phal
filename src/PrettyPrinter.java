@@ -362,9 +362,9 @@ public class PrettyPrinter extends Visitor{
 	@Override public void visit(LiteralAdvancedNode node) {
 		printl("get");
 		printl("element");
-		for(ExprNode expr : node.exprNodes) {
-			visit(expr);
-		}
+
+		visit(node.exprNode);
+		
 		printl("from");
 		visit(node.idNode);
 		printl("");

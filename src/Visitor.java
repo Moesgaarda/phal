@@ -309,10 +309,7 @@ public abstract class Visitor {
 	}
 	public void visit(LiteralAdvancedNode node) {
 		node.idNode.accept(this);
-		for(ExprNode expr: node.exprNodes)
-		{
-			expr.accept(this);
-		}
+		node.exprNode.accept(this);
 	}
 
 	

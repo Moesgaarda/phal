@@ -15,6 +15,7 @@ public class MainClass {
 	
 	public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
 	public static List<CompilerError.Error> CompileWarnings = new ArrayList<>();
+	
 	public static void main(String args[]) throws Exception
 	{
 
@@ -31,6 +32,10 @@ public class MainClass {
 		bv.visit((ProgramNode) ast);
 		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
+		}
+		//TODO Bare til at teste med skal nok først printes når compileren har været gennem alle steps
+		if(!CompileWarnings.isEmpty()) {
+			PrintWarnings();
 		}
 	}
 	
@@ -54,6 +59,11 @@ public class MainClass {
 			System.out.println(e);
 		}
 		System.exit(0);
+	}
+	public static void PrintWarnings() {
+		for(CompilerError.Error e : CompileWarnings) {
+			System.out.println(e);
+		}
 	}
 	static class phalErrorListener implements ANTLRErrorListener {
 		
