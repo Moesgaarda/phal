@@ -32,6 +32,7 @@ public class TypeChecker extends Visitor{
 				else {
 					// Error
 					//TODO Altså hvad type fejl er det her?? type error men med NUMBER eller TEXT
+					// Det er en type error da typen ikke er NUMBER
 				}
 				break;
 		
@@ -200,6 +201,14 @@ public class TypeChecker extends Visitor{
 		}
 		
 		// both
+		
+	}
+	
+	public void visit(AssignmentNode assNode) {
+		typeCheckAssignment(assNode);
+	}
+	
+	private void typeCheckAssignment(AssignmentNode node) {
 		
 	}
 
