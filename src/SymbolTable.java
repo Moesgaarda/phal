@@ -60,18 +60,25 @@ public class SymbolTable {
 		
 	}
 	/*
-	 * Checkstop of stack (current scope)
+	 * Checks top of stack (current scope)
 	 * 
 	 * */
 	public void checkVariablesAreUsed() {
 		for(AstNode node : symbolTable.peek().values()) {
 			if(node instanceof DclNode) {
 				MainClass.CompileWarnings.add(
-						new NotUsedWarning(
-								node.columnNumber, node.lineNumber, ((DclNode) node).idNode.id));
+						new VarNotUsedWarning(node.columnNumber, node.lineNumber, ((DclNode) node).idNode.id));
 			}
 		}
 		
+	}
+	
+	public void checkFunctionsAreUsed() {
+		for(FuncNode node: functionMap.values()) {
+			if(!node.isUsed) {
+				MainClass.CompileWarnings.add(new FuncNotUsedWarning(node.columnNumber, node.lineNumber, node.idNode.id));
+			}
+		}
 	}
 	
 	/*FuncMap methods*/
@@ -90,7 +97,7 @@ public class SymbolTable {
 
 	public FuncNode getFunctionFromFuncMap(FuncCallNode node) {
 		FuncNode func = functionMap.get(node.idNode.id);
-
+		func.isUsed = true;
 		return func;
 	}
 	

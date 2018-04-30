@@ -111,7 +111,7 @@ if (3=3) then {
 } else then {
 	lul := 3
 }
-call asdasdasdihfisdygdsyguasduy223 with (none)
+
 call MyFunc with (none)
 call MyFunc2 with (a3)
 call MyFunc2 with (12)

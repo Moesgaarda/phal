@@ -28,6 +28,7 @@ public class BindingVisitor extends Visitor {
 				//TODO kunne rykkes sammen med løkken her over
 			}
 		}
+		ST.checkFunctionsAreUsed();
 	}
 	
 	

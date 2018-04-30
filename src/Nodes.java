@@ -563,6 +563,7 @@ class FuncNode extends AstNode{
 	public ParametersNode parametersNode;
 	public TypeNode typeNode = null;
 	public List<FuncCntNode> funcCntNodes;
+	public boolean isUsed = false;
 	
 	// If all is set and returnType is not none
 	public FuncNode(IdNode idNode, ParametersNode parametersNode, TypeNode typeNode, 
