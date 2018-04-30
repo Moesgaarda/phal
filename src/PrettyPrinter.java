@@ -240,7 +240,7 @@ public class PrettyPrinter extends Visitor{
 	}
 	@Override public void visit(AssignmentNode node) {
 		visit(node.idNode);
-		printl(node.assignementOperator.toString());
+		printl(node.assignmentOperator.toString());
 		visit(node.exprNode);
 		
 	}
