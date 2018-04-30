@@ -1,4 +1,5 @@
 import CompilerError.*;
+import enums.*;
 
 public class TypeChecker extends Visitor{
 
@@ -210,6 +211,17 @@ public class TypeChecker extends Visitor{
 	
 	private void typeCheckAssignment(AssignmentNode node) {
 		
+		switch(node.assignmentOperator) {
+			case EQUALS:
+		}
+		if(node.idNode.type != node.exprNode.type) {
+			MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, node.exprNode.type.toString(), node.idNode.type.toString()));
+		}
+		else if(node.assignmentOperator == AssignmentOperator.PLUSEQUALS) {
+			if() {
+				
+			}
+		}
 	}
 
 	
