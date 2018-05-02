@@ -32,8 +32,8 @@ public class TypeChecker extends Visitor{
 				}
 				else {
 					// Error
-					//TODO Altså hvad type fejl er det her?? type error men med NUMBER eller TEXT
-					// Det er en type error da typen ikke er NUMBER
+					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
+							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
 				break;
 		
@@ -45,8 +45,8 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
-					MainClass.CompileErrors.add(new TypeError(
-							infixNode.columnNumber, infixNode.lineNumber,??,Type.NUMBER.toString()));
+					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
+							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
 				break;
 			
@@ -56,8 +56,8 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
-					MainClass.CompileErrors.add(new TypeError(
-							infixNode.columnNumber, infixNode.lineNumber,??,Type.BOOL.toString()));
+					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
+							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
 				break;
 		
@@ -73,8 +73,8 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
-					MainClass.CompileErrors.add(new TypeError(
-							infixNode.columnNumber, infixNode.lineNumber,??,Type.BOOL.toString()));
+					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
+							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
 				break;
 			default:
@@ -114,7 +114,7 @@ public class TypeChecker extends Visitor{
 				}
 				else {
 					MainClass.CompileErrors.add(new TypeError(
-							unaryNode.columnNumber, unaryNode.lineNumber,??,Type.BOOL.toString()));
+							unaryNode.columnNumber, unaryNode.lineNumber, unaryNode.exprNode.type.toString(), Type.BOOL.toString()));
 				}
 				break;
 				
@@ -124,7 +124,7 @@ public class TypeChecker extends Visitor{
 				}
 				else {
 					MainClass.CompileErrors.add(new TypeError(
-							unaryNode.columnNumber, unaryNode.lineNumber,??,Type.NUMBER.toString()));
+							unaryNode.columnNumber, unaryNode.lineNumber, unaryNode.exprNode.type.toString(), Type.NUMBER.toString()));
 				}
 				break;
 				
@@ -156,7 +156,6 @@ public class TypeChecker extends Visitor{
 		ParametersNode formalParams = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).parametersNode;
 		
 		checkActualAndFormalParams(funcExprNode, funcExprNode.funcCallNode.callCntNode, formalParams);
-		
 		funcExprNode.type = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).typeNode.Type;
 		
 	}
@@ -185,33 +184,24 @@ public class TypeChecker extends Visitor{
 						if(formalParamType.Type != actualParamExpr.type) {
 							MainClass.CompileErrors.add(new ParameterMismatchError(node.columnNumber, 
 									node.lineNumber, actualParamExpr.type.toString(), formalParamType.Type.toString()));
-							
 						}
 					}
 				}
 			}
 			else {
 				MainClass.CompileErrors.add(new ParameterAmountError(node.columnNumber, 
-								node.lineNumber, actualParamsCount, formalParamsCount));
-				
+								node.lineNumber, actualParamsCount, formalParamsCount));	
 			}
 		}
 		else if(actualParams != null || formalParams != null) {
 			MainClass.CompileErrors.add(new ParameterAmountError(node.columnNumber, 
 					 		node.lineNumber, actualParamsCount, formalParamsCount));
 		}
-		
-		// both
-		
-	}
-	
-	public void visit(AssignmentNode assNode) {
-		typeCheckAssignment(assNode);
 	}
 	
 	public void visit(AdvTypeModifierNode node) {
-		// først checkes om det er en liste
-		if(st.)
+		// TODO Der skal checkes om det faktisk er en liste
+		// if(st.)
 		// Derefter checkes om typen af alle expressions er af samme type som listen.
 		for(int i = 0; i < node.exprNodes.size(); i++) {
 			if(node.idNode.type != node.exprNodes.get(i).type) {
@@ -220,6 +210,10 @@ public class TypeChecker extends Visitor{
 				
 			}
 		}
+	}
+	
+	public void visit(AssignmentNode assNode) {
+		typeCheckAssignment(assNode);
 	}
 	
 	private void typeCheckAssignment(AssignmentNode node) {
@@ -238,60 +232,99 @@ public class TypeChecker extends Visitor{
 			case PLUSEQUALS:
 			case MINUSEQUALS:
 				if(node.idNode.type != Type.NUMBER || node.exprNode.type != Type.NUMBER) {
-					if(st.getEntryInSymbolTable(node.idNode.id)) { // tjek om id'et er en liste
+					// if(st.getEntryInSymbolTable(node.idNode.id)) { // tjek om id'et er en liste
 						
 					}
 					else {
 						// ERROR
 					}
 				}
-				break;			
+							
 		}
-	}
+	
 	
 	public void visit(LiteralAdvancedNode node) {
-		for(int i = 0; i < node.exprNodes.size(); i++) {
-			if(node.idNode.type != node.exprNodes.get(i).type) {
-				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
-											node.exprNodes.get(i).type.toString(), node.idNode.type.toString()));
-			}
+		visit(node.exprNode);
+		// Mangler stadig at checke om id'et er en liste (eller gruppe?)
+		if(node.exprNode.type != node.idNode.type) {
+			MainClass.CompileErrors.add(new TypeError(
+					node.columnNumber, node.lineNumber, node.exprNode.type.toString(), node.idNode.type.toString()));
 		}
 		node.type = node.idNode.type;
 	}
 	
 	public void visit(ParensExprNode node) {
-		node.
+		visit(node.exprNode);
+		node.type = node.exprNode.type;
 	}
 	
 	public void visit(IdRefExprNode node) {
-		
+		node.type = node.idNode.type;
 	}
 	
 	public void visit(ListNode node) {
-		
+		for(int i = 0; i < node.memberExprNodes.size(); i++) {
+			if(node.typeNode.Type != node.memberExprNodes.get(i).type) {
+				
+				MainClass.CompileErrors.add(new TypeError(
+						node.columnNumber, node.lineNumber, node.memberExprNodes.get(i).type.toString(), node.typeNode.type.toString()));
+			}
+		}
 	}
 
 	public void visit(SwitchStmtNode node) {
-		
+		visit(node.exprNode);
+		// checker om hver case expr er samme type som det vi switcher på
+		for(int i = 0; i < node.caseListNode.caseStmtNodes.size(); i++) {
+			visit(node.caseListNode.caseStmtNodes.get(i).exprNode);
+			
+			if(node.exprNode.type != node.caseListNode.caseStmtNodes.get(i).exprNode.type) {
+				
+				MainClass.CompileErrors.add(new TypeError( node.columnNumber, node.lineNumber, 
+						node.caseListNode.caseStmtNodes.get(i).exprNode.type.toString(), node.exprNode.type.toString()));
+			}
+		}
 	}
-	
-	public void visit(CaseStmtNode node) {
-		
-	}
+
+//	public void visit(CaseStmtNode node) {
+//		visit(node.exprNode);
+//		for(int i = 0; i < node.)
+//	}
 	
 	public void visit(IfStmtNode node) {
-		
+		visit(node.ifExprNode);
+		checkCondition(node.ifExprNode, node);
 	}
 	
 	public void visit(ElseIfStmtNode node) {
-		
+		visit(node.exprNode);
+		checkCondition(node.exprNode, node);
 	}
 	
 	public void visit(LoopTimesNode node) {
+		visit(node.exprNode);
 		
+		if(node.exprNode.type != Type.NUMBER) {
+			MainClass.CompileErrors.add(new TypeError( node.columnNumber, node.lineNumber, 
+										node.exprNode.type.toString(), Type.NUMBER.toString()));
+		}
 	}
 	
 	public void visit(LoopUntilNode node) {
+		visit(node.exprNode);
+		checkCondition(node.exprNode, node);
 		
+		if(node.idNode.type != Type.NUMBER) {
+			MainClass.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, 
+					node.idNode.type.toString(), Type.NUMBER.toString()));
+		}
+	}
+	
+	private void checkCondition(ExprNode expr, AstNode node) {
+		
+		if(expr.type != Type.BOOL) {
+			MainClass.CompileErrors.add(new TypeError(
+					node.columnNumber, node.lineNumber, expr.type.toString(), Type.BOOL.toString()));
+		}
 	}
 }
