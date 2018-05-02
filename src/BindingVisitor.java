@@ -1,9 +1,10 @@
 import CompilerError.*;
 //TODO TILFØJ TJEK OM TING BLIVER BRUGT
 public class BindingVisitor extends Visitor {
-	public SymbolTable ST = new SymbolTable();
+	public SymbolTable ST = null;
 	
-	public BindingVisitor() {
+	public BindingVisitor(SymbolTable symT) {
+		ST = symT;
 		ST.openScope();
 	}
 	@Override

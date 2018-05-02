@@ -15,20 +15,23 @@ public class MainClass {
 	
 	public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
 	public static List<CompilerError.Error> CompileWarnings = new ArrayList<>();
-	
+	public static String inputFileName = "PhalLangEx4";//TODO ER KUN TIL TEST FOR CODE GEN, SKAL ÆNDRES
 	public static void main(String args[]) throws Exception
 	{
-
+		
 		String fileName = "..\\Phal\\src\\PhalLangEx4";
         File file = new File(fileName);
         AstNode ast = ASTBuilder(new FileInputStream(file));
 		PrettyPrinter pp = new PrettyPrinter();
 		pp.visit((ProgramNode)ast);
 		TypeChecking(ast);	
+		CodeGeneration cg = new CodeGeneration();//TODO ER KUN TIL TEST FOR CODE GEN, SKAL ÆNDRES
+		cg.visit((ProgramNode)ast);
 	}
 	
 	public static void TypeChecking(AstNode ast) {
-		BindingVisitor bv = new BindingVisitor();
+		SymbolTable ST = new SymbolTable();
+		BindingVisitor bv = new BindingVisitor(ST);
 		bv.visit((ProgramNode) ast);
 		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
