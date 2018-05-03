@@ -33,10 +33,21 @@ public class MainClass {
 		SymbolTable ST = new SymbolTable();
 		BindingVisitor bv = new BindingVisitor(ST);
 		bv.visit((ProgramNode) ast);
+		
 		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
 		}
 		//TODO Bare til at teste med skal nok først printes når compileren har været gennem alle steps
+		if(!CompileWarnings.isEmpty()) {
+			PrintWarnings();
+		}
+		
+		TypeChecker tc = new TypeChecker(ST);
+		tc.visit((ProgramNode) ast);
+		
+		if(!CompileErrors.isEmpty()) {
+			PrintErrorsAndExit();
+		}
 		if(!CompileWarnings.isEmpty()) {
 			PrintWarnings();
 		}

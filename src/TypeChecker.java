@@ -152,6 +152,30 @@ public class TypeChecker extends Visitor{
 		return typeIsCorrect;
 	}
 	
+	public void visit(WaitNode waitNode) {
+		visit(waitNode.exprNode);
+		if(waitNode.exprNode.type != Type.NUMBER) {
+			MainClass.CompileErrors.add(new TypeError(waitNode.columnNumber, waitNode.lineNumber,
+					waitNode.exprNode.type.toString(), Type.NUMBER.toString()));
+		}
+	}
+	
+	public void visit(FuncNode funcNode) {
+		
+		for(int i = 0; i < funcNode.funcCntNodes.size(); i++) {
+			if(funcNode.funcCntNodes.get(i).stmtNode instanceof ReturnStmtNode) {
+				ReturnStmtNode rsNode = (ReturnStmtNode) funcNode.funcCntNodes.get(i).stmtNode;
+				visit(rsNode.exprNode);
+				
+				if(rsNode.exprNode.type != funcNode.typeNode.Type) {
+					MainClass.CompileErrors.add(new ReturnTypeError(rsNode.columnNumber, rsNode.lineNumber,
+							rsNode.exprNode.type.toString(), funcNode.typeNode.Type.toString()));
+				}
+				
+			}
+		}
+	}
+	
 	public void visit(FuncExprNode funcExprNode) {
 		ParametersNode formalParams = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).parametersNode;
 		
@@ -218,10 +242,14 @@ public class TypeChecker extends Visitor{
 	
 	private void typeCheckAssignment(AssignmentNode node) {
 		// Lister og Groups? Hvordan skal det tjekkes?
-		if(node.idNode.type != node.exprNode.type) {
-			if(node.idNode.type != Type.GROUP) { // Er dette nødvendigt? Kan en group indgå i assignment?
-				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
+		visit(node.exprNode);
+		
+		if(node.exprNode != null) {
+			if(node.idNode.type != node.exprNode.type) {
+				if(node.idNode.type != Type.GROUP) { // Er dette nødvendigt? Kan en group indgå i assignment?
+					MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
 											node.exprNode.type.toString(), node.idNode.type.toString()));
+				}
 			}
 		}
 		
@@ -259,15 +287,43 @@ public class TypeChecker extends Visitor{
 	}
 	
 	public void visit(IdRefExprNode node) {
-		node.type = node.idNode.type;
+		node.type = node.idNode.dclNode.idNode.type;
+	}
+	
+	public void visit(IdNode node) {
+		node.type = node.dclNode.idNode.type;
+	}
+	
+	public void visit(GroupNode node) {
+		// Check om id'ernes typer er advTyper
+		for(int i = 0; i < node.memberIdNodes.size(); i++) {
+			if(!(node.memberIdNodes.get(i).dclNode instanceof CmpDclNode)) {
+				MainClass.CompileErrors.add(new GroupError(node.memberIdNodes.get(i).columnNumber, node.memberIdNodes.get(i).lineNumber, 
+						node.memberIdNodes.get(i).type.toString(), node.memberIdNodes.get(i).id));
+			}
+		}
+	}
+	
+	public void visit(VarDclNode node) {
+		if(node.exprNode != null) {
+			visit(node.exprNode);
+			if(node.exprNode.type != node.typeNode.Type) {
+				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
+						node.exprNode.type.toString(), node.typeNode.Type.toString()));
+			}
+		}
 	}
 	
 	public void visit(ListNode node) {
-		for(int i = 0; i < node.memberExprNodes.size(); i++) {
-			if(node.typeNode.Type != node.memberExprNodes.get(i).type) {
+		
+		if(!node.memberExprNodes.isEmpty()) {
+			for(int i = 0; i < node.memberExprNodes.size(); i++) {
+				visit(node.memberExprNodes.get(i));
+				if(node.typeNode.Type != node.memberExprNodes.get(i).type) {
 				
-				MainClass.CompileErrors.add(new TypeError(
-						node.columnNumber, node.lineNumber, node.memberExprNodes.get(i).type.toString(), node.typeNode.type.toString()));
+					MainClass.CompileErrors.add(new TypeError(
+							node.columnNumber, node.lineNumber, node.memberExprNodes.get(i).type.toString(), node.typeNode.type.toString()));
+				}
 			}
 		}
 	}
