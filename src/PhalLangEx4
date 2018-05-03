@@ -133,12 +133,9 @@ define MyFunc3 with (number a, text t) returnType list{
 	number a2 := 2
 	text t2 := "asdasd"
 	list number lstNum {}
-<<<<<<< HEAD
 	number a3
 	a3 := get element 2 from lstNum
-=======
-	number a3 := get element 2 from lstNum
->>>>>>> branch 'master' of https://github.com/Moesgaarda/phal.git
+	a3 := get element 2 from lstNum
 	return lstNum
 }
 
