@@ -98,6 +98,7 @@ public class BindingVisitor extends Visitor {
 	@Override
 	public void visit(IdNode node) {
 		ST.addIdToSymbolTable(node);
+		//TODO TILFØJ LINJENUMMER NÅR JP HAR FIXET DCL's
 	}
 	
 
