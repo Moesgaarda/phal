@@ -95,6 +95,11 @@ public class BindingVisitor extends Visitor {
 	public void visit(IdRefExprNode node) {
 		ST.addIdREfToSymbolTable(node);
 	}
+	@Override
+	public void visit(IdNode node) {
+		ST.addIdToSymbolTable(node);
+	}
+	
 
 
 }

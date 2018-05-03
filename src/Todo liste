@@ -8,6 +8,8 @@ find ud af:
 	
 	ID mangler ref til Linje nummer osv. find fix?
 	
+	Måske tilføj ID som nonterminal
+	
 Fiks eventuelt:
 	unaryOperator der hedder NOT burde nok hedder NEGATION eller NEGATE 
 	Tilføj include og func node, for at gøre prettyprinter pænere.

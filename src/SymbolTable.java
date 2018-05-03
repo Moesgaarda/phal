@@ -82,6 +82,24 @@ public class SymbolTable {
 		}
 
 	}
+	public void addIdToSymbolTable(IdNode node) {
+		HashMap<String, AstNode> map =  symbolTable.peek();
+		String key = node.id;
+		
+		if(map.containsKey(key))
+		{
+			DclNode dcl = (DclNode)map.get(key);
+			if(!dcl.isUsed) {
+				dcl.isUsed = true;
+				map.put(key, dcl);
+			}
+		}
+		else
+		{
+			MainClass.CompileErrors.add(new NotDeclaredError(
+					node.columnNumber, node.lineNumber, node.id));
+		}
+	}
 
 	public AstNode getEntryInSymbolTable(String key) {
 		//TODO Fungere ikke i funktioner DET SKAL FIXES ELLER KAN VI IKKE TYPE CHECKE DEM
@@ -101,7 +119,6 @@ public class SymbolTable {
 				if(!((DclNode) node).isUsed) {
 					MainClass.CompileWarnings.add(
 							new VarNotUsedWarning(node.columnNumber, node.lineNumber, ((DclNode) node).idNode.id));
-				
 				}
 			}
 		}
