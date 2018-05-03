@@ -499,19 +499,19 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	@Override public AstNode visitFuncCnt(PhalParser.FuncCntContext ctx)  
 	{ 
 		if(ctx.varDcl() != null) {
-			return new FuncCntNode((VarDclNode)visit(ctx.varDcl()));
-		}
-			
+			return new FuncCntNode((VarDclNode)visit(ctx.varDcl()),ctx);
+		}	
 		else if(ctx.stmt() != null) {
-			return new FuncCntNode((StmtNode)visit(ctx.stmt()));
+			return new FuncCntNode((StmtNode)visit(ctx.stmt()), ctx);
 		}
 		else if (ctx.list() != null){
-			return new FuncCntNode((ListNode)visit(ctx.list()));
+			return new FuncCntNode((ListNode)visit(ctx.list()),ctx);
 		}
 		else {
 			System.out.println("Something exists inside this function that shouldn't be here.");
 			return null;
 		}
+
 	}
 	
 	

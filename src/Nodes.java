@@ -596,15 +596,17 @@ class FuncCntNode extends AstNode{
 	public StmtNode stmtNode;
 	public ListNode listNode;
 	
-	public FuncCntNode(VarDclNode varDclNode) {
+	public FuncCntNode(VarDclNode varDclNode, PhalParser.FuncCntContext ctx) {
+		super(ctx);
 		this.varDclNode = varDclNode;
 	}
 	
-	public FuncCntNode(StmtNode stmtNode) {
+	public FuncCntNode(StmtNode stmtNode, PhalParser.FuncCntContext ctx) {
+		super(ctx);
 		this.stmtNode = stmtNode;
 	}
-	public FuncCntNode(ListNode listNode)
-	{
+	public FuncCntNode(ListNode listNode, PhalParser.FuncCntContext ctx) {
+		super(ctx);
 		this.listNode = listNode;
 	}
 	
