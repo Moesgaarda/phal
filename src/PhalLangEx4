@@ -133,7 +133,7 @@ define MyFunc3 with (number a, text t) returnType list{
 	number a2 := 2
 	text t2 := "asdasd"
 	list number lstNum {}
-	number a3 := get element 2 from asd
+	number a3 := get element 2 from lstNum
 	return lstNum
 }
 

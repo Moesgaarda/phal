@@ -10,6 +10,17 @@ public class TypeChecker extends Visitor{
 		this.st = st;
 	}
 	
+	public void visit(ProgramNode programNode) {
+		programNode.setupNode.accept(this);
+		programNode.repeatNode.accept(this);
+		
+		if(programNode.funcNodes != null) {
+			for(FuncNode func: programNode.funcNodes) {
+				func.accept(this);
+			}
+		}
+	}
+	
 	public void visit(InfixExprNode infixNode)
 	{
 		visit(infixNode.rightExprNode);
@@ -299,7 +310,7 @@ public class TypeChecker extends Visitor{
 		for(int i = 0; i < node.memberIdNodes.size(); i++) {
 			if(!(node.memberIdNodes.get(i).dclNode instanceof CmpDclNode)) {
 				MainClass.CompileErrors.add(new GroupError(node.memberIdNodes.get(i).columnNumber, node.memberIdNodes.get(i).lineNumber, 
-						node.memberIdNodes.get(i).type.toString(), node.memberIdNodes.get(i).id));
+						node.memberIdNodes.get(i).dclNode.idNode.type.toString(), node.memberIdNodes.get(i).id));
 			}
 		}
 	}
