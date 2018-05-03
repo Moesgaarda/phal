@@ -6,6 +6,7 @@ find ud af:
 	id.id skal det nogensinde bruges? 
 	Hvordan skal det fungere med symbolTablet?
 	
+	ID mangler ref til Linje nummer osv. find fix?
 	
 Fiks eventuelt:
 	unaryOperator der hedder NOT burde nok hedder NEGATION eller NEGATE 

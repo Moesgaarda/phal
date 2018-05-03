@@ -58,11 +58,11 @@ advType
 	;
 
 group        
-	: 	'group' ID NEWLINE* '{' NEWLINE* (ID NEWLINE+)+ '}' 
+	: 	'group' ID NEWLINE* '{' NEWLINE* (ID NEWLINE+)+ '}' 		
 	;
 
 list        
-	: 	'list' type ID '{' (expr ( ',' expr)*)? '}' 
+	: 	'list' type ID '{' (expr ( ',' expr)*)? '}' 	
 	;
 
 
@@ -177,10 +177,10 @@ returnStmt
 	;
 	
 expr
-  :		BOOL																			# litBoolExpr
-  |		NUMBER																			# litNumExpr
+  :		('true'|'false' | 'on' |'off')													# litBoolExpr
+  |		NUMBER																			# litNumExpr	
   |		ID																				# idRefExpr
-  |		TEXT																			# litTextExpr
+  | 	TEXT																			# litTextExpr
   |		ID '.' ID																		# idRefExpr
   |		funcCall																		# funcExpr
   |		'(' expr ')'																	# parenExpr
@@ -203,7 +203,6 @@ ID 				: LETTER (LETTER | DIGIT)*;
 fragment INTEGER 		: DIGIT+;
 fragment FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
 NUMBER 			: (INTEGER | FLOAT) ;
-BOOL 			: ('true'|'false' | 'on' |'off'); 
 
 COMMENT 		: '#' ~('\r' | '\n')* 	-> skip ;
 MULTILINECOMMET	: '/*' .*? '*/' 		-> skip ;

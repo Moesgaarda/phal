@@ -8,7 +8,6 @@ setup
 number i := 1
 number j := 2
 text t := "This is a string"
-bool b := true
 number a
 
 lightbulb lb := pin 1
@@ -38,7 +37,6 @@ add 2,3,4,6,7,8,2+4 to lstNum
 
 lstNum += 23
 bool bar := true
-bool foo := false
 remove element 4 from lstNum
 number a2 := get element 2 from lstNum
 text s
@@ -46,18 +44,18 @@ number x
 if(2=2) then {
 a := 2
 } else if (2=2) then
-{ if(asd) then{ } else if(booleanV) then {}
+{ if(bar) then{ } else if(!bar) then {}
 } 
 else then {
 	switch(a2){
 	case 1: s := "asd"
-	default: switch(a3){
+	default: switch(a){
 		case 123: a := a +2 -3 
 		default: 
 		}
 	}
 }
-switch(a3){
+switch(a2){
 		case 123: a := a +2 -3 
 		default: 
 }
@@ -89,19 +87,19 @@ remove element 4 from lstNum
 a2 := get element 2 from lstNum
 if(2=2) then {
 } else if (2=2) then
-{ if(asd) then{ } else if(booleanV) then {}
+{ if(lul = 2) then{ } else if(fuu) then {}
 } 
 
 else then {
 	switch(a2){
 	case 1: s := "asd"
-	default: switch(a3){
+	default: switch(a2){
 		case 123: a := a +2 -3 
 		default: 
 		}
 	}
 }
-switch(a3){
+switch(a2){
 		case 123: a := a +2 -3 
 		default: 
 }
@@ -127,13 +125,15 @@ define MyFunc2 with (number a2) returnType bool{
 	a2 := 2
 	text t := "asdasd"
 	wait 2.5 seconds
-	return true
+	return 32
+	return false
 }
 define MyFunc3 with (number a, text t) returnType list{
 	a := 3
 	number a2 := 2
 	text t2 := "asdasd"
 	number a3 := get element 2 from asd
+	list number lstNum {}
 	return lstNum
 }
 

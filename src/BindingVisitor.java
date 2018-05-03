@@ -22,6 +22,7 @@ public class BindingVisitor extends Visitor {
 		node.setupNode.accept(this);
 		node.repeatNode.accept(this);
 		ST.checkVariablesAreUsed();
+		
 		if(node.funcNodes != null)
 		{
 			for(FuncNode func: node.funcNodes) {
@@ -71,6 +72,7 @@ public class BindingVisitor extends Visitor {
 	public void visit(GroupNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
+		super.visit(node);
 	}
 	@Override
 	public void visit(FuncCallNode node) {
@@ -88,6 +90,12 @@ public class BindingVisitor extends Visitor {
 	{
 		ST.addAssignmentToSymbolTable(node);
 	}
-	
+
+	@Override
+	public void visit(IdRefExprNode node) {
+		ST.addIdREfToSymbolTable(node);
+	}
+
+
 }
 

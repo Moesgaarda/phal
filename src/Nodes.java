@@ -89,8 +89,8 @@ class SetupCntNode extends AstNode{
 
 abstract class DclNode extends AstNode{
 	public IdNode idNode;
-	public DclNode() {
-		
+	public boolean isUsed = false;
+	public DclNode() {	
 	}
 	public DclNode(ParserRuleContext ctx) {
 		super(ctx);
@@ -632,9 +632,8 @@ class ParametersNode extends AstNode{
 	}
 }
 
-class ParamNode extends AstNode{
+class ParamNode extends DclNode{
 	public TypeNode typeNode;
-	public IdNode idNode;
 	
 	public ParamNode(TypeNode typeNode, IdNode idNode, PhalParser.ParamContext ctx) {
 		super(ctx);
@@ -668,7 +667,7 @@ abstract class ExprNode extends AstNode{
 	}
 	abstract void accept(Visitor v);
 }
-
+//TODO BLIVER DEN NOGENSINDE BRUGT? GJORDE DEN IKKE DA JEG TESTEDE
 class IdRefExprNode extends ExprNode{
 	public IdNode idNode;
 	
@@ -762,7 +761,7 @@ class IdNode extends ExprNode{
 	public String id;
 	public String subId;
 	
-	public IdNode(String id) {
+	public IdNode(String id) {//TODO TEST AF CTX
 		this.id = id;
 	}
 	

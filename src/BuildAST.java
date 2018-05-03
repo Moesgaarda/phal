@@ -148,7 +148,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	}
 	@Override public AstNode visitGroup(PhalParser.GroupContext ctx)  
 	{ 
-		IdNode idNode = new IdNode(ctx.ID(0).getText());
+		IdNode idNode = new IdNode(ctx.ID(0).getText()); //TODO FIX DET HER TIL IDREFS PLZ
 		List<IdNode> memberIdNodes = new LinkedList<>();
 		
 		int count = ctx.ID().size();
@@ -156,6 +156,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		{
 			memberIdNodes.add(new IdNode(ctx.ID(i).getText()));
 		}
+
 		return new GroupNode(idNode, memberIdNodes, ctx);
 	}
 	@Override public AstNode visitList(PhalParser.ListContext ctx)  
@@ -497,10 +498,20 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	
 	@Override public AstNode visitFuncCnt(PhalParser.FuncCntContext ctx)  
 	{ 
-		if(ctx.varDcl() != null)
+		if(ctx.varDcl() != null) {
 			return new FuncCntNode((VarDclNode)visit(ctx.varDcl()));
-		else
+		}
+			
+		else if(ctx.stmt() != null) {
 			return new FuncCntNode((StmtNode)visit(ctx.stmt()));
+		}
+		else if (ctx.list() != null){
+			return new FuncCntNode((ListNode)visit(ctx.list()));
+		}
+		else {
+			System.out.println("Something exists inside this function that shouldn't be here.");
+			return null;
+		}
 	}
 	
 	
@@ -528,7 +539,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		IdNode idNode = null;
 
 		type = new TypeNode(ctx.type().getText()); 
-		idNode = new IdNode(ctx.ID().getText());
+		idNode = new IdNode(ctx.ID().getText() );
 			
 		return new ParamNode(type, idNode, ctx);
 	}
@@ -606,16 +617,18 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		
 		return new InfixExprNode(leftExprNode, infixOperator, rightExprNode, ctx); 
 	}
+	//TODO ÆNDREDE RETURN FRA IDNODE TIL IDREF
 	@Override public AstNode visitIdRefExpr(PhalParser.IdRefExprContext ctx)  
 	{ 
 		String id = ctx.ID(0).getText();
 		
 		if(ctx.ID(1) != null) {
 			String subId = ctx.ID(1).getText();
-			return new IdNode(id, subId);
+			//return new IdNode(id, subId);
+			return new IdRefExprNode(new IdNode(id, subId), ctx);
 		}
 		else {
-			return new IdNode(id);
+			return new IdRefExprNode(new IdNode(id), ctx);
 		}
 			
 	}

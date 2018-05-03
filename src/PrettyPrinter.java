@@ -303,8 +303,10 @@ public class PrettyPrinter extends Visitor{
 	@Override public void visit(FuncCntNode node) {
 		if(node.varDclNode != null)
 			visit(node.varDclNode);
-		else
+		else if (node.stmtNode != null)
 			visit(node.stmtNode);
+		else
+			visit(node.listNode);
 	}
 	@Override public void visit(ParametersNode node) {
 		if(node.noneNode != null) {

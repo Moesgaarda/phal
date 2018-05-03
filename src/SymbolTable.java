@@ -30,15 +30,23 @@ public class SymbolTable {
 	}
 
 	public void addAssignmentToSymbolTable(AssignmentNode node) {
-		if(!symbolTable.peek().containsKey(node.idNode.id))
+		HashMap<String, AstNode> map =  symbolTable.peek();
+		String key = node.idNode.id;
+		
+		if(map.containsKey(key))
 		{
-			MainClass.CompileErrors.add(new NotDeclaredError(
-					node.columnNumber, node.lineNumber, node.idNode.id));
+			DclNode dcl = (DclNode)map.get(key);
+			if(!dcl.isUsed) {
+				dcl.isUsed = true;
+				map.put(key, dcl);
+			}
+
 
 		}
 		else
 		{
-			symbolTable.peek().put(node.idNode.id, node);
+			MainClass.CompileErrors.add(new NotDeclaredError(
+					node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 
 	}
@@ -55,10 +63,34 @@ public class SymbolTable {
 		}
 
 	}
-	public void getEntryInSymbolTable(String key) {
-		//TODO IMPLEMENT
+	public void addIdREfToSymbolTable(IdRefExprNode node) {
+		HashMap<String, AstNode> map =  symbolTable.peek();
+		String key = node.idNode.id;
 		
+		if(map.containsKey(key))
+		{
+			DclNode dcl = (DclNode)map.get(key);
+			if(!dcl.isUsed) {
+				dcl.isUsed = true;
+				map.put(key, dcl);
+			}
+		}
+		else
+		{
+			MainClass.CompileErrors.add(new NotDeclaredError(
+					node.columnNumber, node.lineNumber, node.idNode.id));
+		}
+
 	}
+
+	public AstNode getEntryInSymbolTable(String key) {
+		//TODO Fungere ikke i funktioner DET SKAL FIXES ELLER KAN VI IKKE TYPE CHECKE DEM
+		AstNode node = symbolTable.peek().get(key);
+		return node;
+	}
+	
+	
+	
 	/*
 	 * Checks top of stack (current scope)
 	 * 
@@ -66,8 +98,11 @@ public class SymbolTable {
 	public void checkVariablesAreUsed() {
 		for(AstNode node : symbolTable.peek().values()) {
 			if(node instanceof DclNode) {
-				MainClass.CompileWarnings.add(
-						new VarNotUsedWarning(node.columnNumber, node.lineNumber, ((DclNode) node).idNode.id));
+				if(!((DclNode) node).isUsed) {
+					MainClass.CompileWarnings.add(
+							new VarNotUsedWarning(node.columnNumber, node.lineNumber, ((DclNode) node).idNode.id));
+				
+				}
 			}
 		}
 		
