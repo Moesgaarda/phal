@@ -193,7 +193,7 @@ expr
   |		expr ('<='|'>='|'less than or equal to'|'greater than or equal to') expr		# infixExpr
   |		expr ('and'|'&') expr															# infixExpr
   |		expr ('or'|'|') expr															# infixExpr 
-  |		'get' 'element' expr 'from' ID										# litAdvExpr
+  |		'get' 'element' expr 'from' ID													# litAdvExpr
   ;
  
 none : 'none';

@@ -101,12 +101,6 @@ public class SymbolTable {
 					node.columnNumber, node.lineNumber, node.id));
 		}
 	}
-
-	public AstNode getEntryInSymbolTable(String key) {
-		//TODO Fungere ikke i funktioner DET SKAL FIXES ELLER KAN VI IKKE TYPE CHECKE DEM
-		AstNode node = symbolTable.peek().get(key);
-		return node;
-	}
 	
 	
 	

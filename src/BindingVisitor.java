@@ -58,12 +58,15 @@ public class BindingVisitor extends Visitor {
 	public void visit(VarDclNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
+		super.visit(node);
 	}
 	@Override
 	public void visit(CmpDclNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
-	}@Override
+		super.visit(node);
+	}
+	@Override
 	public void visit(ListNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
@@ -85,11 +88,12 @@ public class BindingVisitor extends Visitor {
 					);
 		}
 	}
-	
+	//TODO tænl over om det er nødvendigt at have disse metoder nu da vi bare tjekker id
 	@Override 
 	public void visit(AssignmentNode node)
 	{
 		ST.addAssignmentToSymbolTable(node);
+		super.visit(node);
 		
 	}
 
@@ -103,8 +107,13 @@ public class BindingVisitor extends Visitor {
 		ST.addIdToSymbolTable(node);
 
 	}
+	@Override
+	public void visit(LiteralAdvancedNode node) {
+		ST.addIdToSymbolTable(node.idNode);
+		
+	}
 	
-
+//TODO måske tilføj literal exprnode??
 
 }
 
