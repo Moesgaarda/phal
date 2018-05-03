@@ -498,9 +498,9 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	@Override public AstNode visitFuncCnt(PhalParser.FuncCntContext ctx)  
 	{ 
 		if(ctx.varDcl() != null)
-			return new FuncCntNode((VarDclNode)visit(ctx.varDcl()));
+			return new FuncCntNode((VarDclNode)visit(ctx.varDcl()), ctx);
 		else
-			return new FuncCntNode((StmtNode)visit(ctx.stmt()));
+			return new FuncCntNode((StmtNode)visit(ctx.stmt()), ctx);
 	}
 	
 	
