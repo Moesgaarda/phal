@@ -762,6 +762,7 @@ class ParensExprNode extends ExprNode{
 class IdNode extends ExprNode{
 	public String id;
 	public String subId;
+	public DclNode dclNode;
 	
 	public IdNode(String id) {//TODO TEST AF CTX
 		this.id = id;

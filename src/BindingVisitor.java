@@ -88,16 +88,17 @@ public class BindingVisitor extends Visitor {
 	@Override 
 	public void visit(AssignmentNode node)
 	{
-		ST.addAssignmentToSymbolTable(node);
+		node = ST.addAssignmentToSymbolTable(node);
+		
 	}
 
 	@Override
 	public void visit(IdRefExprNode node) {
-		ST.addIdREfToSymbolTable(node);
+		node = ST.addIdREfToSymbolTable(node);
 	}
 	@Override
 	public void visit(IdNode node) {
-		ST.addIdToSymbolTable(node);
+		node = ST.addIdToSymbolTable(node);
 	}
 	
 
