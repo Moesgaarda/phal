@@ -474,7 +474,7 @@ class LoopUntilNode extends IterativeNode{
 
 class FuncCallNode extends StmtNode{
 	public IdNode idNode;
-	public CallCntNode callCntNode; // Parameters
+	public CallCntNode callCntNode = null; // Parameters
 	
 	public FuncCallNode(IdNode idNode, CallCntNode callCntNode, PhalParser.FuncCallContext ctx) {
 		super(ctx);

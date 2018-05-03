@@ -16,7 +16,7 @@ public class BindingVisitor extends Visitor {
 			for(FuncNode func: node.funcNodes)
 			{
 				ST.addToFuncMap(func);
-			}
+			} 
 		}
 		/*Creates ST*/
 		node.setupNode.accept(this);
@@ -86,6 +86,10 @@ public class BindingVisitor extends Visitor {
 			MainClass.CompileErrors.add(
 					new FunctionNotDeclaredError( node.columnNumber,node.lineNumber, node.idNode.id)
 					);
+		}
+		if(node.callCntNode != null)
+		{
+			node.callCntNode.accept(this);
 		}
 	}
 	//TODO tænl over om det er nødvendigt at have disse metoder nu da vi bare tjekker id

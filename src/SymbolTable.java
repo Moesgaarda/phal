@@ -93,7 +93,7 @@ public class SymbolTable {
 				dcl.isUsed = true;
 				map.put(key, dcl);
 			}
-			node.dclNode = dcl;
+			node.dclNode = dcl; 
 		}
 		else
 		{

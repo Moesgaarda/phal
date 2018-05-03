@@ -6,7 +6,7 @@ using Su24eljnknkjnxfdcfvgbhnjkhggcvbniughvbnm9iuhynkhgyhjbhnjikhlugygkygyfytfjg
 setup
 {
 number lul 
-number i := 1
+number i := lul
 number j := 2
 text t := "This is a string"
 number a
@@ -70,7 +70,7 @@ loop until 2 +3 , increase asd by 4{
 asd := 6
 sdf += 2
 }
-
+number a3
 bool fuu
 }
 
@@ -133,7 +133,8 @@ define MyFunc3 with (number a, text t) returnType list{
 	number a2 := 2
 	text t2 := "asdasd"
 	list number lstNum {}
-	number a3 := get element 2 from asd
+	number a3
+	a3 := get element 2 from lstNum
 	return lstNum
 }
 
