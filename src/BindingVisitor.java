@@ -67,6 +67,7 @@ public class BindingVisitor extends Visitor {
 	public void visit(ListNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
+		super.visit(node);
 	}
 	@Override
 	public void visit(GroupNode node)

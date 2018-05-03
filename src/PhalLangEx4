@@ -28,7 +28,8 @@ group everything{
 	ts
 	numAndCoffee
 }
-
+number asd
+number dsa
 list number lstNum {5,2,4,5,1,23,2,asd + dsa}
 a := 2
 add 2 to lstNum
@@ -63,7 +64,6 @@ call MyFunc with (none)
 
 loop 4 times {x := 3
 }
-number asd
 number sdf
 loop until 2 +3 , increase asd by 4{
 asd := 6
