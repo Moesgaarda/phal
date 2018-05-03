@@ -29,7 +29,7 @@ public class SymbolTable {
 
 	}
 
-	public AssignmentNode addAssignmentToSymbolTable(AssignmentNode node) {
+	public void addAssignmentToSymbolTable(AssignmentNode node) {
 		HashMap<String, AstNode> map =  symbolTable.peek();
 		String key = node.idNode.id;
 		
@@ -48,7 +48,6 @@ public class SymbolTable {
 			MainClass.CompileErrors.add(new NotDeclaredError(
 					node.columnNumber, node.lineNumber, node.idNode.id));
 		}
-		return node;
 	}
 	public void addParamToSymbolTable(ParamNode node) {
 		if(symbolTable.peek().containsKey(node.idNode.id))
@@ -63,7 +62,7 @@ public class SymbolTable {
 		}
 
 	}
-	public IdRefExprNode addIdREfToSymbolTable(IdRefExprNode node) {
+	public void addIdREfToSymbolTable(IdRefExprNode node) {
 		HashMap<String, AstNode> map =  symbolTable.peek();
 		String key = node.idNode.id;
 		
@@ -81,10 +80,9 @@ public class SymbolTable {
 			MainClass.CompileErrors.add(new NotDeclaredError(
 					node.columnNumber, node.lineNumber, node.idNode.id));
 		}
-		return node;
 
 	}
-	public IdNode addIdToSymbolTable(IdNode node) {
+	public void addIdToSymbolTable(IdNode node) {
 		HashMap<String, AstNode> map =  symbolTable.peek();
 		String key = node.id;
 		
@@ -102,7 +100,6 @@ public class SymbolTable {
 			MainClass.CompileErrors.add(new NotDeclaredError(
 					node.columnNumber, node.lineNumber, node.id));
 		}
-		return node;
 	}
 
 	public AstNode getEntryInSymbolTable(String key) {
