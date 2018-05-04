@@ -25,8 +25,7 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(InfixExprNode infixNode)
 	{
-		visit(infixNode.rightExprNode);
-		visit(infixNode.leftExprNode);
+		super.visit(infixNode);
 		
 		switch(infixNode.infixOperator) 
 		{
@@ -173,7 +172,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(WaitNode waitNode) {
-		visit(waitNode.exprNode);
+		super.visit(waitNode);
 		if(waitNode.exprNode.type != Type.NUMBER) {
 			MainClass.CompileErrors.add(new TypeError(waitNode.columnNumber, waitNode.lineNumber,
 					waitNode.exprNode.type.toString(), Type.NUMBER.toString()));
@@ -230,10 +229,10 @@ public class TypeChecker extends Visitor{
 			if(actualParamsCount == formalParamsCount) {
 				// Check if types match
 				if(actualParamsCount != 0) {
+					super.visit(actualParams);
 					for(int i = 0; i < actualParamsCount; i++) {
 						ExprNode actualParamExpr = actualParams.exprNodes.get(i);
 						TypeNode formalParamType = formalParams.paramNodes.get(i).typeNode;
-						visit(actualParamExpr);
 						
 						if(formalParamType.Type != actualParamExpr.type) {
 							MainClass.CompileErrors.add(new ParameterMismatchError(node.columnNumber, 
@@ -256,7 +255,7 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(AdvTypeModifierNode node) {
 		// Derefter checkes om typen af alle expressions er af samme type som listen.
-		visit(node.idNode);
+		super.visit(node);
 		if(node.idNode.dclNode instanceof ListNode){
 			for(int i = 0; i < node.exprNodes.size(); i++) {
 				visit(node.exprNodes.get(i));
@@ -278,9 +277,7 @@ public class TypeChecker extends Visitor{
 	
 	private void typeCheckAssignment(AssignmentNode node) {
 		// Lister og Groups? Hvordan skal det tjekkes?
-		visit(node.exprNode);
-		visit(node.idNode);
-		
+		super.visit(node);
 		if(node.exprNode != null) {
 			if(node.idNode.type != node.exprNode.type) {
 				if(node.idNode.type != Type.GROUP) { // Er dette nødvendigt? Kan en group indgå i assignment?
@@ -308,8 +305,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(LiteralAdvancedNode node) {
-		visit(node.exprNode);
-		visit(node.idNode);
+		super.visit(node);
 		// Mangler stadig at checke om id'et er en liste (eller gruppe?)
 		if(node.exprNode.type != node.idNode.type) {
 			MainClass.CompileErrors.add(new TypeError(
@@ -320,7 +316,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(ParensExprNode node) {
-		visit(node.exprNode);
+		super.visit(node);
 		node.type = node.exprNode.type;
 	}
 	
@@ -386,7 +382,7 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(VarDclNode node) {
 		if(node.exprNode != null) {
-			visit(node.exprNode);
+			super.visit(node);
 			if(node.exprNode.type != node.typeNode.Type) {
 				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
 						node.exprNode.type.toString(), node.typeNode.Type.toString()));
@@ -396,10 +392,9 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(ListNode node) {
-		
+		super.visit(node);
 		if(!node.memberExprNodes.isEmpty()) {
 			for(int i = 0; i < node.memberExprNodes.size(); i++) {
-				visit(node.memberExprNodes.get(i));
 				if(node.typeNode.Type != node.memberExprNodes.get(i).type) {
 				
 					MainClass.CompileErrors.add(new TypeError(
@@ -412,11 +407,8 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(SwitchStmtNode node) {
 		super.visit(node);
-		visit(node.exprNode);
 		// checker om hver case expr er samme type som det vi switcher på
 		for(int i = 0; i < node.caseListNode.caseStmtNodes.size(); i++) {
-			visit(node.caseListNode.caseStmtNodes.get(i).exprNode);
-			
 			if(node.exprNode.type != node.caseListNode.caseStmtNodes.get(i).exprNode.type) {
 				
 				MainClass.CompileErrors.add(new TypeError( node.columnNumber, node.lineNumber, 
@@ -428,22 +420,18 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(IfStmtNode node) {
 		super.visit(node);
-		visit(node.ifExprNode);
 		checkCondition(node.ifExprNode);
 	}
 	
 	@Override
 	public void visit(ElseIfStmtNode node) {
 		super.visit(node);
-		visit(node.exprNode);
 		checkCondition(node.exprNode);
 	}
 	
 	@Override
 	public void visit(LoopTimesNode node) {
 		super.visit(node);
-		visit(node.exprNode);
-		
 		if(node.exprNode.type != Type.NUMBER) {
 			MainClass.CompileErrors.add(new TypeError( node.columnNumber, node.lineNumber, 
 										node.exprNode.type.toString(), Type.NUMBER.toString()));
@@ -453,8 +441,6 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(LoopUntilNode node) {
 		super.visit(node);
-		visit(node.exprNode);
-		visit(node.idNode);
 		checkCondition(node.exprNode);
 		
 		if(node.idNode.type != Type.NUMBER) {
