@@ -237,19 +237,19 @@ public class TypeChecker extends Visitor{
 						
 						if(formalParamType.Type != actualParamExpr.type) {
 							MainClass.CompileErrors.add(new ParameterMismatchError(node.columnNumber, 
-									node.lineNumber, actualParamExpr.type.toString(), formalParamType.Type.toString()));
+									node.lineNumber, i + 1, actualParamExpr.type.toString(), formalParamType.Type.toString()));
 						}
 					}
 				}
 			}
 			else {
 				MainClass.CompileErrors.add(new ParameterAmountError(node.columnNumber, 
-								node.lineNumber, actualParamsCount, formalParamsCount));	
+								node.lineNumber, formalParamsCount, actualParamsCount));	
 			}
 		}
 		else if(actualParamsCount != 0 || formalParamsCount != 0) {
 			MainClass.CompileErrors.add(new ParameterAmountError(node.columnNumber, 
-					 		node.lineNumber, actualParamsCount, formalParamsCount));
+					 		node.lineNumber, formalParamsCount, actualParamsCount));
 		}
 	}
 	
@@ -411,6 +411,7 @@ public class TypeChecker extends Visitor{
 
 	@Override
 	public void visit(SwitchStmtNode node) {
+		super.visit(node);
 		visit(node.exprNode);
 		// checker om hver case expr er samme type som det vi switcher på
 		for(int i = 0; i < node.caseListNode.caseStmtNodes.size(); i++) {
@@ -426,18 +427,21 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(IfStmtNode node) {
+		super.visit(node);
 		visit(node.ifExprNode);
 		checkCondition(node.ifExprNode);
 	}
 	
 	@Override
 	public void visit(ElseIfStmtNode node) {
+		super.visit(node);
 		visit(node.exprNode);
 		checkCondition(node.exprNode);
 	}
 	
 	@Override
 	public void visit(LoopTimesNode node) {
+		super.visit(node);
 		visit(node.exprNode);
 		
 		if(node.exprNode.type != Type.NUMBER) {
@@ -448,6 +452,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(LoopUntilNode node) {
+		super.visit(node);
 		visit(node.exprNode);
 		visit(node.idNode);
 		checkCondition(node.exprNode);
