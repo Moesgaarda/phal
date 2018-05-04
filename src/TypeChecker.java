@@ -201,7 +201,7 @@ public class TypeChecker extends Visitor{
 	public void visit(FuncExprNode funcExprNode) {
 		ParametersNode formalParams = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).parametersNode;
 		
-		checkActualAndFormalParams(funcExprNode, funcExprNode.funcCallNode.callCntNode, formalParams);
+		checkActualAndFormalParams(funcExprNode.funcCallNode, funcExprNode.funcCallNode.callCntNode, formalParams);
 		funcExprNode.type = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).typeNode.Type;
 		
 	}
@@ -215,7 +215,7 @@ public class TypeChecker extends Visitor{
 
 	}
 	
-	private void checkActualAndFormalParams(AstNode node, CallCntNode actualParams, ParametersNode formalParams) {
+	private void checkActualAndFormalParams(FuncCallNode node, CallCntNode actualParams, ParametersNode formalParams) {
 		int actualParamsCount = 0;
 		int formalParamsCount = 0;
 		
