@@ -176,7 +176,8 @@ enum Type{
 	LIGHTBULB,
 	MOTOR,
 	TEMPERATURESENSOR,
-	NONE
+	NONE,
+	ERROR
 }
 
 abstract class AdvDataTypeNode extends DclNode{

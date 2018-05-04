@@ -11,6 +11,6 @@ public class AssignmentError extends Error{
     }
     @Override
     public String toString() {
-        return "line " + lineNumber + ":" + columnNumber + " Tried to assign type " + exprType + " to an identifier of type " + idType;
+        return "line " + lineNumber + ":" + columnNumber + " Tried to assign type '" + idType + "' to an identifier of type '" + exprType + "'";
     }
 }

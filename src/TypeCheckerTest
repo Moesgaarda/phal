@@ -1,0 +1,143 @@
+using asd
+using morfae
+using TeamWork
+using Su24eljnknkjnxfdcfvgbhnjkhggcvbniughvbnm9iuhynkhgyhjbhnjikhlugygkygyfytfjgbjvgjtfjaWholesomeness
+
+setup
+{
+number lul 
+text i := lul
+number j := 2
+text t := "This is a string"
+number a
+
+lightbulb lb := pin 1
+motor cm := pin 2,3,4
+temperatureSensor ts := pin 5
+
+group numAndCoffee{
+	i
+	j
+	cm
+}
+group everything{
+	i
+	j
+	t
+	cm
+	lb
+	ts
+	numAndCoffee
+}
+number asd
+bool dsa
+list number lstNum {5,2,4,"hej",1,23,2,((asd * "text") + (dsa + 600))}
+a := 2 + 4 * (asd + 42)
+add "great" to lstNum
+add 2,3,4,6,7,8,2+4 to lstNum
+
+lstNum += 23
+bool bar := true
+remove element 4 from lstNum
+number a2 := get element 2 from lstNum
+text s
+number x
+if(2=2 & (6+4) * (4 -2) > 2) then {
+a := 2
+} else if (2=2) then
+{ if(bar) then{ } else if(!bar) then {}
+} 
+else then {
+	switch(a2){
+	case 1: s := "asd"
+	default: switch(a){
+		case 123: a := a +2 -3 
+		default: 
+		}
+	}
+}
+switch(a2){
+		case 123: a := a +2 -3 
+		default: 
+}
+
+call MyFunc with (none)
+
+loop 4 times {x := 3
+}
+number sdf
+loop until 2 +3 < 4 * 2 , increase asd by 4{
+asd := 6
+sdf += 2
+}
+number a3
+bool fuu
+}
+
+
+repeat
+{
+add 2 to lstNum
+add 2,3,4,6,7,8,2+4 to lstNum
+
+lstNum += 23
+fuu.bar := true
+bar.foo := false
+remove element 4 from lstNum
+a2 := get element 2 from lstNum
+if(2=2) then {
+} else if (2=2) then
+{ if(lul = 2) then{ } else if(fuu) then {}
+} 
+
+else then {
+	switch(a2){
+	case 1: s := "asd"
+	default: switch(a2){
+		case 123: a := a +2 -3 
+		default: 
+		}
+	}
+}
+switch(a2){
+		case 123: a := a +2 -3 
+		default: 
+}
+
+if (3=3) then {
+	lul := 2
+} else then {
+	lul := 3
+}
+
+call MyFunc with (none)
+call MyFunc2 with (a3)
+call MyFunc2 with (12)
+call MyFunc3 with (12, "asd")
+call MyFunc with (none)
+}
+define asdasdasdihfisdygdsyguasduy223 with (none) returnType none
+{}
+define MyFunc with (none) returnType none
+{}
+
+define MyFunc2 with (number a2) returnType bool{
+	a2 := 2
+	text t := "asdasd"
+	wait 2.5 seconds
+	return 32
+	return false
+}
+define MyFunc3 with (number a, text t) returnType list{
+	a := 3
+	number a2 := 2
+	text t2 := "asdasd"
+	list number lstNum {}
+	number a3
+	a3 := get element 2 from lstNum
+	a3 := get element 2 from lstNum
+	return lstNum
+}
+
+
+

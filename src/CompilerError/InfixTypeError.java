@@ -18,8 +18,8 @@ public class InfixTypeError extends Error {
 		
 		switch(operator) {
 			case PLUS: 
-				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' with expressions of the types"
-					+ typeOne + " and " + typeTwo + "\n" + "Both must be of either type NUMBER or TEXT";
+				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of the types '"
+					+ typeOne + "' and '" + typeTwo + "'\n" + "Both must be of type NUMBER or TEXT";
 				
 			case MINUS:
 			case MULTIPLY:
@@ -29,17 +29,17 @@ public class InfixTypeError extends Error {
 			case GREATERTHANEQUAL:
 			case GREATERTHAN:
 			case LESSTHAN:
-				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' with expressions of the types"
-				+ typeOne + " and " + typeTwo + "\n" + "Both must be of type NUMBER";
+				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of the types '"
+				+ typeOne + "' and '" + typeTwo + "'\n" + "Both must be of type NUMBER";
 		
 			case AND:
 			case OR:
-				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' with expressions of the types"
-				+ typeOne + " and " + typeTwo + "\n" + "Both must be of type BOOL";
+				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of the types '"
+				+ typeOne + "' and '" + typeTwo + "'\n" + "Both must be of type BOOL";
 			case EQUAL:
 			case NOTEQUAL:
-				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' with expressions of types"
-				+ typeOne + " and " + typeTwo + "\n" + "Both must be of either type NUMBER, TEXT or BOOL";
+				return "line " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of types '"
+				+ typeOne + "' and '" + typeTwo + "'\n" + "Both must be of type NUMBER, TEXT or BOOL";
 				
 			default:
 				return "line " + lineNumber + ":" + columnNumber + " - Undefined type error";

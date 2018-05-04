@@ -44,7 +44,7 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.NUMBER;
 				}
 				else {
-					// Error
+					infixNode.type = Type.ERROR;
 					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
 							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
@@ -58,6 +58,7 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
+					infixNode.type = Type.ERROR;
 					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
 							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
@@ -69,6 +70,7 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
+					infixNode.type = Type.ERROR;
 					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
 							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
@@ -86,6 +88,7 @@ public class TypeChecker extends Visitor{
 					infixNode.type = Type.BOOL;
 				}
 				else {
+					infixNode.type = Type.ERROR;
 					MainClass.CompileErrors.add(new InfixTypeError(infixNode.columnNumber, infixNode.lineNumber, 
 							infixNode.leftExprNode.type.toString(), infixNode.rightExprNode.type.toString(), infixNode.infixOperator));
 				}
@@ -127,6 +130,7 @@ public class TypeChecker extends Visitor{
 					unaryNode.type = Type.BOOL;
 				}
 				else {
+					unaryNode.type = Type.ERROR;
 					MainClass.CompileErrors.add(new TypeError(
 							unaryNode.columnNumber, unaryNode.lineNumber, unaryNode.exprNode.type.toString(), Type.BOOL.toString()));
 				}
@@ -137,6 +141,7 @@ public class TypeChecker extends Visitor{
 					unaryNode.type = Type.NUMBER;
 				}
 				else {
+					unaryNode.type = Type.ERROR;
 					MainClass.CompileErrors.add(new TypeError(
 							unaryNode.columnNumber, unaryNode.lineNumber, unaryNode.exprNode.type.toString(), Type.NUMBER.toString()));
 				}
