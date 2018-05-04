@@ -34,7 +34,7 @@ bool dsa
 list number lstNum {5,2,4,"hej",1,23,2,((asd * "text") + (dsa + 600))}
 a := 2 + 4 * (asd + 42)
 add "great" to lstNum
-add 2,3,4,6,7,8,2+4 to lstNum
+add 2,3,6,8,2+4 to lstNum
 
 lstNum += 23
 bool bar := true
@@ -93,7 +93,7 @@ else then {
 	switch(a2){
 	case 1: s := "asd"
 	default: switch(a2){
-		case 123: a := a +2 -3 
+		case 123: a := a + 2 - 3 + (call MyFunc4 with (none) * true)
 		default: 
 		}
 	}
@@ -124,6 +124,7 @@ define MyFunc2 with (number a2) returnType bool{
 	a2 := 2
 	text t := "asdasd"
 	wait 2.5 seconds
+	call MyFunc with (none)
 	return 32
 	return false
 }
@@ -138,5 +139,8 @@ define MyFunc3 with (number a, text t) returnType list{
 	return lstNum
 }
 
+define MyFunc4 with (none) returnType number{
+	return 5
+}
 
 

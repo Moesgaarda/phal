@@ -10,7 +10,7 @@ public class ListError extends Error{
 	
 	@Override 
 	public String toString() {
-		return "line " + lineNumber + ":" + columnNumber + " - The id '" + id + "' is not a list. This operation requires a list.";
+		return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - The id '" + id + "' is not a list. This operation requires a list.";
     }
 }
 
