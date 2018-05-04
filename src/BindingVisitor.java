@@ -1,5 +1,5 @@
 import CompilerError.*;
-//TODO TILFØJ TJEK OM TING BLIVER BRUGT
+import Warnings.*;
 public class BindingVisitor extends Visitor {
 	public SymbolTable ST = null;
 	
@@ -27,7 +27,6 @@ public class BindingVisitor extends Visitor {
 		{
 			for(FuncNode func: node.funcNodes) {
 				func.accept(this);
-				//TODO kunne rykkes sammen med løkken her over
 			}
 		}
 		ST.checkFunctionsAreUsed();
@@ -58,25 +57,45 @@ public class BindingVisitor extends Visitor {
 	public void visit(VarDclNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
-		super.visit(node);
+		if(node.exprNode != null) {
+			node.isInitialized = true;
+			node.exprNode.accept(this);
+		}
 	}
 	@Override
 	public void visit(CmpDclNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
-		super.visit(node);
+		node.advTypeNode.accept(this);
+		node.isInitialized = true;
+		for(LiteralExprNode num: node.literalExprNodes)
+		{
+			num.accept(this);
+		}
 	}
 	@Override
 	public void visit(ListNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
-		super.visit(node);
+		node.isInitialized = true;
+		node.typeNode.accept(this);
+		if(node.memberExprNodes != null)
+		{
+			for(ExprNode expr: node.memberExprNodes)
+			{
+				expr.accept(this);
+			}
+		}
 	}
 	@Override
 	public void visit(GroupNode node)
 	{
 		ST.addDeclarationToSymbolTable(node);
-		super.visit(node);
+		node.isInitialized = true;
+		for(IdNode member: node.memberIdNodes) 
+		{
+			member.accept(this);
+		}
 	}
 	@Override
 	public void visit(FuncCallNode node) {
@@ -92,23 +111,23 @@ public class BindingVisitor extends Visitor {
 			node.callCntNode.accept(this);
 		}
 	}
-	//TODO tænl over om det er nødvendigt at have disse metoder nu da vi bare tjekker id
+	
 	@Override 
 	public void visit(AssignmentNode node)
 	{
 		ST.addAssignmentToSymbolTable(node);
-		super.visit(node);
+		node.idNode.dclNode.isInitialized = true;
+		node.exprNode.accept(this);
 		
 	}
-
+	
 	@Override
-	public void visit(IdRefExprNode node) {
-		ST.addIdREfToSymbolTable(node);
-	}
-	@Override
-
 	public void visit(IdNode node) {
 		ST.addIdToSymbolTable(node);
+		if(  node.dclNode != null && node.dclNode.isInitialized == false) {
+			MainClass.CompileWarnings.add(
+					new NotInitializedWarning(node.columnNumber, node.lineNumber, node.id));
+		}
 
 	}
 	@Override
@@ -117,7 +136,6 @@ public class BindingVisitor extends Visitor {
 		
 	}
 	
-//TODO måske tilføj literal exprnode??
 
 }
 

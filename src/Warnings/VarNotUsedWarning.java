@@ -8,6 +8,6 @@ public class VarNotUsedWarning extends CompilerError.Error {
 	}
 	@Override
 	public String toString() {
-		return "Line: " + lineNumber + ":" + columnNumber + " - Variable \"" + id + "\" never used";
+		return "Line: " + lineNumber + ":" + columnNumber + " - Variable \"" + id + "\" is never used";
 	}
 }

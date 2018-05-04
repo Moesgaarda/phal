@@ -90,6 +90,7 @@ class SetupCntNode extends AstNode{
 abstract class DclNode extends AstNode{
 	public IdNode idNode;
 	public boolean isUsed = false;
+	public boolean isInitialized = false;
 	public DclNode() {	
 	}
 	public DclNode(ParserRuleContext ctx) {

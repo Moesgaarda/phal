@@ -41,7 +41,7 @@ public class SymbolTable {
 				map.put(key, dcl);
 			}
 			node.idNode.dclNode = dcl;
-
+			
 		}
 		else
 		{
@@ -62,26 +62,7 @@ public class SymbolTable {
 		}
 
 	}
-	public void addIdREfToSymbolTable(IdRefExprNode node) {
-		HashMap<String, AstNode> map =  symbolTable.peek();
-		String key = node.idNode.id;
-		
-		if(map.containsKey(key))
-		{
-			DclNode dcl = (DclNode)map.get(key);
-			if(!dcl.isUsed) {
-				dcl.isUsed = true;
-				map.put(key, dcl);
-			}
-			node.idNode.dclNode = dcl;
-		}
-		else
-		{
-			MainClass.CompileErrors.add(new NotDeclaredError(
-					node.columnNumber, node.lineNumber, node.idNode.id));
-		}
-
-	}
+	
 	public void addIdToSymbolTable(IdNode node) {
 		HashMap<String, AstNode> map =  symbolTable.peek();
 		String key = node.id;

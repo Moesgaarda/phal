@@ -6,6 +6,7 @@ using Su24eljnknkjnxfdcfvgbhnjkhggcvbniughvbnm9iuhynkhgyhjbhnjikhlugygkygyfytfjg
 setup
 {
 number lul 
+lul := 2
 number i := lul
 number j := 2
 text t := "This is a string"
@@ -29,9 +30,16 @@ group everything{
 	ts
 	numAndCoffee
 }
-number asd
+number asd1
+number asd2
+number asd3
+number asd4
+number asd5
+number asd6
+number asd7
 number dsa
-list number lstNum {5,2,4,5,1,23,2,asd + dsa}
+list number lstNum {5,2,4,5,1,23,2,asd1 + dsa}
+a := asd2
 a := 2
 add 2 to lstNum
 add 2,3,4,6,7,8,2+4 to lstNum
@@ -49,7 +57,7 @@ a := 2
 } 
 else then {
 	switch(a2){
-	case 1: s := "asd"
+	case 1: s := "asd3"
 	default: switch(a){
 		case 123: a := a +2 -3 
 		default: 
@@ -66,8 +74,8 @@ call MyFunc with (none)
 loop 4 times {x := 3
 }
 number sdf
-loop until 2 +3 , increase asd by 4{
-asd := 6
+loop until 2 +3 , increase asd4 by 4{
+asd5 := 6
 sdf += 2
 }
 number a3
@@ -92,7 +100,7 @@ if(2=2) then {
 
 else then {
 	switch(a2){
-	case 1: s := "asd"
+	case 1: s := "asd6"
 	default: switch(a2){
 		case 123: a := a +2 -3 
 		default: 
@@ -113,7 +121,7 @@ if (3=3) then {
 call MyFunc with (none)
 call MyFunc2 with (a3)
 call MyFunc2 with (12)
-call MyFunc3 with (12, "asd")
+call MyFunc3 with (12, "asd7")
 call MyFunc with (none)
 }
 define asdasdasdihfisdygdsyguasduy223 with (none) returnType none
@@ -133,9 +141,9 @@ define MyFunc3 with (number a, text t) returnType list{
 	number a2 := 2
 	text t2 := "asdasd"
 	list number lstNum {}
-	number a3
-	a3 := get element 2 from lstNum
-	a3 := get element 2 from lstNum
+	number a32
+	a32 := get element 2 from lstNum
+	a32 := get element 2 from lstNum
 	return lstNum
 }
 
