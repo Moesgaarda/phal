@@ -18,7 +18,7 @@ public class InfixTypeError extends Error {
 		
 		switch(operator) {
 			case PLUS: 
-				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of the types '"
+				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator + "' operator with expressions of the types '"
 					+ typeOne + "' and '" + typeTwo  + "'. Both must be of type NUMBER or TEXT";
 				
 			case MINUS:
@@ -29,16 +29,16 @@ public class InfixTypeError extends Error {
 			case GREATERTHANEQUAL:
 			case GREATERTHAN:
 			case LESSTHAN:
-				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of the types '"
+				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator + "' operator with expressions of the types '"
 				+ typeOne + "' and '" + typeTwo + "'. Both must be of type NUMBER";
 		
 			case AND:
 			case OR:
-				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of the types '"
+				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator + "' operator with expressions of the types '"
 				+ typeOne + "' and '" + typeTwo + "'. Both must be of type BOOL";
 			case EQUAL:
 			case NOTEQUAL:
-				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator.toString() + "' operator with expressions of types '"
+				return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Could not use the '" + operator + "' operator with expressions of types '"
 				+ typeOne + "' and '" + typeTwo + "'. Both must be of type NUMBER, TEXT or BOOL";
 				
 			default:

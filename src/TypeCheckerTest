@@ -130,12 +130,14 @@ define MyFunc2 with (number a2) returnType bool{
 }
 define MyFunc3 with (number a, text t) returnType list{
 	a := 3
-	number a2 := 2
+	number a2 := "text"
 	text t2 := "asdasd"
 	list number lstNum {}
+	list hej
 	number a3
+	a2 := get element 2 from lstNum
 	a3 := get element 2 from lstNum
-	a3 := get element 2 from lstNum
+	lstNum += 24
 	return lstNum
 }
 
