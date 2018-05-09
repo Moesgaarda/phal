@@ -103,7 +103,7 @@ switch(a2){
 		default: 
 }
 
-if (3 + 3) then {
+if (3 greater than or equal to 3) then {
 	lul := call MyFunc3 with (none)
 } else then {
 	lul := call MyFunc2 with ("hej")
@@ -128,14 +128,14 @@ define MyFunc2 with (number a2) returnType bool{
 	return 32
 	return false
 }
-define MyFunc3 with (number a, text t) returnType list{
+define MyFunc3 with (number a, text t) returnType number{
 	a := 3
 	number a2 := "text"
 	text t2 := "asdasd"
-	list number lstNum {}
-	list hej
+	list number lstNum {} 
+	number hej
 	number a3
-	a2 := get element 2 from lstNum
+	a2 := get element "hej" from hej
 	a3 := get element 2 from lstNum
 	lstNum += 24
 	return lstNum

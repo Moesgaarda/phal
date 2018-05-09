@@ -37,7 +37,6 @@ type
 	: 	'number' 
 	|  	'text'  
 	|  	'bool' 
-	|   'list'
 	|	'group'
 	|	advType
 	;

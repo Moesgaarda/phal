@@ -13,6 +13,6 @@ public class CompoundAssignmentError extends Error{
     }
     @Override
     public String toString() {
-        return "ERROR - Line: " + lineNumber + ":" + columnNumber + "The operator " + op + " only works with types of 'NUMBER', unless the id '" + id + "' is a list";
+        return "ERROR - Line: " + lineNumber + ":" + columnNumber + "The operator " + op + " only works with variables of type 'NUMBER', unless the variable '" + id + "' is a list";
     }
 }
