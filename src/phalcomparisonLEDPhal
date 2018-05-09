@@ -1,0 +1,18 @@
+setup
+{
+	lightbulb green := pin 13
+	lightbulb red := pin 12
+	group lights
+	{
+		green,
+		red
+	}
+	# As more lightbulbs are added the more readable and easy to write Phal becomes
+}
+repeat
+{
+	lights := on
+	wait(1)
+	ligths := off
+	wait(1)
+}
