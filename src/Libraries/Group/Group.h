@@ -7,25 +7,41 @@ Used in our university assignment.
 #ifndef PhalGroup_h
 #define PhalGroup_h
 
-#include "Arduino.h"
+//#include "Arduino.h"
+#include "../Adt/Adt.h"
 
+template <typename Adt>
 class PhalGroup
 {
-public:
-	PhalGroup();
-	void add(Adt _t);
-	void iterate();
-private:
-	Adt arr[];
+  public:
+    PhalGroup(int size);
+    void add(Adt _t);
+    void iterate();
+
+  private:
+    int _size;
+    int _pos = 0;
+    Adt arr[];
 };
 
-
-PhalGroup<T>::add(Adt _t){
-    
+template <typename Adt>
+PhalGroup<Adt>::PhalGroup(int size)
+{
+    _size = size;
+    Adt arr[] = new Adt[_size];
 }
 
-PhalGroup<T>::iterate(){
-    
+template <typename Adt>
+PhalGroup<Adt>::add(Adt _t)
+{
+    arr[_pos] = _t;
+    _pos++;
+}
+
+template <typename Adt>
+PhalGroup<Adt>::iterate()
+{
+    // ????????????? implementus patronus
 }
 
 #endif
