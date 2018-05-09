@@ -14,6 +14,6 @@ public class ParameterMismatchError extends Error{
 
     @Override
     public String toString() {
-        return "line " + lineNumber + ":" + columnNumber + " Argument " + paramNum +  ": Expected parameter of type '" + expectedSignature + "', but got '" + actualSignature + "'";
+        return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Parameter " + paramNum +  ": Expected parameter of type '" + expectedSignature + "' but got '" + actualSignature + "'";
     }
 }

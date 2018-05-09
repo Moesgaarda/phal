@@ -9,6 +9,6 @@ public class FunctionNotReturningError extends Error {
 	
 	@Override
 	public String toString() {
-		return "Line: " + lineNumber + ":" + columnNumber + " - Function " + functionName + " Expected to return. But never returns a value";
+		return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Function " + functionName + " Expected to return. But never returns a value";
 	}
 }

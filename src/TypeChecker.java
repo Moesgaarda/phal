@@ -25,8 +25,7 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(InfixExprNode infixNode)
 	{
-		visit(infixNode.rightExprNode);
-		visit(infixNode.leftExprNode);
+		super.visit(infixNode);
 		
 		switch(infixNode.infixOperator) 
 		{
@@ -173,7 +172,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(WaitNode waitNode) {
-		visit(waitNode.exprNode);
+		super.visit(waitNode);
 		if(waitNode.exprNode.type != Type.NUMBER) {
 			MainClass.CompileErrors.add(new TypeError(waitNode.columnNumber, waitNode.lineNumber,
 					waitNode.exprNode.type.toString(), Type.NUMBER.toString()));
@@ -182,7 +181,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(FuncNode funcNode) {
-		
+		super.visit(funcNode);
 		for(int i = 0; i < funcNode.funcCntNodes.size(); i++) {
 			if(funcNode.funcCntNodes.get(i).stmtNode instanceof ReturnStmtNode) {
 				ReturnStmtNode rsNode = (ReturnStmtNode) funcNode.funcCntNodes.get(i).stmtNode;
@@ -201,7 +200,7 @@ public class TypeChecker extends Visitor{
 	public void visit(FuncExprNode funcExprNode) {
 		ParametersNode formalParams = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).parametersNode;
 		
-		checkActualAndFormalParams(funcExprNode, funcExprNode.funcCallNode.callCntNode, formalParams);
+		checkActualAndFormalParams(funcExprNode.funcCallNode, funcExprNode.funcCallNode.callCntNode, formalParams);
 		funcExprNode.type = st.getFunctionFromFuncMap(funcExprNode.funcCallNode).typeNode.Type;
 		
 	}
@@ -215,9 +214,10 @@ public class TypeChecker extends Visitor{
 
 	}
 	
-	private void checkActualAndFormalParams(AstNode node, CallCntNode actualParams, ParametersNode formalParams) {
+	private void checkActualAndFormalParams(FuncCallNode node, CallCntNode actualParams, ParametersNode formalParams) {
 		int actualParamsCount = 0;
 		int formalParamsCount = 0;
+		int paramNum;
 		
 		if(actualParams != null) {
 			actualParamsCount = actualParams.exprNodes.size();
@@ -230,14 +230,15 @@ public class TypeChecker extends Visitor{
 			if(actualParamsCount == formalParamsCount) {
 				// Check if types match
 				if(actualParamsCount != 0) {
+					super.visit(actualParams);
 					for(int i = 0; i < actualParamsCount; i++) {
 						ExprNode actualParamExpr = actualParams.exprNodes.get(i);
 						TypeNode formalParamType = formalParams.paramNodes.get(i).typeNode;
-						visit(actualParamExpr);
 						
 						if(formalParamType.Type != actualParamExpr.type) {
+							paramNum = i + 1;
 							MainClass.CompileErrors.add(new ParameterMismatchError(node.columnNumber, 
-									node.lineNumber, i + 1, actualParamExpr.type.toString(), formalParamType.Type.toString()));
+									node.lineNumber, paramNum, actualParamExpr.type.toString(), formalParamType.Type.toString()));
 						}
 					}
 				}
@@ -255,8 +256,8 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(AdvTypeModifierNode node) {
-		// Derefter checkes om typen af alle expressions er af samme type som listen.
-		visit(node.idNode);
+		// Derefter checkes om typen af hver expressions er af samme type som listen.
+		super.visit(node);
 		if(node.idNode.dclNode instanceof ListNode){
 			for(int i = 0; i < node.exprNodes.size(); i++) {
 				visit(node.exprNodes.get(i));
@@ -278,87 +279,93 @@ public class TypeChecker extends Visitor{
 	
 	private void typeCheckAssignment(AssignmentNode node) {
 		// Lister og Groups? Hvordan skal det tjekkes?
-		visit(node.exprNode);
-		visit(node.idNode);
-		
-		if(node.exprNode != null) {
-			if(node.idNode.type != node.exprNode.type) {
-				if(node.idNode.type != Type.GROUP) { // Er dette nødvendigt? Kan en group indgå i assignment?
-					MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
-											node.exprNode.type.toString(), node.idNode.type.toString()));
-				}
+		super.visit(node);
+		if(node.idNode.type != node.exprNode.type) {
+				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
+									node.exprNode.type.toString(), node.idNode.type.toString()));
+		}
+		else {
+			switch(node.assignmentOperator) {
+				case EQUALS:
+					break;
+				case PLUSEQUALS:
+				case MINUSEQUALS:
+					if(node.idNode.type != Type.NUMBER && node.exprNode.type != Type.NUMBER) {
+						if(node.idNode.dclNode instanceof ListNode) {
+							// Hvis id'et er en liste behøves typen ikke være NUMBER for at bruge '+=' eller '-='
+							break;
+						}
+						else {
+							MainClass.CompileErrors.add(new CompoundAssignmentError(node.columnNumber, node.lineNumber, node.assignmentOperator, node.idNode.id));
+						}
+					}
 			}
-		}
-		
-		switch(node.assignmentOperator) {
-			case EQUALS:
-				break;
-				
-			case PLUSEQUALS:
-			case MINUSEQUALS:
-				if(node.idNode.type != Type.NUMBER || node.exprNode.type != Type.NUMBER) {
-					// if(st.getEntryInSymbolTable(node.idNode.id)) { // tjek om id'et er en liste
-						
-					}
-					else {
-						// ERROR
-					}
-				}				
-		}
+		}	
+	}
 	
 	@Override
 	public void visit(LiteralAdvancedNode node) {
-		visit(node.exprNode);
-		visit(node.idNode);
-		// Mangler stadig at checke om id'et er en liste (eller gruppe?)
-		if(node.exprNode.type != node.idNode.type) {
-			MainClass.CompileErrors.add(new TypeError(
-					node.columnNumber, node.lineNumber, node.exprNode.type.toString(), node.idNode.type.toString()));
+		super.visit(node);
+		if(node.exprNode.type != Type.NUMBER) {
+			MainClass.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, node.exprNode.type.toString(), Type.NUMBER.toString()));
+		}
+		if(!(node.idNode.dclNode instanceof ListNode)) {
+			MainClass.CompileErrors.add(new ListError(node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 		node.type = node.idNode.type;
 	}
 	
 	@Override
 	public void visit(ParensExprNode node) {
-		visit(node.exprNode);
+		super.visit(node);
 		node.type = node.exprNode.type;
 	}
 	
 	@Override
-	public void visit(IdRefExprNode node) {
-		if(node.idNode.dclNode instanceof VarDclNode) {
-			VarDclNode vdNode = (VarDclNode) node.idNode.dclNode;
-			node.type = vdNode.typeNode.Type;
+	public void visit(IdRefExprNode idRefNode) {
+		if(idRefNode.idNode.dclNode instanceof VarDclNode) {
+			VarDclNode vdNode = (VarDclNode) idRefNode.idNode.dclNode;
+			idRefNode.type = vdNode.typeNode.Type;
 		}
-		else if(node.idNode.dclNode instanceof CmpDclNode) {
-			CmpDclNode cdNode = (CmpDclNode) node.idNode.dclNode;
-			node.type = cdNode.advTypeNode.Type;
+		else if(idRefNode.idNode.dclNode instanceof CmpDclNode) {
+			CmpDclNode cdNode = (CmpDclNode) idRefNode.idNode.dclNode;
+			idRefNode.type = cdNode.advTypeNode.Type;
 		}
-		else if(node.idNode.dclNode instanceof ListNode) {
-			ListNode lNode = (ListNode) node.idNode.dclNode;
-			node.type = lNode.typeNode.Type;
+		else if(idRefNode.idNode.dclNode instanceof ListNode) {
+			ListNode lNode = (ListNode) idRefNode.idNode.dclNode;
+			idRefNode.type = lNode.typeNode.Type;
 		}
-		else if(node.idNode.dclNode instanceof GroupNode) {
-			node.type = Type.GROUP;
+		else if(idRefNode.idNode.dclNode instanceof GroupNode) {
+			idRefNode.type = Type.GROUP;
+		}
+		// Når id'et er det formelle parameter
+		else if(idRefNode.idNode.dclNode instanceof ParamNode) {
+			ParamNode pNode = (ParamNode) idRefNode.idNode.dclNode;
+			idRefNode.type = pNode.typeNode.Type;
 		}
 	}
 	
 	@Override
-	public void visit(IdNode node) {
-		if(node.dclNode instanceof VarDclNode) {
-			VarDclNode vdNode = (VarDclNode) node.dclNode;
-			node.type = vdNode.typeNode.Type;
+	public void visit(IdNode idNode) {
+		if(idNode.dclNode instanceof VarDclNode) {
+			VarDclNode vdNode = (VarDclNode) idNode.dclNode;
+			idNode.type = vdNode.typeNode.Type;
 		}
-		else if(node.dclNode instanceof CmpDclNode) {
-			CmpDclNode cdNode = (CmpDclNode) node.dclNode;
-			node.type = cdNode.advTypeNode.Type;
+		else if(idNode.dclNode instanceof CmpDclNode) {
+			CmpDclNode cdNode = (CmpDclNode) idNode.dclNode;
+			idNode.type = cdNode.advTypeNode.Type;
 		}
-		else if(node.dclNode instanceof ListNode) {
-				ListNode lNode = (ListNode) node.dclNode;
-				node.type = lNode.typeNode.Type;
+		else if(idNode.dclNode instanceof ListNode) {
+				ListNode lNode = (ListNode) idNode.dclNode;
+				idNode.type = lNode.typeNode.Type;
 		}
-		else if(node.dclNode instanceof GroupNode) {
-			node.type = Type.GROUP;
+		else if(idNode.dclNode instanceof GroupNode) {
+			idNode.type = Type.GROUP;
+		}
+		// Når id'et er det formelle parameter
+		else if(idNode.dclNode instanceof ParamNode) {
+			ParamNode pNode = (ParamNode) idNode.dclNode;
+			idNode.type = pNode.typeNode.Type;
 		}
 	}
 	
@@ -368,7 +375,7 @@ public class TypeChecker extends Visitor{
 		for(int i = 0; i < node.memberIdNodes.size(); i++) {
 			if(!(node.memberIdNodes.get(i).dclNode instanceof CmpDclNode)) {
 				
-				// Denne her løsning er ret hæslig. Kan sikkert laves pænere
+				// Denne her løsning kan sikkert laves pænere
 				if(node.memberIdNodes.get(i).dclNode instanceof VarDclNode) {
 					VarDclNode vdNode = (VarDclNode) node.memberIdNodes.get(i).dclNode;
 					MainClass.CompileErrors.add(new GroupError(node.columnNumber, node.lineNumber, 
@@ -385,8 +392,12 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(VarDclNode node) {
+		super.visit(node);
+		
+		if(node.typeNode.Type == Type.GROUP || node.typeNode.Type == Type.LIST) {
+			MainClass.CompileErrors.add(new DeclarationError(node.columnNumber, node.lineNumber, node.typeNode.Type.toString(), node.idNode.id));
+		}
 		if(node.exprNode != null) {
-			visit(node.exprNode);
 			if(node.exprNode.type != node.typeNode.Type) {
 				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
 						node.exprNode.type.toString(), node.typeNode.Type.toString()));
@@ -396,10 +407,9 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(ListNode node) {
-		
+		super.visit(node);
 		if(!node.memberExprNodes.isEmpty()) {
 			for(int i = 0; i < node.memberExprNodes.size(); i++) {
-				visit(node.memberExprNodes.get(i));
 				if(node.typeNode.Type != node.memberExprNodes.get(i).type) {
 				
 					MainClass.CompileErrors.add(new TypeError(
@@ -412,11 +422,8 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(SwitchStmtNode node) {
 		super.visit(node);
-		visit(node.exprNode);
 		// checker om hver case expr er samme type som det vi switcher på
 		for(int i = 0; i < node.caseListNode.caseStmtNodes.size(); i++) {
-			visit(node.caseListNode.caseStmtNodes.get(i).exprNode);
-			
 			if(node.exprNode.type != node.caseListNode.caseStmtNodes.get(i).exprNode.type) {
 				
 				MainClass.CompileErrors.add(new TypeError( node.columnNumber, node.lineNumber, 
@@ -428,22 +435,18 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(IfStmtNode node) {
 		super.visit(node);
-		visit(node.ifExprNode);
 		checkCondition(node.ifExprNode);
 	}
 	
 	@Override
 	public void visit(ElseIfStmtNode node) {
 		super.visit(node);
-		visit(node.exprNode);
 		checkCondition(node.exprNode);
 	}
 	
 	@Override
 	public void visit(LoopTimesNode node) {
 		super.visit(node);
-		visit(node.exprNode);
-		
 		if(node.exprNode.type != Type.NUMBER) {
 			MainClass.CompileErrors.add(new TypeError( node.columnNumber, node.lineNumber, 
 										node.exprNode.type.toString(), Type.NUMBER.toString()));
@@ -453,8 +456,6 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(LoopUntilNode node) {
 		super.visit(node);
-		visit(node.exprNode);
-		visit(node.idNode);
 		checkCondition(node.exprNode);
 		
 		if(node.idNode.type != Type.NUMBER) {

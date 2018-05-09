@@ -10,6 +10,6 @@ public class NotDeclaredError extends Error {
 
 	@Override
 	public String toString() {
-		return "Line: " + lineNumber + ":" + columnNumber + " - Id: " + varName + " Not declared";
+		return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Id: " + varName + " Not declared";
 	}
 }

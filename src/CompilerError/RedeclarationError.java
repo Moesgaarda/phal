@@ -10,6 +10,6 @@ public class RedeclarationError extends Error {
 	
 	 @Override
 	 public String toString() {
-	     return "line " + lineNumber + ":" + columnNumber + " - " + referenceName + " already declared in this scope";
+	     return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - " + referenceName + " already declared in this scope";
 	 }
 }

@@ -8,6 +8,6 @@ public class FuncNotUsedWarning extends CompilerError.Error {
 	}
 	@Override
 	public String toString() {
-		return "Line: " + lineNumber + ":" + columnNumber + " - Function \"" + id + "\" never used";
+		return "WARNING - Line: " + lineNumber + ":" + columnNumber + " - Function \"" + id + "\" never used";
 	}
 }

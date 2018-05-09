@@ -11,6 +11,6 @@ public class ParameterAmountError extends Error{
     }
 
     public String toString() {
-        return "line " + lineNumber + ":" + columnNumber + " - Expected " + expectedAmount + " parameters, but got " + actualAmount + " parameters";
+        return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - Expected " + expectedAmount + " parameters but got " + actualAmount + " parameters";
     }
 }
