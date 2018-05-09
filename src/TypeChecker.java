@@ -306,10 +306,11 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(LiteralAdvancedNode node) {
 		super.visit(node);
-		// Mangler stadig at checke om id'et er en liste (eller gruppe?)
-		if(node.exprNode.type != node.idNode.type) {
-			MainClass.CompileErrors.add(new TypeError(
-					node.columnNumber, node.lineNumber, node.exprNode.type.toString(), node.idNode.type.toString()));
+		if(node.exprNode.type != Type.NUMBER) {
+			MainClass.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, node.exprNode.type.toString(), Type.NUMBER.toString()));
+		}
+		if(!(node.idNode.dclNode instanceof ListNode)) {
+			MainClass.CompileErrors.add(new ListError(node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 		node.type = node.idNode.type;
 	}
@@ -391,8 +392,12 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(VarDclNode node) {
+		super.visit(node);
+		
+		if(node.typeNode.Type == Type.GROUP || node.typeNode.Type == Type.LIST) {
+			MainClass.CompileErrors.add(new DeclarationError(node.columnNumber, node.lineNumber, node.typeNode.Type.toString(), node.idNode.id));
+		}
 		if(node.exprNode != null) {
-			super.visit(node);
 			if(node.exprNode.type != node.typeNode.Type) {
 				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
 						node.exprNode.type.toString(), node.typeNode.Type.toString()));
