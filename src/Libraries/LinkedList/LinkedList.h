@@ -1,6 +1,9 @@
-/* 
+/*
     LinkedList for use with the PHAL language
 */
+
+#ifndef LinkedList_h
+#define LinkedList_h
 
 #include <stddef.h>
 
@@ -15,7 +18,7 @@ class LinkedList{
     protected:
         int _size;
         ListNode<T> *root;
-        ListNode<T> *tail;
+        ListNode<T> *last;
 
         ListNode<T>* getNode(int index);
 
@@ -32,9 +35,18 @@ class LinkedList{
         virtual T remove(int index);
 };
 
+
+template<typename T>
+LinkedList<T>::LinkedList()
+{
+    root=NULL;
+    last=NULL;
+    _size=0;
+}
+
 // Add a new node to the list
 template<typename T>
-ListNode<T>* LinkedList<T>::add(T _t){
+bool LinkedList<T>::add(T _t){
     ListNode<T> *tmp = new ListNode<T>();
     tmp->data = _t;
     tmp->next = NULL;
@@ -54,7 +66,7 @@ ListNode<T>* LinkedList<T>::add(T _t){
 }
 
 template<typename T>
-ListNode<T>* LinkedList<T>::get(int index){
+T LinkedList<T>::get(int index){
     ListNode<T> *tmp = getNode(index);
     return (tmp ? tmp->data : T());
 }
@@ -74,7 +86,8 @@ ListNode<T>* LinkedList<T>::getNode(int index){
         return current;
     }
 
-    return false;
+    return current;
+
 }
 
 // Remove element at given index
@@ -82,7 +95,7 @@ template<typename T>
 T LinkedList<T>::remove(int index){
     if(index < 0 || index >= _size)
         return T();
-    
+
     ListNode<T> *tmp = getNode(index-1);
     ListNode<T> *toDelete = tmp->next;
     T ret = toDelete->data;
@@ -91,3 +104,5 @@ T LinkedList<T>::remove(int index){
     _size--;
     return ret;
 }
+
+#endif
