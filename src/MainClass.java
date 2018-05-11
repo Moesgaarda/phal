@@ -19,18 +19,19 @@ public class MainClass {
 	public static void main(String args[]) throws Exception
 	{
 		
-		String fileName = "..\\Phal\\src\\TypeCheckerTest";
+		String fileName = "..\\Phal\\src\\PhalLangEx4";
         File file = new File(fileName);
         AstNode ast = ASTBuilder(new FileInputStream(file));
 		PrettyPrinter pp = new PrettyPrinter();
 		pp.visit((ProgramNode)ast);
-		TypeChecking(ast);	
-		CodeGeneration cg = new CodeGeneration();//TODO ER KUN TIL TEST FOR CODE GEN, SKAL ÆNDRES
+		SymbolTable ST = new SymbolTable();
+		TypeChecking(ast, ST);	
+		CodeGeneration cg = new CodeGeneration(ST.getCompInclMap());
 		cg.visit((ProgramNode)ast);
 	}
 	
-	public static void TypeChecking(AstNode ast) {
-		SymbolTable ST = new SymbolTable();
+	public static void TypeChecking(AstNode ast, SymbolTable ST) {
+
 		BindingVisitor bv = new BindingVisitor(ST);
 		bv.visit((ProgramNode) ast);
 		

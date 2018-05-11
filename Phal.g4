@@ -32,7 +32,9 @@ varDcl
 	: 	type ID 
 	| 	type ID ':=' expr 
 	;
-  
+listType
+	:	'list of' type
+	;  
 type        
 	: 	'number' 
 	|  	'text'  
@@ -153,7 +155,7 @@ repeat
 	;
 
 func        
-	: 	'define' ID 'with' '(' parameters ')' 'returnType' (type | none) NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* '}' 
+	: 	'define' ID 'with' '(' parameters ')' 'returnType' (listType | type | none) NEWLINE* '{' NEWLINE* funcCnt* NEWLINE* '}' 
 	;
 
 funcCnt		

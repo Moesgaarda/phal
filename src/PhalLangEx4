@@ -17,14 +17,9 @@ motor cm := pin 2,3,4
 temperatureSensor ts := pin 5
 
 group numAndCoffee{
-	i
-	j
 	cm
 }
 group everything{
-	i
-	j
-	t
 	cm
 	lb
 	ts
@@ -74,7 +69,7 @@ call MyFunc with (none)
 loop 4 times {x := 3
 }
 number sdf
-loop until 2 +3 , increase asd4 by 4{
+loop until 2 = 3 , increase asd4 by 4{
 asd5 := 6
 sdf += 2
 }
@@ -133,10 +128,9 @@ define MyFunc2 with (number a2) returnType bool{
 	a2 := 2
 	text t := "asdasd"
 	wait 2.5 seconds
-	return 32
 	return false
 }
-define MyFunc3 with (number a, text t) returnType list{
+define MyFunc3 with (number a, text t) returnType list of number{
 	a := 3
 	#t := "kkk"
 	number a2 := 2
