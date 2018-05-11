@@ -142,6 +142,7 @@ define MyFunc3 with (number a, text t) returnType number{
 }
 
 define MyFunc4 with (none) returnType number{
+	a6 := 16
 	return 5
 }
 
