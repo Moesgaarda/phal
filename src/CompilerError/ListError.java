@@ -1,16 +1,17 @@
 package CompilerError;
+import enums.InfixOperator;
 
 public class ListError extends Error{
-	private String id;
+	private String op;
 	
-	public ListError(int columnNumber, int lineNumber, String id) {
+	public ListError(int columnNumber, int lineNumber, String op) {
 		super(columnNumber, lineNumber);
-		this.id = id;
+		this.op = op;
 	}
 	
 	@Override 
 	public String toString() {
-		return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - The id '" + id + "' is not a list. This operation requires a list.";
+		return "ERROR - Line: " + lineNumber + ":" + columnNumber + " - The operator '" + op + "' cannot be used with a list variable";
     }
-}
 
+}

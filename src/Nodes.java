@@ -127,33 +127,58 @@ class VarDclNode extends DclNode{
 class TypeNode extends AstNode{
 	public String type;
 	public Type Type;
+	public boolean islist = false;
 	
 	public TypeNode(String type) {
+		
 		this.type = type;
-	
+		
+		if(this.type.contains("list")) {
+			this.islist = true;
+		}
+
 		switch(this.type) {
 		case "number":
+			this.Type = Type.NUMBER;
+			break;
+		// Der skal ikke være mellemrum mellem "ofnumber", ellers virker det ikke
+		case "list ofnumber":
 			this.Type = Type.NUMBER;
 			break;
 		case "text":
 			this.Type = Type.TEXT;
 			break;
+		case "list oftext":
+			this.Type = Type.TEXT;
+			break;
 		case "bool":
+			this.Type = Type.BOOL;
+			break;
+		case "list ofbool":
 			this.Type = Type.BOOL;
 			break;
 		case "group":
 			this.Type = Type.GROUP;
 			break;
-		case "list":
-			this.Type = Type.LIST;
+		case "list ofgroup":
+			this.Type = Type.GROUP;
 			break;
 		case "lightbulb":
+			this.Type = Type.LIGHTBULB;
+			break;
+		case "list oflightbulb":
 			this.Type = Type.LIGHTBULB;
 			break;
 		case "motor":
 			this.Type = Type.MOTOR;
 			break;
+		case "list ofmotor":
+			this.Type = Type.MOTOR;
+			break;
 		case "temperaturesensor":
+			this.Type = Type.TEMPERATURESENSOR;
+			break;
+		case "list oftemperaturesensor":
 			this.Type = Type.TEMPERATURESENSOR;
 			break;
 		case "none":

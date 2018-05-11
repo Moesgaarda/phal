@@ -162,6 +162,7 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	@Override public AstNode visitList(PhalParser.ListContext ctx)  
 	{ 
 		TypeNode typeNode = new TypeNode(ctx.type().getText());
+		typeNode.islist = true;
 		IdNode idNode = new IdNode(ctx.ID().getText());
 		List<ExprNode> memberExprNodes = new LinkedList<>();
 		for(PhalParser.ExprContext expr: ctx.expr()) 
@@ -475,6 +476,12 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 		if(ctx.type() != null)
 		{
 			typeNode = new TypeNode(ctx.type().getText());
+			typeNode.islist = false;
+		}
+		else if(ctx.listType() != null)
+		{
+			typeNode = new TypeNode(ctx.listType().getText());
+			typeNode.islist = true;
 		}
 		else
 		{
@@ -537,8 +544,16 @@ public class BuildAST extends PhalBaseVisitor<AstNode> {
 	{ 
 		TypeNode type = null;
 		IdNode idNode = null;
+				
 
-		type = new TypeNode(ctx.type().getText()); 
+		if(ctx.type() != null) {
+			type = new TypeNode(ctx.type().getText());
+			type.islist = false;
+		}
+		if(ctx.listType() != null) {
+			type = new TypeNode(ctx.listType().getText());
+			type.islist = true;
+		}
 		idNode = new IdNode(ctx.ID().getText() );
 			
 		return new ParamNode(type, idNode, ctx);

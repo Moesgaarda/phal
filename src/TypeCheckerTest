@@ -71,6 +71,7 @@ sdf += 2
 }
 number a3
 bool fuu
+list number numlist {}
 }
 
 
@@ -109,6 +110,7 @@ if (3 greater than or equal to 3) then {
 	lul := call MyFunc2 with ("hej")
 }
 
+call MyFunc2 with (numlist)
 call MyFunc with (none)
 call MyFunc2 with (a3)
 call MyFunc2 with (12)
@@ -128,11 +130,12 @@ define MyFunc2 with (number a2) returnType bool{
 	return 32
 	return false
 }
-define MyFunc3 with (number a, text t) returnType number{
-	a := 3
+define MyFunc3 with (text a, text t) returnType number{
 	number a2 := "text"
 	text t2 := "asdasd"
 	list number lstNum {} 
+	list number listNum2 {}
+	a := lstNum + listNum2 
 	number hej
 	number a3
 	a2 := get element "hej" from hej
@@ -142,7 +145,6 @@ define MyFunc3 with (number a, text t) returnType number{
 }
 
 define MyFunc4 with (none) returnType number{
-	a6 := 16
 	return 5
 }
 

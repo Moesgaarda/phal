@@ -26,7 +26,9 @@ public class TypeChecker extends Visitor{
 	public void visit(InfixExprNode infixNode)
 	{
 		super.visit(infixNode);
-		
+		if(isAList(infixNode)) {
+			MainClass.CompileErrors.add(new ListError(infixNode.columnNumber, infixNode.lineNumber, infixNode.infixOperator.toString()));
+		}
 		switch(infixNode.infixOperator) 
 		{
 			case PLUS: 
@@ -100,29 +102,35 @@ public class TypeChecker extends Visitor{
 	}
 	
 	private boolean correctType(InfixExprNode infixExprNode, Type expectedType) {
-		boolean typeIsCorrect = false;
-		
 		if(infixExprNode.leftExprNode.type == expectedType && infixExprNode.rightExprNode.type == expectedType) {
-			typeIsCorrect = true;
+				return true;
 		}
-		else if(infixExprNode.leftExprNode instanceof IdNode) {
-			IdNode idNode = (IdNode) infixExprNode.leftExprNode;
-			if(idNode.type == expectedType && infixExprNode.rightExprNode.type == expectedType) {
-				typeIsCorrect = true;
+		return false;
+	}
+	
+	private boolean isAList(InfixExprNode infixExprNode) {
+		if(infixExprNode.leftExprNode instanceof IdRefExprNode) {
+			IdRefExprNode leftIdNode = (IdRefExprNode) infixExprNode.leftExprNode;
+			if(leftIdNode.idNode.dclNode instanceof ListNode) {
+				return false;
 			}
 		}
-		else if(infixExprNode.rightExprNode instanceof IdNode) {
-			IdNode idNode = (IdNode) infixExprNode.rightExprNode;
-			if(idNode.type == expectedType && infixExprNode.leftExprNode.type == expectedType) {
-				typeIsCorrect = true;
+		else if(infixExprNode.rightExprNode instanceof IdRefExprNode) {
+			IdRefExprNode rightIdNode = (IdRefExprNode) infixExprNode.rightExprNode;
+			if(rightIdNode.idNode.dclNode instanceof ListNode) {
+				return false;
 			}
 		}
-		return typeIsCorrect;
+		return true;
 	}
 	
 	@Override
 	public void visit(UnaryExprNode unaryNode) {
 		visit(unaryNode.exprNode);
+		if(isAList(unaryNode)) {
+			MainClass.CompileErrors.add(new ListError(unaryNode.columnNumber, unaryNode.lineNumber, 
+					unaryNode.unaryOperator.toString()));
+		}
 		switch(unaryNode.unaryOperator) {
 			case NOT:
 				if(correctType(unaryNode, Type.BOOL)) {
@@ -154,20 +162,21 @@ public class TypeChecker extends Visitor{
 	}
 	
 	private boolean correctType(UnaryExprNode unaryExprNode, Type expectedType) {
-		boolean typeIsCorrect = false;
-		
 		if(unaryExprNode.exprNode.type == expectedType) {
-			typeIsCorrect = true;
+			return true;
 		}
-		else if(unaryExprNode.exprNode instanceof IdNode) {
-			IdNode idNode = (IdNode) unaryExprNode.exprNode;
 			
-			if(idNode.type == expectedType) {
-				typeIsCorrect = true;
+		return false;
+	}
+	
+	private boolean isAList(UnaryExprNode unaryExprNode) {
+		if(unaryExprNode.exprNode instanceof IdRefExprNode) {
+			IdRefExprNode idExprNode = (IdRefExprNode) unaryExprNode.exprNode;
+			if(idExprNode.idNode.dclNode instanceof ListNode) {
+				return false;
 			}
 		}
-		
-		return typeIsCorrect;
+		return true;
 	}
 	
 	@Override
@@ -238,7 +247,7 @@ public class TypeChecker extends Visitor{
 						if(formalParamType.Type != actualParamExpr.type) {
 							paramNum = i + 1;
 							MainClass.CompileErrors.add(new ParameterMismatchError(node.columnNumber, 
-									node.lineNumber, paramNum, actualParamExpr.type.toString(), formalParamType.Type.toString()));
+									node.lineNumber, paramNum, formalParamType.Type.toString(), actualParamExpr.type.toString()));
 						}
 					}
 				}
@@ -268,7 +277,7 @@ public class TypeChecker extends Visitor{
 			}
 		}
 		else {
-			MainClass.CompileErrors.add(new ListError(node.columnNumber, node.lineNumber, node.idNode.id));
+			MainClass.CompileErrors.add(new ListOperationError(node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 	}
 	
@@ -310,7 +319,7 @@ public class TypeChecker extends Visitor{
 			MainClass.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, node.exprNode.type.toString(), Type.NUMBER.toString()));
 		}
 		if(!(node.idNode.dclNode instanceof ListNode)) {
-			MainClass.CompileErrors.add(new ListError(node.columnNumber, node.lineNumber, node.idNode.id));
+			MainClass.CompileErrors.add(new ListOperationError(node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 		node.type = node.idNode.type;
 	}

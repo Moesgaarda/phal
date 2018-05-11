@@ -171,6 +171,7 @@ parameters
 
 param        
 	: 	type ID
+	|   listType ID
 	;
 
 returnStmt    

@@ -15,7 +15,7 @@ public class MainClass {
 	
 	public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
 	public static List<CompilerError.Error> CompileWarnings = new ArrayList<>();
-	public static String inputFileName = "PhalLangEx4"; //TODO ER KUN TIL TEST FOR CODE GEN, SKAL ÆNDRES
+	public static String inputFileName = "PhalLangEx4"; //TODO ER KUN TIL TEST FOR CODE GEN, SKAL ï¿½NDRES
 	public static void main(String args[]) throws Exception
 	{
 		
@@ -38,7 +38,7 @@ public class MainClass {
 		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
 		}
-		//TODO Bare til at teste med skal nok først printes når compileren har været gennem alle steps
+		//TODO Bare til at teste med skal nok fï¿½rst printes nï¿½r compileren har vï¿½ret gennem alle steps
 		if(!CompileWarnings.isEmpty()) {
 			PrintWarnings();
 		}
