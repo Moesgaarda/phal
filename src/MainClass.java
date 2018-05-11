@@ -15,11 +15,11 @@ public class MainClass {
 	
 	public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
 	public static List<CompilerError.Error> CompileWarnings = new ArrayList<>();
-	public static String inputFileName = "PhalLangEx4";//TODO ER KUN TIL TEST FOR CODE GEN, SKAL ÆNDRES
+	public static String inputFileName = "PhalLangEx4"; //TODO ER KUN TIL TEST FOR CODE GEN, SKAL ÆNDRES
 	public static void main(String args[]) throws Exception
 	{
 		
-		String fileName = "..\\Phal\\src\\PhalLangEx4";
+		String fileName = "..\\Phal\\src\\PhalLangEx";
         File file = new File(fileName);
         AstNode ast = ASTBuilder(new FileInputStream(file));
 		PrettyPrinter pp = new PrettyPrinter();

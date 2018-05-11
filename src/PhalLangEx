@@ -16,20 +16,23 @@ setup{
   # <type> <name> := pin <number>
   lightbulb l := pin 1
   temperatureSensor ls := pin 2
+  bool satan := true
+  bool god := false
+  bool alive := true
+  bool dead := false
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
 repeat{ 
-  l := on 
+
 
   if(satan is true and god is dead) then { 
   	satan := false
   	god := alive
   }
-  
-  call wait with (42) # Wait 2.32 seconds
+  # Wait 2.32 seconds
 }
 
-define wait with(number num) returnType none{
+define waitup with(number num) returnType none{
 	num += 45
 }

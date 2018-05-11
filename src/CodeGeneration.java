@@ -39,6 +39,29 @@ public class CodeGeneration extends Visitor{
 	public void visit(ProgramNode node) {
 		printHeader();
 		
+		// visit includes
+		
+		visit(node.setupNode);
+		visit(node.repeatNode);
+		
+		writer.close();
+	}
+	
+	@Override
+	public void visit(SetupNode node) {
+		writer.print("void setup(){ \n");
+		// visit setup
+		writer.print("} \n\n");
+		
+		writer.close();
+	}
+	
+	@Override
+	public void visit(RepeatNode node) {
+		writer.print("void loop(){ \n");
+		// visit nodes
+		writer.print("} \n\n");
+		
 		writer.close();
 	}
 }
