@@ -24,8 +24,6 @@ setup{
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
 repeat{ 
-
-
   if(satan is true and god is dead) then { 
   	satan := false
   	god := alive
