@@ -30,15 +30,18 @@ public class CodeGeneration extends Visitor{
 				     + "\n*/\n\n"
 					 );
 	}
-	private void printCmpIncludes(String using) {
-		writer.print("#include \"" + using +".h\" \n"
+	private void printCmpIncludes() {
+		for(Type t : ComponentIncludesMap) {
+			writer.print("#include \"" + t +".h\" \n"
 				     );
+		}
+
 	}
 	
 	@Override
 	public void visit(ProgramNode node) {
 		printHeader();
-		
+		printCmpIncludes();
 		// visit includes
 		
 		visit(node.setupNode);

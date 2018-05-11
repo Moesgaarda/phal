@@ -178,7 +178,25 @@ enum Type{
 	MOTOR,
 	TEMPERATURESENSOR,
 	NONE,
-	ERROR
+	ERROR;
+	@Override
+    public String toString() {
+        String stringRep = "";
+        switch(this) {
+	        case MOTOR:
+	        	stringRep = "Motor";
+	        	break;
+	        case TEMPERATURESENSOR:
+	        	stringRep = "TemperatureSensor";
+	        	break;
+	        case LIGHTBULB:
+	        	stringRep = "Lightbulb";
+	        	break;
+            default:
+            	stringRep = this.toString();
+        }
+    return stringRep;
+    }
 }
 
 abstract class AdvDataTypeNode extends DclNode{
