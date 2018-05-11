@@ -45,7 +45,8 @@ public class CodeGeneration extends Visitor{
 
 		
 		for(SetupCntNode dcl : node.setupNode.setupCntNodes) {
-			writer.print(dcl.dclNode.idNode.type + " " + dcl.dclNode.idNode.id + " = " + " ;\n");
+			if(dcl.dclNode instanceof VarDclNode)
+				visit(dcl);
 		}
 		
 		// visit includes
@@ -68,6 +69,38 @@ public class CodeGeneration extends Visitor{
 		writer.print("void loop(){ \n");
 		// visit nodes
 		writer.print("} \n\n");
+	}
+	
+	@Override
+	public void visit(VarDclNode node) {
+		if(node.exprNode == null)
+			writer.print(node.typeNode.type + " " + node.idNode.id + "\n;");
+		else
+			writer.print(node.typeNode.type + " " + node.idNode.id + " = ");
+					visit(node.exprNode);
+			writer.print(";\n");
+	}
+	
+	@Override
+	public void visit(CmpDclNode node) {
+		
+	}
+	
+	@Override
+	public void visit(LiteralExprNode node) {
+		switch(node.literalExprNode) {
+		case "on":
+		case "true":
+			writer.print("true");
+			break;
+		case "off":
+		case "false":
+			writer.print("false");
+			break;
+		default: 
+			writer.print(node.literalExprNode);
+			break;
+		}
 	}
 }
  
