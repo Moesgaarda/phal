@@ -1,4 +1,6 @@
 #include "Servo.h"
+#include "iostream"
+#include "string"
 
 servo::servo(string name)
 {
@@ -29,6 +31,6 @@ int servo::read(servo name){
   name.read();
 }
 
-bool servo::added(){
-  Servo.attached();
+bool servo::added(servo name){
+  name.attached();
 }
