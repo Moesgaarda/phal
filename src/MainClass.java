@@ -19,7 +19,7 @@ public class MainClass {
 	public static void main(String args[]) throws Exception
 	{
 		
-		String fileName = "..\\Phal\\src\\TypeCheckerTest";
+		String fileName = "..\\Phal\\src\\PhalLangEx";
         File file = new File(fileName);
         AstNode ast = ASTBuilder(new FileInputStream(file));
 		PrettyPrinter pp = new PrettyPrinter();
