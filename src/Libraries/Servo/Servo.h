@@ -27,32 +27,4 @@ private:
   int _max;
 };
 
-servo::add(){
-  Servo.attach(pin)
-      _pin = pin;
-}
-
-servo::add(int pin, int min, int max){
-  Servo.attach(pin, min, max);
-  _pin = pin;
-  _min = min;
-  _max = max;
-}
-
-servo::remove(){
-  Servo.detach();
-}
-
-servo::move(){
-  Servo.write(value);
-}
-
-servo::read(){
-  Servo.read();
-}
-
-servo::added(){
-  Servo.attached();
-}
-
 #endif
