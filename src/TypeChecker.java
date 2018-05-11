@@ -26,7 +26,7 @@ public class TypeChecker extends Visitor{
 	public void visit(InfixExprNode infixNode)
 	{
 		super.visit(infixNode);
-		if(isAList(infixNode)) {
+		if(isAList(infixNode.leftExprNode) || isAList(infixNode.rightExprNode)) {
 			MainClass.CompileErrors.add(new ListError(infixNode.columnNumber, infixNode.lineNumber, infixNode.infixOperator.toString()));
 		}
 		switch(infixNode.infixOperator) 
@@ -108,26 +108,20 @@ public class TypeChecker extends Visitor{
 		return false;
 	}
 	
-	private boolean isAList(InfixExprNode infixExprNode) {
-		if(infixExprNode.leftExprNode instanceof IdRefExprNode) {
-			IdRefExprNode leftIdNode = (IdRefExprNode) infixExprNode.leftExprNode;
-			if(leftIdNode.idNode.dclNode instanceof ListNode) {
-				return false;
+	private boolean isAList(ExprNode exprNode) {
+		if(exprNode instanceof IdRefExprNode) {
+			IdRefExprNode idRefExpr = (IdRefExprNode) exprNode;
+			if(idRefExpr.idNode.dclNode instanceof ListNode) {
+				return true;
 			}
 		}
-		else if(infixExprNode.rightExprNode instanceof IdRefExprNode) {
-			IdRefExprNode rightIdNode = (IdRefExprNode) infixExprNode.rightExprNode;
-			if(rightIdNode.idNode.dclNode instanceof ListNode) {
-				return false;
-			}
-		}
-		return true;
+		return false;
 	}
 	
 	@Override
 	public void visit(UnaryExprNode unaryNode) {
 		visit(unaryNode.exprNode);
-		if(isAList(unaryNode)) {
+		if(isAList(unaryNode.exprNode)) {
 			MainClass.CompileErrors.add(new ListError(unaryNode.columnNumber, unaryNode.lineNumber, 
 					unaryNode.unaryOperator.toString()));
 		}
@@ -167,16 +161,6 @@ public class TypeChecker extends Visitor{
 		}
 			
 		return false;
-	}
-	
-	private boolean isAList(UnaryExprNode unaryExprNode) {
-		if(unaryExprNode.exprNode instanceof IdRefExprNode) {
-			IdRefExprNode idExprNode = (IdRefExprNode) unaryExprNode.exprNode;
-			if(idExprNode.idNode.dclNode instanceof ListNode) {
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	@Override
@@ -332,7 +316,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(IdRefExprNode idRefNode) {
-		
+		super.visit(idRefNode);
 		if(idRefNode.idNode.dclNode instanceof VarDclNode) {
 			VarDclNode vdNode = (VarDclNode) idRefNode.idNode.dclNode;
 			idRefNode.type = vdNode.typeNode.Type;
@@ -483,7 +467,9 @@ public class TypeChecker extends Visitor{
 	}
 	
 	private void checkCondition(ExprNode expr) {
-		
+		if(isAList(expr)) {
+			MainClass.CompileErrors.add(new ListError(expr.columnNumber, expr.lineNumber));
+		}
 		if(expr.type != Type.BOOL) {
 			MainClass.CompileErrors.add(new TypeError(
 					expr.columnNumber, expr.lineNumber, expr.type.toString(), Type.BOOL.toString()));

@@ -4,12 +4,10 @@
 
 #include "Lightbulb.h" 
 #include "TemperatureSensor.h" 
-null l =  ;
-null ls =  ;
-null satan =  ;
-null god =  ;
-null alive =  ;
-null dead =  ;
+bool satan = true;
+bool god = false;
+bool alive = true;
+bool dead = false;
 void setup(){ 
 } 
 
