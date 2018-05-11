@@ -126,3 +126,4 @@ target/*
 *.tokens
 
 *.interp
+src/Libraries/a.exe
