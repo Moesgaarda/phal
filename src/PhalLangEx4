@@ -138,6 +138,7 @@ define MyFunc2 with (number a2) returnType bool{
 }
 define MyFunc3 with (number a, text t) returnType list{
 	a := 3
+	#t := "kkk"
 	number a2 := 2
 	text t2 := "asdasd"
 	list number lstNum {}
