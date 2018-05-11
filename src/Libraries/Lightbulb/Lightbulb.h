@@ -1,10 +1,9 @@
 #ifndef Lightbulb_h
 #define Lightbulb_h
 
-
 #include "Arduino.h"
 
-class Lightbulb {
+class Lightbulb : public Adt {
     public:
 	    Lightbulb(int pin);
 	    void on();
@@ -12,6 +11,8 @@ class Lightbulb {
 	    void dim(int dimValue);
     private: 
     	int _pin;
+	protected:
+		bool status;
 }
 
 #endif
