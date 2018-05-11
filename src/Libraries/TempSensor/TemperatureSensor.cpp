@@ -7,7 +7,7 @@ TemperatureSensor::TemperatureSensor(int pin){
 	_pin = pin;
 }
 
-void TemperatureSensor::reading(){
+double TemperatureSensor::reading(){
 	 int rawValue = analogRead(_pin);
      double Temp;
      Temp = log(((10240000/rawValue) - 10000));

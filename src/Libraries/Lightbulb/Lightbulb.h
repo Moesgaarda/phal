@@ -13,6 +13,6 @@ class Lightbulb : public Adt {
     	int _pin;
 	protected:
 		bool status;
-}
+};
 
 #endif
