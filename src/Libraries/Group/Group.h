@@ -1,6 +1,6 @@
 /*
 PhalGroup.h - Library for Groups in the Phal language.
-Created by Frederik V. Schrøder, may 9 2018.
+Created by Frederik V. Schrøder and Morfae, may 9 2018.
 Used in our university assignment.
 */
 
@@ -11,10 +11,10 @@ Used in our university assignment.
 #include "../Adt/Adt.h"
 
 template <typename Adt>
-class PhalGroup
+class PhalGroup: public Adt
 {
   public:
-    PhalGroup(int size);
+    void PhalGroup(int size);
     void add(Adt _t);
     void iterate();
 
@@ -32,14 +32,14 @@ PhalGroup<Adt>::PhalGroup(int size)
 }
 
 template <typename Adt>
-PhalGroup<Adt>::add(Adt _t)
+void PhalGroup<Adt>::add(Adt _t)
 {
-    arr[_pos] = _t;
-    _pos++;
+   // arr[_pos] = _t;
+   // _pos++;
 }
 
 template <typename Adt>
-PhalGroup<Adt>::iterate()
+void PhalGroup<Adt>::iterate()
 {
     // ????????????? implementus patronus
 }

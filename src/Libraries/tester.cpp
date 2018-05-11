@@ -1,10 +1,11 @@
-#include <stddef.h>
 #include <iostream>
-#include "src/Libraries/Group/Group.h"
+#include "Group/Group.h"
+
+using namespace std;
 
 
-int main(){
+int main()
+{
     std::cout << "hello worldus";
-
-return 0;
+    return 0;
 }
