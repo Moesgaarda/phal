@@ -323,6 +323,7 @@ public class TypeChecker extends Visitor{
 	
 	@Override
 	public void visit(IdRefExprNode idRefNode) {
+		
 		if(idRefNode.idNode.dclNode instanceof VarDclNode) {
 			VarDclNode vdNode = (VarDclNode) idRefNode.idNode.dclNode;
 			idRefNode.type = vdNode.typeNode.Type;
@@ -342,6 +343,15 @@ public class TypeChecker extends Visitor{
 		else if(idRefNode.idNode.dclNode instanceof ParamNode) {
 			ParamNode pNode = (ParamNode) idRefNode.idNode.dclNode;
 			idRefNode.type = pNode.typeNode.Type;
+		}
+		
+		if(idRefNode.idNode.subId != null) {
+			if(idRefNode.idNode.subId == "reading") {
+				if(idRefNode.type != Type.TEMPERATURESENSOR) {
+					MainClass.CompileErrors.add(new TypeError(idRefNode.columnNumber, idRefNode.lineNumber, 
+							idRefNode.type.toString(), Type.TEMPERATURESENSOR.toString()));
+				}
+			}
 		}
 	}
 	
@@ -375,7 +385,6 @@ public class TypeChecker extends Visitor{
 		for(int i = 0; i < node.memberIdNodes.size(); i++) {
 			if(!(node.memberIdNodes.get(i).dclNode instanceof CmpDclNode)) {
 				
-				// Denne her løsning kan sikkert laves pænere
 				if(node.memberIdNodes.get(i).dclNode instanceof VarDclNode) {
 					VarDclNode vdNode = (VarDclNode) node.memberIdNodes.get(i).dclNode;
 					MainClass.CompileErrors.add(new GroupError(node.columnNumber, node.lineNumber, 
