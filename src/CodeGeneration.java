@@ -15,7 +15,7 @@ public class CodeGeneration extends Visitor{
 	public CodeGeneration(HashMap<Type, Boolean> CIM) {
 		ComponentIncludesMap = CIM;
 		try {
-			writer = new PrintWriter(new FileWriter( MainClass.inputFileName + ".ino", false));
+			writer = new PrintWriter(new FileWriter( "../phal/PhalLangEx4/" + MainClass.inputFileName + ".ino", false));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,6 +40,10 @@ public class CodeGeneration extends Visitor{
 	public void visit(ProgramNode node) {
 		printHeader();
 		
+		for(SetupCntNode dcl : node.setupNode.setupCntNodes) {
+			writer.print(dcl.dclNode.idNode.type + " " + dcl.dclNode.idNode.id + " = " + " ;\n");
+		}
+		
 		// visit includes
 		
 		visit(node.setupNode);
@@ -53,8 +57,6 @@ public class CodeGeneration extends Visitor{
 		writer.print("void setup(){ \n");
 		// visit setup
 		writer.print("} \n\n");
-		
-		writer.close();
 	}
 	
 	@Override
@@ -62,8 +64,6 @@ public class CodeGeneration extends Visitor{
 		writer.print("void loop(){ \n");
 		// visit nodes
 		writer.print("} \n\n");
-		
-		writer.close();
 	}
 }
  
