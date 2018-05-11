@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import CompilerError.*;
 import Warnings.*;
 
@@ -8,15 +11,10 @@ public class SymbolTable {
 
 	private HashMap<String, FuncNode> functionMap = new HashMap<>();
 	private Stack<HashMap<String, AstNode>> symbolTable = new Stack<>();
-	private HashMap<Type, Boolean> ComponentIncludesMap = new HashMap<>();
-	
-	public SymbolTable() {
-		ComponentIncludesMap.put(Type.LIGHTBULB, false);
-		ComponentIncludesMap.put(Type.MOTOR, false);
-		ComponentIncludesMap.put(Type.TEMPERATURESENSOR, false);
-	}
-	public HashMap<Type, Boolean> getCompInclMap() {
-		return ComponentIncludesMap;
+	private List<Type> componentIncludesList = new ArrayList<>();
+
+	public List<Type> getCompInclMap() {
+		return componentIncludesList;
 	}
 	
 	/*ST methods*/
@@ -36,7 +34,9 @@ public class SymbolTable {
 		{
 			symbolTable.peek().put(node.idNode.id, node);
 			if(node instanceof CmpDclNode) {
-				ComponentIncludesMap.put(((CmpDclNode) node).advTypeNode.Type, true);
+				if(!componentIncludesList.contains(((CmpDclNode) node).advTypeNode.Type)) {
+					componentIncludesList.add(((CmpDclNode) node).advTypeNode.Type);
+				}
 			}
 		}
 

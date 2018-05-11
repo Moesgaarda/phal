@@ -4,15 +4,16 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import enums.*;
 
 public class CodeGeneration extends Visitor{
 
 	private PrintWriter writer;
-	private HashMap<Type, Boolean> ComponentIncludesMap;
+	private List<Type> ComponentIncludesMap;
 	
-	public CodeGeneration(HashMap<Type, Boolean> CIM) {
+	public CodeGeneration(List<Type> CIM) {
 		ComponentIncludesMap = CIM;
 		try {
 			writer = new PrintWriter(new FileWriter( MainClass.inputFileName + ".ino", false));
@@ -29,10 +30,8 @@ public class CodeGeneration extends Visitor{
 				     + "\n*/\n\n"
 					 );
 	}
-	private void printCmpIncludes() {
-		writer.print("#include \"Lightbulb.h\" \n"
-				     + "#include \"Motor.h\" \n"
-				     + "#include \"TemperatureSensor.h\"\n"
+	private void printCmpIncludes(String using) {
+		writer.print("#include \"" + using +".h\" \n"
 				     );
 	}
 	

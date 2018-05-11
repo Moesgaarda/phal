@@ -130,7 +130,7 @@ define MyFunc2 with (number a2) returnType bool{
 	wait 2.5 seconds
 	return false
 }
-define MyFunc3 with (number a, text t) returnType list of number{
+define MyFunc3 with (number a, text t) returnType  number{
 	a := 3
 	#t := "kkk"
 	number a2 := 2
@@ -139,7 +139,7 @@ define MyFunc3 with (number a, text t) returnType list of number{
 	number a32
 	a32 := get element 2 from lstNum
 	a32 := get element 2 from lstNum
-	return lstNum
+	return a32
 }
 
 
