@@ -8,6 +8,7 @@ int main()
 {
     Motor mymotor(1);
     mymotor.on();
+    if (mymotor.status())
     mymotor.off();
 
     std::cout << "Motor works";

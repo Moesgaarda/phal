@@ -7,6 +7,7 @@ class Motor
 	    Motor(int pin);
 	    void on();
 	    void off();
+		bool status();
     private: 
     	int _pin;
 };
