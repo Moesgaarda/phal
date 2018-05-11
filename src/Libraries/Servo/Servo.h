@@ -7,10 +7,10 @@
 #ifndef servo_h
 #define servo_h
 
-#include "Arduino.h"
+#include "../Arduino.h"
 #include "Libraries/Servo.h"
 
-class servo
+class servo : public Adt
 {
 public:
   servo();

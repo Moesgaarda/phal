@@ -7,7 +7,7 @@ class Adt
   public:
     Adt() {}
     Adt(const Type &initValue) : var(initValue) {}
-    virtual void On();
-    virtual void Off();
-    void ToggleOnOff(){ status ? Off() : On(); }
+    virtual void on();
+    virtual void off();
+    virtual void toggleOnOff(){ status ? off() : on(); }
 };

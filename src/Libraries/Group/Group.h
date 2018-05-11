@@ -7,22 +7,22 @@ Used in our university assignment.
 #ifndef PhalGroup_h
 #define PhalGroup_h
 
-//#include "Arduino.h"
 #include "../Adt/Adt.h"
 
 template <typename Adt>
-class PhalGroup: public Adt
+class PhalGroup : public Adt
 {
   public:
-    void PhalGroup(int size);
+    PhalGroup(int = 0);
     void add(Adt _t);
-    void iterate();
 
   private:
     int _size;
     int _pos = 0;
     Adt arr[];
 };
+
+
 
 template <typename Adt>
 PhalGroup<Adt>::PhalGroup(int size)
@@ -34,14 +34,32 @@ PhalGroup<Adt>::PhalGroup(int size)
 template <typename Adt>
 void PhalGroup<Adt>::add(Adt _t)
 {
-   // arr[_pos] = _t;
-   // _pos++;
+    arr[_pos] = _t;
+    _pos++;
 }
 
 template <typename Adt>
-void PhalGroup<Adt>::iterate()
+void PhalGroup<Adt>::on()
 {
-    // ????????????? implementus patronus
+    for(Adt a: arr){
+        a.on();
+    }
+}
+
+template <typename Adt>
+void PhalGroup<Adt>::off()
+{
+    for(Adt a: arr){
+        a.off();
+    }
+}
+
+template <typename Adt>
+void PhalGroup<Adt>::toggleOnOff()
+{
+    for(Adt a: arr){
+        a ? a.off() : a.on();
+    }
 }
 
 #endif
