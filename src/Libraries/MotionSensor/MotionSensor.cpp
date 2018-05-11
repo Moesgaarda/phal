@@ -19,7 +19,7 @@ void MotionSensor::off()
 
 void MotionSensor::read()
 {
-    if (status = true)
+    if (status == true)
     {
         if (digitalRead(_pin) != 0)
             reading = true;
