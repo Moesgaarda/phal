@@ -67,6 +67,16 @@ public interface PhalListener extends ParseTreeListener {
 	 */
 	void exitVarDcl(PhalParser.VarDclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PhalParser#listType}.
+	 * @param ctx the parse tree
+	 */
+	void enterListType(PhalParser.ListTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PhalParser#listType}.
+	 * @param ctx the parse tree
+	 */
+	void exitListType(PhalParser.ListTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PhalParser#type}.
 	 * @param ctx the parse tree
 	 */

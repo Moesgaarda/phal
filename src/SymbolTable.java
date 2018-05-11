@@ -8,6 +8,16 @@ public class SymbolTable {
 
 	private HashMap<String, FuncNode> functionMap = new HashMap<>();
 	private Stack<HashMap<String, AstNode>> symbolTable = new Stack<>();
+	private HashMap<Type, Boolean> ComponentIncludesMap = new HashMap<>();
+	
+	public SymbolTable() {
+		ComponentIncludesMap.put(Type.LIGHTBULB, false);
+		ComponentIncludesMap.put(Type.MOTOR, false);
+		ComponentIncludesMap.put(Type.TEMPERATURESENSOR, false);
+	}
+	public HashMap<Type, Boolean> getCompInclMap() {
+		return ComponentIncludesMap;
+	}
 	
 	/*ST methods*/
 	public void openScope() {
@@ -25,7 +35,11 @@ public class SymbolTable {
 		else
 		{
 			symbolTable.peek().put(node.idNode.id, node);
+			if(node instanceof CmpDclNode) {
+				ComponentIncludesMap.put(((CmpDclNode) node).advTypeNode.Type, true);
+			}
 		}
+
 
 	}
 
