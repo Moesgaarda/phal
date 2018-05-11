@@ -116,7 +116,10 @@ public class BindingVisitor extends Visitor {
 	public void visit(AssignmentNode node)
 	{
 		ST.addAssignmentToSymbolTable(node);
-		node.idNode.dclNode.isInitialized = true;
+		if(node.idNode.dclNode != null) {
+			node.idNode.dclNode.isInitialized = true;
+		}
+
 		node.exprNode.accept(this);
 		
 	}
