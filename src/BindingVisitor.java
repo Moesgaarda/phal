@@ -1,3 +1,4 @@
+
 import CompilerError.*;
 import Warnings.*;
 import enums.AssignmentOperator;
@@ -145,4 +146,3 @@ public class BindingVisitor extends Visitor {
 	
 
 }
-
