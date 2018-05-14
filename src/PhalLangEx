@@ -20,16 +20,18 @@ setup{
   bool god := false
   bool alive := on
   bool dead := off
+  list bool bla {}
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
-repeat{ 
+repeat{  
   if(get element 1 from bla) then { 
   if(true = off) then {
   	satan := false
   	god := alive
   }
   # Wait 2.32 seconds
+}
 }
 
 define waitup with(number num) returnType none{
