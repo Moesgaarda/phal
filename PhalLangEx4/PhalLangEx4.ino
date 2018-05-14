@@ -4,11 +4,21 @@
 
 #include "Lightbulb.h" 
 #include "TemperatureSensor.h" 
+
 bool satan = true;
 bool god = false;
 bool alive = true;
 bool dead = false;
-void setup(){ 
+
+void setup(){
+    pinMode(1, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+    pinMode(2, INPUT);
+    dead=true;
+    Delay((2 + 4)*1000);
+    Delay((2.32)*1000);
+    Delay((5)*1000);
 } 
 
 void loop(){ 
