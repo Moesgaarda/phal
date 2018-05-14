@@ -30,13 +30,19 @@ setup{
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
 repeat{  
-  if(get element 1 from bla) then { 
-  if(true = off) then {
-  	satan := false
-  	god := alive
+  if(true = false and false = false) then {
+      if(true = off) then {
+        satan := false
+        god := alive
+      }
+        else if(god = alive) then{
+            satan := dead
+        }else if(satan = alive) then{
+            satan := dead
+        }else then{
+            alive := false
+        }
   }
-  # Wait 2.32 seconds
-}
 }
 
 define waitup with(number num) returnType none{
