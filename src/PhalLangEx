@@ -14,13 +14,18 @@ using lightsensorPRS
 setup{
   # The types define whether they are input or output
   # <type> <name> := pin <number>
-  lightbulb l := pin 1
+  lightbulb l := pin 1, 2, 5
   temperatureSensor ls := pin 2
   bool satan := true
   bool god := false
   bool alive := on
   bool dead := off
   list bool bla {}
+
+  dead := true
+
+  wait 32 seconds
+
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
