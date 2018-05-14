@@ -1,5 +1,6 @@
 import CompilerError.*;
 import Warnings.*;
+import enums.AssignmentOperator;
 public class BindingVisitor extends Visitor {
 	public SymbolTable ST = null;
 	
@@ -52,6 +53,7 @@ public class BindingVisitor extends Visitor {
 	public void visit(ParamNode node)
 	{
 		ST.addParamToSymbolTable(node);
+		node.isInitialized = true;
 	}
 	@Override
 	public void visit(VarDclNode node)
@@ -117,9 +119,11 @@ public class BindingVisitor extends Visitor {
 	{
 		ST.addAssignmentToSymbolTable(node);
 		if(node.idNode.dclNode != null) {
-			node.idNode.dclNode.isInitialized = true;
+			if(node.assignmentOperator == AssignmentOperator.EQUALS) {
+				node.idNode.dclNode.isInitialized = true;
+			}
 		}
-
+		node.idNode.accept(this);
 		node.exprNode.accept(this);
 		
 	}

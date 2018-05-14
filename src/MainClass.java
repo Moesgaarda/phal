@@ -38,10 +38,6 @@ public class MainClass {
 		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
 		}
-		//TODO Bare til at teste med skal nok f�rst printes n�r compileren har v�ret gennem alle steps
-		if(!CompileWarnings.isEmpty()) {
-			PrintWarnings();
-		}
 		
 		TypeChecker tc = new TypeChecker(ST);
 		tc.visit((ProgramNode) ast);
