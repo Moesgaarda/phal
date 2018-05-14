@@ -20,12 +20,11 @@ setup{
   bool god := false
   bool alive := on
   bool dead := off
-  list bool bla {}
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
 repeat{ 
-  if(bla) then { 
+  if(true = off) then {
   	satan := false
   	god := alive
   }
