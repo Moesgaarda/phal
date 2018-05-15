@@ -13,10 +13,10 @@ public class ListAssignmentError extends Error {
 	@Override 
 	public String toString() {
 		if(idIsList) {
-			return "ERROR - Line: " + lineNumber + ":" + columnNumber + "The expression is not a list and therefore could not be assigned to the list '" + id + "'";
+			return "ERROR - Line: " + lineNumber + ":" + columnNumber + "The expression is not a list and could therefore not be assigned to the list '" + id + "'";
 		}
 		else {
-			return "ERROR - Line: " + lineNumber + ":" + columnNumber + "The expression is a list and therefore could not be assigned to the '" + id + "'";
+			return "ERROR - Line: " + lineNumber + ":" + columnNumber + "The expression is a list and could therefore not be assigned to the variable '" + id + "'";
 		}
 	}
 }

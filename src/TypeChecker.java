@@ -544,8 +544,14 @@ public class TypeChecker extends Visitor{
 	private boolean isAList(ExprNode exprNode) {
 		if(exprNode instanceof IdRefExprNode) {
 			IdRefExprNode idRefExpr = (IdRefExprNode) exprNode;
-			if(idRefExpr.idNode.dclNode instanceof ListNode || idRefExpr.idNode.dclNode instanceof ParamNode) {
+			if(idRefExpr.idNode.dclNode instanceof ListNode) {
 				return true;
+			}
+			else if(idRefExpr.idNode.dclNode instanceof ParamNode) {
+				ParamNode paramNode = (ParamNode) idRefExpr.idNode.dclNode;
+				if(paramNode.typeNode.islist) {
+					return true;
+				}
 			}
 		}
 		return false;
