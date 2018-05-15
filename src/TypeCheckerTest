@@ -56,8 +56,8 @@ else then {
 		}
 	}
 }
-switch(a2){
-		case 123: a := a +2 -3 
+switch(lstNum){
+		case listNum: a := a +2 -3 
 		default: 
 }
 
