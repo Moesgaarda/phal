@@ -18,7 +18,7 @@ setup{
   temperatureSensor ls := pin 2
   bool satan := true
   bool god := false
-  bool alive := on
+  bool alive := !on
   bool dead := off
   number boob := 8008
   list bool bla {
@@ -65,6 +65,19 @@ setup{
     loop until boob < 3000 decrease boob by 500{
         boob += 200
     }
+
+    switch(boob){
+        case 2:
+            boob += 2
+            boob -= 2
+        case 3:
+            boob += 4
+            boob += (2+(4-2))
+        default:
+            boob := 2
+    }
+
+      bool test := get element 2+2 from bla
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
@@ -82,6 +95,10 @@ repeat{
             alive := false
         }
   }
+
+  call waitup with (24)
+  call waitufp with (24, 13)
+
 }
 
 define waitup with(number num) returnType number{

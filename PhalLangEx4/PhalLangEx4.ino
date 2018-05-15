@@ -6,13 +6,18 @@
 #include "TemperatureSensor.h" 
 bool satan = true;
 bool god = false;
-bool alive = true;
+bool alive = !true;
 bool dead = false;
 float boob = 8008;
-i am a list
+LinkedList bla = LinkedList<bool>();
+bla.add(1 == 4);
+bla.add(false);
+bla.add(satan);
+bla.add(alive);
 PhalGroup testgroup = PhalGroup<Adt>(2);
 testgroup.add(l);
 testgroup.add(ls);
+bool test = bla.getNode(2 + 2);
 void setup(){ 
 pinMode(1, OUTPUT);
 pinMode(2, OUTPUT);
@@ -45,6 +50,19 @@ while(!(boob < 3000)){
 boob -= 500;
 boob += 200;
 }
+switch(boob){
+case 2:
+boob += 2;
+boob -= 2;
+break;
+case 3:
+boob += 4;
+boob += (2 + (4 - 2));
+break;
+default: 
+boob = 2;
+break;
+}
 } 
 
 void loop(){ 
@@ -64,6 +82,8 @@ else{
 alive = false;
 }
 }
+waitup(24);
+waitufp(24, 13);
 } 
 
 float waitup (float num){
