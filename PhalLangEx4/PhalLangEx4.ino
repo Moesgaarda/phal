@@ -4,6 +4,7 @@
 
 #include "Lightbulb.h" 
 #include "TemperatureSensor.h" 
+#include lightsensorPRS.h;
 bool satan = true;
 bool god = false;
 bool alive = !true;
@@ -86,6 +87,21 @@ waitup(24);
 waitufp(24, 13);
 } 
 
+bool listdiffer (bool bolleboll){
+LinkedList result = LinkedList<bool>();
+result.add(true);
+result.add(false);
+result.add(true);
+result.add(false);
+LinkedList john = LinkedList<bool>();
+john.add(true);
+john.add(false);
+john.add(true);
+john.add(false);
+resulttrueresult3result12result = john;
+john = result;
+return result;
+}
 float waitup (float num){
 float num1;
 float num2;

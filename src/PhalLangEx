@@ -101,6 +101,30 @@ repeat{
 
 }
 
+define listdiffer with (list of bool bolleboll) returnType list of bool{
+ 	list bool result {
+ 	true
+ 	false
+ 	on
+ 	off
+ 	}
+
+    list bool john {
+     	true
+     	false
+     	on
+     	off
+    }
+
+    add true to result
+    remove element 3 from result
+    remove element 1, 2 from result
+
+ 	result := john
+ 	john := bolleboll
+ 	return result
+}
+
 define waitup with(number num) returnType number{
  	number num1
  	number num2
