@@ -21,7 +21,7 @@ setup{
   bool alive := on
   bool dead := off
   list bool bla {}
-
+  number boob := 8008
   dead := true
 
   wait 32 seconds
@@ -34,6 +34,28 @@ setup{
     alive := false
     }
 
+    loop 5 times{
+      dead := on
+      dead := off
+    }
+
+    loop 2 times{
+      dead := on
+      dead := off
+    }
+
+        loop 3 times{
+          dead := on
+          dead := off
+        }
+
+    loop until boob > 9000 and dead is off increase boob by 500{
+        boob -= 200
+    }
+
+    loop until boob < 3000 decrease boob by 500{
+        boob += 200
+    }
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 

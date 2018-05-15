@@ -8,6 +8,7 @@ bool satan = true;
 bool god = false;
 bool alive = true;
 bool dead = false;
+float boob = 8008;
 void setup(){ 
 pinMode(1, OUTPUT);
 pinMode(2, OUTPUT);
@@ -24,7 +25,24 @@ dead = false;
 }
 else{
 alive = false;
-}} 
+}for(int _i0 = 0; _i0 < 5; _i0++){
+dead = true;
+dead = false;
+}for(int _i1 = 0; _i1 < 2; _i1++){
+dead = true;
+dead = false;
+}for(int _i2 = 0; _i2 < 3; _i2++){
+dead = true;
+dead = false;
+}while(!(boob > 9000 && dead == false)){
+boob += 500;
+boob -= 200;
+}
+while(!(boob < 3000)){
+boob -= 500;
+boob += 200;
+}
+} 
 
 void loop(){ 
 if(true == false && false == false){

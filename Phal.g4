@@ -128,7 +128,7 @@ loopTimes
 	;
 
 loopUntil
-	:   'loop' 'until' expr (',' ('increase'|'decrease') ID 'by' NUMBER)? NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}'
+	:   'loop' 'until' expr (('increase'|'decrease') ID 'by' NUMBER)? NEWLINE* '{' NEWLINE* stmt* NEWLINE* '}'
 	;
 
 funcCall    
@@ -201,7 +201,7 @@ expr
 none : 'none';
 
 TEXT 			: '"' ~('\r' | '\n' | '"')* '"' ;
-ID 				: LETTER (LETTER | DIGIT)*;
+ID                 : LETTER (LETTER | DIGIT | '_' (LETTER|DIGIT))*;
 fragment INTEGER 		: DIGIT+;
 fragment FLOAT 			: (DIGIT | [1-9](DIGIT)+)'.'(DIGIT | (DIGIT)*[1-9]);
 NUMBER 			: (INTEGER | FLOAT) ;
