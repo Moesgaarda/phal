@@ -20,9 +20,18 @@ setup{
   bool god := false
   bool alive := on
   bool dead := off
-  list bool bla {}
   number boob := 8008
+  list bool bla {
+  1=4
+  false
+  satan
+  alive }
   dead := true
+
+  group testgroup{
+    l
+    ls
+  }
 
   wait 32 seconds
 
@@ -31,7 +40,7 @@ setup{
     }else if(true) then{
     dead := off
     }else then{
-    alive := false
+    # testgroup := on
     }
 
     loop 5 times{
@@ -49,7 +58,7 @@ setup{
           dead := off
         }
 
-    loop until boob > 9000 and dead is off increase boob by 500{
+    loop until boob > 9000 and dead is off or alive is off increase boob by 500{
         boob -= 200
     }
 

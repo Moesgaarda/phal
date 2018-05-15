@@ -63,7 +63,7 @@ group
 	;
 
 list        
-	: 	'list' type ID '{' (expr ( ',' expr)*)? '}' 	
+	: 	'list' type ID '{' (NEWLINE* expr (NEWLINE* expr)*)? NEWLINE* '}'
 	;
 
 

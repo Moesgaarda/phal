@@ -9,6 +9,10 @@ bool god = false;
 bool alive = true;
 bool dead = false;
 float boob = 8008;
+i am a list
+PhalGroup testgroup = PhalGroup<Adt>(2);
+testgroup.add(l);
+testgroup.add(ls);
 void setup(){ 
 pinMode(1, OUTPUT);
 pinMode(2, OUTPUT);
@@ -24,7 +28,6 @@ else if(true){
 dead = false;
 }
 else{
-alive = false;
 }for(int _i0 = 0; _i0 < 5; _i0++){
 dead = true;
 dead = false;
@@ -34,7 +37,7 @@ dead = false;
 }for(int _i2 = 0; _i2 < 3; _i2++){
 dead = true;
 dead = false;
-}while(!(boob > 9000 && dead == false)){
+}while(!(boob > 9000 && dead == false || alive == false)){
 boob += 500;
 boob -= 200;
 }
