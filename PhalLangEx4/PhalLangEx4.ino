@@ -98,8 +98,10 @@ john.add(true);
 john.add(false);
 john.add(true);
 john.add(false);
-resulttrueresult3result12result = john;
-john = result;
+result.add(true);
+result.remove(3);
+result.remove(1);
+result.remove(2);
 return result;
 }
 float waitup (float num){
@@ -117,12 +119,6 @@ num1 += 45;
 if(num1 == 4){
 num2 = 3;
 
-}
-else if(num < 3){
-num = 4;
-}
-else if(five >= 3){
-five = 2;
 }
 else{
 num2 = num1;
