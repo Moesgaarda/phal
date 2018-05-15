@@ -26,12 +26,20 @@ setup{
 
   wait 32 seconds
 
+    if(true = false) then{
+    dead := on
+    }else if(true) then{
+    dead := off
+    }else then{
+    alive := false
+    }
+
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
 repeat{  
   if(true = false and false = false) then {
-      if(true = off) then {
+      if(true = off & 21 > 30) then {
         satan := false
         god := alive
       }
@@ -45,9 +53,31 @@ repeat{
   }
 }
 
-define waitup with(number num) returnType none{
-	number num1
-	number num2
-	num += 45
-	num1 += 45
+define waitup with(number num) returnType number{
+ 	number num1
+ 	number num2
+ 	num += 45
+ 	num1 += 45
 }
+
+ define waitufp with(number num, number five) returnType number{
+ 	number num1
+ 	number num2
+ 	num += 45
+ 	num1 += 45
+
+    if(num1 = 4) then {
+        num2 := 3
+    }
+    else if(num < 3) then{
+        num := 4
+    }else if(five >= 3) then{
+        five := 2
+    }else then{
+        num2 := num1
+    }
+
+    wait 2.5 seconds
+
+ 	return 15
+ }
