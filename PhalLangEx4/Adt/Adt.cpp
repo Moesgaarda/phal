@@ -8,15 +8,8 @@ Adt::Adt(){
 
 }
 
-Adt::Adt(const Type &initValue) : var(initValue) {
-    var = initValue;
-}
-void Adt::on(){
-    status = off;
-}
-void Adt::off(){
-    status = on;
-}
+virtual void Adt::on(){}
+virtual void Adt::off(){}
 virtual void Adt::toggleOnOff(){
     status ? off() : on();
 }

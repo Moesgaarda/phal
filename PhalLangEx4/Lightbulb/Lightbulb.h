@@ -2,8 +2,9 @@
 #define Lightbulb_h
 
 #include "Arduino.h"
+#include "../Adt/Adt.h"
 
-class Lightbulb : public Adt {
+class Lightbulb: public Adt {
     public:
 	    Lightbulb(int pin);
 	    void on();

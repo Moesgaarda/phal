@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "Lightbulb.h"
 
-Lightbulb::Lightbulb(int pin){
+Lightbulb::Lightbulb(int pin) : Adt(){
     pinMode(pin, OUTPUT);
     _pin = pin;
 }
