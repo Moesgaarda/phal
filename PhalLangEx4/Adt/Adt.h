@@ -1,4 +1,8 @@
-template <typename Type>
+#ifndef Adt_h
+#define Adt_h
+
+#include "Arduino.h"
+
 class Adt
 {
   protected:
