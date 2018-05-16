@@ -90,6 +90,10 @@ repeat{
   call waitup with (24)
   call waitufp with (24, 13)
 
+    testgroup := on
+    testgroup := false
+    testgroup := off
+
 }
 
 define listdiffer with (list of bool bolleboll) returnType list of bool{
