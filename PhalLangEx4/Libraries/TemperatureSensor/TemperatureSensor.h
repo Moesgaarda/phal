@@ -3,8 +3,9 @@
 
 
 #include "Arduino.h"
+#include "../Adt/Adt.h"
 
-class TemperatureSensor{
+class TemperatureSensor : public Adt{
 	public:
         TemperatureSensor(int pin);
         double reading();

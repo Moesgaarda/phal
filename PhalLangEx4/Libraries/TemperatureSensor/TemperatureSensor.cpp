@@ -2,7 +2,7 @@
 #include "TemperatureSensor.h"
 #include "math.h"
 
-TemperatureSensor::TemperatureSensor(int pin){
+TemperatureSensor::TemperatureSensor(int pin) : Adt(){
 	pinMode(pin, INPUT);
 	_pin = pin;
 }

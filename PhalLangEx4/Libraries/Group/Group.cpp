@@ -9,7 +9,7 @@ Used in our university assignment.
 class PhalGroup : public Adt
 {
 public:
-    PhalGroup(int = 0);
+    PhalGroup(int size);
     void add(Adt _t);
 
 private:
@@ -25,6 +25,7 @@ PhalGroup<Adt>::PhalGroup(int size)
     Adt arr[] = new Adt[_size];
 }
 
+template <typename Adt>
 void PhalGroup<Adt>::add(Adt _t)
 {
     arr[_pos] = _t;

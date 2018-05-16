@@ -1,18 +1,18 @@
 #include "Arduino.h"
 #include "Motor.h"
 
-Motor::Motor(int pin) : public Adt 
+Motor::Motor(int pin) : Adt() 
 {
   pinMode(pin, OUTPUT);
   _pin = pin;
 }
 
 void Motor::on() {
-    Motor.status = true;
+    status = true;
     digitalWrite(_pin, HIGH);
 }
 
 void Motor::off() {
-    Motor.status = false;
+    status = false;
     digitalWrite(_pin, LOW);	
 }

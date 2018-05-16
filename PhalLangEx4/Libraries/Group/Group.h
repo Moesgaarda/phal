@@ -13,16 +13,11 @@ template <typename Adt>
 class PhalGroup : public Adt
 {
   public:
-    PhalGroup(int = 0);
+    PhalGroup(int size);
     void add(Adt _t);
     void on();
     void off();
     void toggleOnOff();
-
-  private:
-    int _size;
-    int _pos = 0;
-    Adt arr[];
 };
 
 #endif

@@ -2,33 +2,39 @@
 *  Created 16-05-2018
 */
 
-#include "Lightbulb/Lightbulb.h" 
-#include "TempSensor/TemperatureSensor.h" 
-#include "LinkedList/LinkedList.h"
-#include "Group/Group.h"
-
-bool satan = true;
-bool god = false;
-bool alive = !true;
-bool dead = false;
-float boob = 8008;
+#include <Lightbulb.h>
+#include <TemperatureSensor.h> 
+#include <Motor.h> 
+#include <Group.h>
+#include <LinkedList.h>
+Lightbulb l(1);
+TemperatureSensor ls(2);
+Motor mot(3);
+bool satan;
+bool god;
+bool alive;
+bool dead;
+float boob;
 LinkedList<bool> bla = LinkedList<bool>();
-bla.add(bool hello);
+PhalGroup<Adt> testgroup = PhalGroup<Adt>(2);
+bool test;
+LinkedList<bool> gah = LinkedList<bool>();
+void setup(){ 
+pinMode(1, OUTPUT);
+pinMode(2, INPUT);
+pinMode(3, OUTPUT);
+satan = true;
+god = false;
+alive = !true;
+dead = false;
+boob = 8008;
+bla.add(1 == 4);
 bla.add(false);
 bla.add(satan);
 bla.add(alive);
-PhalGroup testgroup = PhalGroup<Adt>(2);
+dead = true;
 testgroup.add(l);
 testgroup.add(ls);
-bool test = bla.getNode(2 + 2);
-LinkedList<bool> gah = LinkedList<bool>();
-gah.add(false);
-void setup(){ 
-pinMode(1, OUTPUT);
-pinMode(2, OUTPUT);
-pinMode(5, OUTPUT);
-pinMode(2, INPUT);
-dead = true;
 delay((32)*1000);
 if(true == false){
 dead = true;
@@ -55,12 +61,12 @@ while(!(boob < 3000)){
 boob -= 500;
 boob += 200;
 }
-switch(boob){
-case 2:
+switch(boob < 3){
+case true:
 boob += 2;
 boob -= 2;
 break;
-case 3:
+case false:
 boob += 4;
 boob += (2 + (4 - 2));
 break;
@@ -68,6 +74,8 @@ default:
 boob = 2;
 break;
 }
+test = bla.get(2 + 2);
+gah.add(false);
 bla.add(true);
 bla.remove(2);
 bla = gah;
@@ -135,3 +143,4 @@ num2 = num1;
 }delay((2.5)*1000);
 return 15;
 }
+

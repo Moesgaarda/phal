@@ -185,7 +185,6 @@ public class TypeChecker extends Visitor{
 					MainClass.CompileErrors.add(new ReturnTypeError(rsNode.columnNumber, rsNode.lineNumber, funcNode.idNode.id,
 							rsNode.exprNode.type.toString(), funcNode.typeNode.Type.toString(), true, true));
 				}
-				
 			}
 		}
 	}
@@ -515,7 +514,7 @@ public class TypeChecker extends Visitor{
 	@Override
 	public void visit(LoopTimesNode node) {
 		super.visit(node);
-		if(node.exprNode.type != Type.NUMBER) {
+		if(node.exprNode.type != Type.NUMBER || isAList(node.exprNode)) {
 			MainClass.CompileErrors.add(new TypeError( node.columnNumber, node.lineNumber, 
 										node.exprNode.type.toString(), Type.NUMBER.toString()));
 		}
@@ -548,6 +547,7 @@ public class TypeChecker extends Visitor{
 			if(idRefExpr.idNode.dclNode instanceof ListNode) {
 				return true;
 			}
+			// en param kan også være liste, men bliver deklareret på en anden måde.
 			else if(idRefExpr.idNode.dclNode instanceof ParamNode) {
 				DclNode tempDcl = idRefExpr.idNode.dclNode;
 				ParamNode paramNode = (ParamNode) tempDcl;
@@ -563,6 +563,7 @@ public class TypeChecker extends Visitor{
 		if(dclNode instanceof ListNode) {
 			return true;
 		}
+		// en param kan også være liste, men bliver deklareret på en anden måde.
 		else if(dclNode instanceof ParamNode) {
 			DclNode tempDcl = dclNode;
 			ParamNode paramNode = (ParamNode) tempDcl;
