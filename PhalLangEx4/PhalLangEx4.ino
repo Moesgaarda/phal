@@ -2,8 +2,11 @@
 *  Created 16-05-2018
 */
 
-#include "Lightbulb.h" 
-#include "TemperatureSensor.h" 
+#include "Lightbulb/Lightbulb.h" 
+#include "TempSensor/TemperatureSensor.h" 
+#include "LinkedList/LinkedList.h"
+#include "Group/Group.h"
+
 bool satan = true;
 bool god = false;
 bool alive = !true;
