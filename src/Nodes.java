@@ -93,6 +93,7 @@ abstract class DclNode extends AstNode{
 	public IdNode idNode;
 	public boolean isUsed = false;
 	public boolean isInitialized = false;
+	public boolean isInt;
 	public DclNode() {	
 	}
 	public DclNode(ParserRuleContext ctx) {
