@@ -3,7 +3,6 @@ import java.util.List;
 
 import CompilerError.AssignmentError;
 import CompilerError.TypeError;
-import com.sun.tools.javac.Main;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import enums.InfixOperator;
