@@ -1,15 +1,18 @@
 #ifndef Motor_h
 #define Motor_h
 
-class Motor
+#include "../Adt/Adt.h"
+
+class Motor: public Adt
 {
     public:
 	    Motor(int pin);
 	    void on();
 	    void off();
-		bool status();
+
     private: 
     	int _pin;
+	bool status;
 };
 
 #endif

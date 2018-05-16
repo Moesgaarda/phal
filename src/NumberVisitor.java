@@ -58,7 +58,7 @@ public class NumberVisitor extends Visitor {
     }
 
     private boolean checkExprType(FuncExprNode node){
-
+        return true;
     }
 
     private boolean checkExprType(ParensExprNode node){

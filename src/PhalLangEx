@@ -16,8 +16,9 @@ using LinkedList
 setup{
   # The types define whether they are input or output
   # <type> <name> := pin <number>
-  lightbulb l := pin 1, 2, 5
+  lightbulb l := pin 1
   temperatureSensor ls := pin 2
+  motor mot := pin 3
   bool satan := true
   bool god := false
   bool alive := !on
@@ -68,11 +69,11 @@ setup{
         boob += 200
     }
 
-    switch(boob){
-        case 2:
+    switch(boob < 3){
+        case true:
             boob += 2
             boob -= 2
-        case 3:
+        case false:
             boob += 4
             boob += (2+(4-2))
         default:
