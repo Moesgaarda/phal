@@ -4,13 +4,12 @@
 
 #include "Lightbulb.h" 
 #include "TemperatureSensor.h" 
-#include lightsensorPRS.h;
 bool satan = true;
 bool god = false;
 bool alive = !true;
 bool dead = false;
 float boob = 8008;
-LinkedList bla = LinkedList<bool>();
+LinkedList<bool> bla = LinkedList<bool>();
 bla.add(1 == 4);
 bla.add(false);
 bla.add(satan);
@@ -19,6 +18,8 @@ PhalGroup testgroup = PhalGroup<Adt>(2);
 testgroup.add(l);
 testgroup.add(ls);
 bool test = bla.getNode(2 + 2);
+LinkedList<bool> gah = LinkedList<bool>();
+gah.add(false);
 void setup(){ 
 pinMode(1, OUTPUT);
 pinMode(2, OUTPUT);
@@ -64,6 +65,9 @@ default:
 boob = 2;
 break;
 }
+bla.add(true);
+bla.remove(2);
+bla = gah;
 } 
 
 void loop(){ 
@@ -85,15 +89,18 @@ alive = false;
 }
 waitup(24);
 waitufp(24, 13);
-I AM A GROUP CHANGE!I AM A GROUP CHANGE!I AM A GROUP CHANGE!} 
+testgroup.on();
+testgroup.off();
+testgroup.off();
+} 
 
-bool listdiffer (bool bolleboll){
-LinkedList result = LinkedList<bool>();
+LinkedList<bool> listdiffer (LinkedList<bool> bolleboll){
+LinkedList<bool> result = LinkedList<bool>();
 result.add(true);
 result.add(false);
 result.add(true);
 result.add(false);
-LinkedList john = LinkedList<bool>();
+LinkedList<bool> john = LinkedList<bool>();
 john.add(true);
 john.add(false);
 john.add(true);
@@ -102,8 +109,6 @@ result.add(true);
 result.remove(3);
 result.remove(1);
 result.remove(2);
-bolleboll = john;
-john = result;
 return result;
 }
 float waitup (float num){
@@ -121,12 +126,6 @@ num1 += 45;
 if(num1 == 4){
 num2 = 3;
 
-}
-else if(num < 3){
-num = 4;
-}
-else if(five >= 3){
-five = 2;
 }
 else{
 num2 = num1;

@@ -96,20 +96,36 @@ public class CodeGeneration extends Visitor{
 
 	@Override
 	public void visit(AssignmentNode node){
-
 		if(node.idNode.type == Type.GROUP){
 			if(node.assignmentOperator == AssignmentOperator.EQUALS){
-				// TODO Toggle status of components in group
+				visit(node.idNode);
+				LiteralExprNode le = (LiteralExprNode) node.exprNode;
+
+				switch(le.literalExprNode){
+					case "true":
+					case "on":
+						writer.print(".on();\n");
+					break;
+					case "false":
+					case "off":
+						writer.print(".off();\n");
+					break;
+				}
 			}
 		}
 		else if(node.idNode.type == Type.LIST) {
-			if (node.assignmentOperator == AssignmentOperator.PLUSEQUALS) {
-				// TODO Add to list
-			} else if (node.assignmentOperator == AssignmentOperator.MINUSEQUALS) {
-				// TODO Remove from list
-			} else if (node.assignmentOperator == AssignmentOperator.EQUALS) {
-				// TODO Replace list
-			}
+			visit(node.idNode);
+				if (node.assignmentOperator == AssignmentOperator.PLUSEQUALS) {
+					writer.print(".add(");
+					writer.print(")");
+				} else if (node.assignmentOperator == AssignmentOperator.MINUSEQUALS) {
+					writer.print(".remove(");
+					writer.print(")");
+				} else if (node.assignmentOperator == AssignmentOperator.EQUALS) {
+					writer.print(" = ");
+				}
+			visit(node.exprNode);
+				writer.print(";\n");
 		}
 			else{
 			visit(node.idNode);
@@ -118,7 +134,6 @@ public class CodeGeneration extends Visitor{
 			} else {
 				writer.print(node.assignmentOperator.toString());
 			}
-
 			visit(node.exprNode);
 			writer.print(";\n");
 		}
@@ -139,9 +154,6 @@ public class CodeGeneration extends Visitor{
 
 	@Override
 	public void visit(LoopUntilNode node){
-
-		// loop until expr, inc/dec id by number
-
 		writer.print("while(!(");
 		visit(node.exprNode);
 		writer.print(")){\n");
@@ -180,11 +192,8 @@ public class CodeGeneration extends Visitor{
 				writer.print(" = ");
 				visit(node.exprNode);
 			}
-
 			writer.print(";\n");
 	}
-
-
 
 	@Override
 	public void visit(ReturnStmtNode node){
@@ -320,6 +329,10 @@ public class CodeGeneration extends Visitor{
 
 	@Override
 	public void visit(TypeNode node){
+		if(node.islist){
+			writer.print("LinkedList<");
+		}
+
 		switch(node.Type){
 			case NONE:
 				writer.print("void");
@@ -342,9 +355,6 @@ public class CodeGeneration extends Visitor{
 			case TEMPERATURESENSOR:
 				writer.print("temperatureSensor");
 				break;
-			case LIST:
-				writer.print("list"); // TODO Add type of list
-				break;
 			case GROUP:
 				writer.print("group");
 				break;
@@ -352,15 +362,22 @@ public class CodeGeneration extends Visitor{
 				writer.print("void");
 				break;
 		}
+
+		if(node.islist){
+			writer.print(">");
+		}
+
 	}
 
 	@Override
 	public void visit(ListNode node){
-		writer.print("LinkedList ");
-		visit(node.idNode);
-		writer.print(" = LinkedList<");
 		visit(node.typeNode);
-		writer.print(">();\n");
+		writer.print(" ");
+		visit(node.idNode);
+		writer.print(" = ");
+		visit(node.typeNode);
+
+		writer.print("();\n");
 
 		for(ExprNode expr : node.memberExprNodes){
 			visit(node.idNode);
@@ -461,9 +478,9 @@ public class CodeGeneration extends Visitor{
 
 	@Override
 	public void visit(IncludeNode node){
-		writer.print("#include ");
+		writer.print("#include \"");
 		visit(node.idNode);
-		writer.print(".h;\n");
+		writer.print(".h\"\n");
 	}
 
 	@Override

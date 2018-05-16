@@ -10,7 +10,7 @@ int main()
     lightbulb = new Lightbulb(2);
     lightbulb2 = new Lightbulb(3);
 
-    auto group = PhalGroup<Lightbulb>(2);
+    PhalGroup group = PhalGroup<Lightbulb>(2);
     group.add(lightbulb);
     group.add(Lightbulb2);
 

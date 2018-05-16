@@ -78,6 +78,15 @@ setup{
     }
 
       bool test := get element 2+2 from bla
+
+      list bool gah {
+      false
+      }
+
+      add true to bla
+      remove element 2 from bla
+      bla := gah
+
 }
 
 # The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
