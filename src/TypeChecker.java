@@ -259,7 +259,7 @@ public class TypeChecker extends Visitor{
 		// Derefter checkes om typen af hver expressions er af samme type som listen.
 		super.visit(node);
 		
-		if(isAList(node.idNode.dclNode)){
+		if(node.idNode.dclNode instanceof ListNode){
 			if(node.advancedTypeModifierOperator == AdvancedTypeModifierOperator.ADD) {
 				for(int i = 0; i < node.exprNodes.size(); i++) {
 					visit(node.exprNodes.get(i));
@@ -311,10 +311,10 @@ public class TypeChecker extends Visitor{
 								node.exprNode.type.toString(), node.idNode.type.toString()));
 		}
 		// check efter om både id og expr er lister og omvendt
-		if(isAList(node.idNode.dclNode) && !isAList(node.exprNode)) {
+		if(node.idNode.dclNode instanceof ListNode && !isAList(node.exprNode)) {
 			MainClass.CompileErrors.add(new ListAssignmentError(node.columnNumber, node.lineNumber, node.idNode.id, true));
 		}
-		else if(!isAList(node.idNode.dclNode) && isAList(node.exprNode)) {
+		else if(!(node.idNode.dclNode instanceof ListNode) && isAList(node.exprNode)) {
 			MainClass.CompileErrors.add(new ListAssignmentError(node.columnNumber, node.lineNumber, node.idNode.id, false));
 		}
 		else {
@@ -324,7 +324,7 @@ public class TypeChecker extends Visitor{
 				case PLUSEQUALS:
 				case MINUSEQUALS:
 					if(node.idNode.type != Type.NUMBER && node.exprNode.type != Type.NUMBER) {
-						if(isAList(node.idNode.dclNode)) {
+						if(node.idNode.dclNode instanceof ListNode) {
 							// Hvis id'et er en liste behøves typen ikke være number for at bruge '+=' eller '-='
 							break;
 						}
@@ -345,7 +345,7 @@ public class TypeChecker extends Visitor{
 		if(node.exprNode.type != Type.NUMBER) {
 			MainClass.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, node.exprNode.type.toString(), Type.NUMBER.toString()));
 		}
-		if(!(isAList(node.idNode.dclNode))) {
+		if(!(node.idNode.dclNode instanceof ListNode)) {
 			MainClass.CompileErrors.add(new ListOperationError(node.columnNumber, node.lineNumber, node.idNode.id));
 		}
 		node.type = node.idNode.type;
@@ -405,8 +405,8 @@ public class TypeChecker extends Visitor{
 			idNode.type = cdNode.advTypeNode.Type;
 		}
 		else if(idNode.dclNode instanceof ListNode) {
-			ListNode lNode = (ListNode) idNode.dclNode;
-			idNode.type = lNode.typeNode.Type;
+				ListNode lNode = (ListNode) idNode.dclNode;
+				idNode.type = lNode.typeNode.Type;
 		}
 		else if(idNode.dclNode instanceof GroupNode) {
 			idNode.type = Type.GROUP;
@@ -415,7 +415,6 @@ public class TypeChecker extends Visitor{
 		else if(idNode.dclNode instanceof ParamNode) {
 			ParamNode pNode = (ParamNode) idNode.dclNode;
 			idNode.type = pNode.typeNode.Type;
-			
 		}
 	}
 	
@@ -430,7 +429,7 @@ public class TypeChecker extends Visitor{
 					MainClass.CompileErrors.add(new GroupError(node.columnNumber, node.lineNumber, 
 							vdNode.typeNode.Type.toString(), node.memberIdNodes.get(i).id));
 				}
-				else if(isAList(node.memberIdNodes.get(i).dclNode)) {
+				else if(node.memberIdNodes.get(i).dclNode instanceof ListNode) {
 					ListNode listNode = (ListNode) node.memberIdNodes.get(i).dclNode;
 					MainClass.CompileErrors.add(new GroupError(node.memberIdNodes.get(i).columnNumber, node.memberIdNodes.get(i).lineNumber, 
 							listNode.typeNode.Type.toString(), node.memberIdNodes.get(i).id));
@@ -549,25 +548,10 @@ public class TypeChecker extends Visitor{
 				return true;
 			}
 			else if(idRefExpr.idNode.dclNode instanceof ParamNode) {
-				DclNode tempDcl = idRefExpr.idNode.dclNode;
-				ParamNode paramNode = (ParamNode) tempDcl;
+				ParamNode paramNode = (ParamNode) idRefExpr.idNode.dclNode;
 				if(paramNode.typeNode.islist) {
 					return true;
 				}
-			}
-		}
-		return false;
-	}
-	
-	private boolean isAList(DclNode dclNode) {
-		if(dclNode instanceof ListNode) {
-			return true;
-		}
-		else if(dclNode instanceof ParamNode) {
-			DclNode tempDcl = dclNode;
-			ParamNode paramNode = (ParamNode) tempDcl;
-			if(paramNode.typeNode.islist) {
-				return true;
 			}
 		}
 		return false;
