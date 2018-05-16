@@ -32,7 +32,7 @@ public class CodeGeneration extends Visitor{
 	}
 	private void printCmpIncludes() {
 		for(Type t : ComponentIncludesMap) {
-			writer.print("#include \"" + t +".h\" \n"
+			writer.print("#include \"" + t + "/" + t +".h\" \n"
 				     );
 		}
 
@@ -47,10 +47,14 @@ public class CodeGeneration extends Visitor{
 			visit(incl);
 		
 		for(SetupCntNode dcl : node.setupNode.setupCntNodes) {
-			if(dcl.dclNode instanceof VarDclNode || dcl.dclNode instanceof ListNode|| dcl.dclNode instanceof GroupNode){
-				visit(dcl.dclNode);
-			}
+			if(dcl.dclNode instanceof VarDclNode)
+				visit((VarDclNode)dcl.dclNode, CodeGen.GLOBAL);
+			if(dcl.dclNode instanceof ListNode)
+				visit((ListNode)dcl.dclNode, CodeGen.GLOBAL);
+			if(dcl.dclNode instanceof GroupNode)
+				visit((GroupNode)dcl.dclNode, CodeGen.GLOBAL);
 		}
+
 		
 		visit(node.setupNode);
 		visit(node.repeatNode);
@@ -61,12 +65,20 @@ public class CodeGeneration extends Visitor{
 		
 		writer.close();
 	}
-	
+
+
 	@Override
 	public void visit(SetupNode node) {
 		writer.print("void setup(){ \n");
 
 		for(SetupCntNode cnt : node.setupCntNodes){
+			if(cnt.dclNode instanceof VarDclNode)
+				visit((VarDclNode)cnt.dclNode, CodeGen.SETUP);
+			if(cnt.dclNode instanceof ListNode)
+				visit((ListNode)cnt.dclNode, CodeGen.SETUP);
+			if(cnt.dclNode instanceof GroupNode)
+				visit((GroupNode)cnt.dclNode, CodeGen.SETUP);
+
 			if(cnt.dclNode instanceof  CmpDclNode){
 				visit(cnt.dclNode);
 			}
@@ -182,17 +194,36 @@ public class CodeGeneration extends Visitor{
 			writer.print(node.id + "." + node.subId);
 	}
 
-	@Override
-	public void visit(VarDclNode node) {
-			visit(node.typeNode);
-			writer.print(" ");
-			visit(node.idNode);
 
-			if(node.exprNode != null){
-				writer.print(" = ");
-				visit(node.exprNode);
+	public void visit(VarDclNode node, Enum<CodeGen> location) {
+
+			if(location == CodeGen.GLOBAL) {
+				visit(node.typeNode);
+				writer.print(" ");
+				visit(node.idNode);
 			}
+
+
+			if(location == CodeGen.SETUP) {
+				if (node.exprNode != null) {
+					visit(node.idNode);
+					writer.print(" = ");
+					visit(node.exprNode);
+				}
+			}
+
+			if(location == CodeGen.FUNCTION) {
+				visit(node.typeNode);
+				writer.print(" ");
+				visit(node.idNode);
+				if (node.exprNode != null) {
+					writer.print(" = ");
+					visit(node.exprNode);
+				}
+			}
+
 			writer.print(";\n");
+
 	}
 
 	@Override
@@ -305,8 +336,15 @@ public class CodeGeneration extends Visitor{
 		writer.write(" (");
 		visit(node.parametersNode);
 		writer.write("){\n");
-		for(FuncCntNode funcCnt : node.funcCntNodes)
-			visit(funcCnt);
+		for(FuncCntNode cnt : node.funcCntNodes){
+			if(cnt.varDclNode instanceof VarDclNode)
+				visit(cnt.varDclNode, CodeGen.FUNCTION);
+			else if(cnt.listNode instanceof ListNode)
+				visit(cnt.listNode, CodeGen.FUNCTION);
+			else
+				visit(cnt);
+		}
+
 		writer.write("\n}\n");
 	}
 
@@ -369,34 +407,71 @@ public class CodeGeneration extends Visitor{
 
 	}
 
-	@Override
-	public void visit(ListNode node){
-		visit(node.typeNode);
-		writer.print(" ");
-		visit(node.idNode);
-		writer.print(" = ");
-		visit(node.typeNode);
-
-		writer.print("();\n");
-
-		for(ExprNode expr : node.memberExprNodes){
+	public void visit(ListNode node, Enum<CodeGen> location){
+		if(location == CodeGen.GLOBAL) {
+			visit(node.typeNode);
+			writer.print(" ");
 			visit(node.idNode);
 
-			writer.print(".add(");
-			visit(expr);
-			writer.print(");\n");
+			writer.print(" = ");
+			visit(node.typeNode);
+
+			writer.print("();\n");
 		}
+
+		if(location == CodeGen.SETUP) {
+			for (ExprNode expr : node.memberExprNodes) {
+				visit(node.idNode);
+
+				writer.print(".add(");
+				visit(expr);
+				writer.print(");\n");
+			}
+		}
+
+		if(location == CodeGen.FUNCTION) {
+			visit(node.typeNode);
+			writer.print(" ");
+			visit(node.idNode);
+
+			writer.print(" = ");
+			visit(node.typeNode);
+
+			writer.print("();\n");
+
+			for (ExprNode expr : node.memberExprNodes) {
+				visit(node.idNode);
+				writer.print(".add(");
+				visit(expr);
+				writer.print(");\n");
+			}
+		}
+
 	}
 
-	@Override
-	public void visit(GroupNode node){
-		writer.print("PhalGroup ");
-		visit(node.idNode);
-		writer.print(" = PhalGroup<Adt>(" + node.memberIdNodes.size() + ");\n");
-
-		for(IdNode id : node.memberIdNodes){
+	public void visit(GroupNode node, Enum<CodeGen> location){
+		if(location == CodeGen.GLOBAL) {
+			writer.print("PhalGroup ");
 			visit(node.idNode);
-			writer.print(".add(" + id.id + ");\n");
+			writer.print(" = PhalGroup<Adt>(" + node.memberIdNodes.size() + ");\n");
+		}
+
+		if(location == CodeGen.SETUP) {
+			for (IdNode id : node.memberIdNodes) {
+				visit(node.idNode);
+				writer.print(".add(" + id.id + ");\n");
+			}
+		}
+
+		if(location == CodeGen.FUNCTION) {
+			writer.print("PhalGroup ");
+			visit(node.idNode);
+			writer.print(" = PhalGroup<Adt>(" + node.memberIdNodes.size() + ");\n");
+
+			for (IdNode id : node.memberIdNodes) {
+				visit(node.idNode);
+				writer.print(".add(" + id.id + ");\n");
+			}
 		}
 	}
 
@@ -479,6 +554,8 @@ public class CodeGeneration extends Visitor{
 	@Override
 	public void visit(IncludeNode node){
 		writer.print("#include \"");
+		visit(node.idNode);
+		writer.print("/");
 		visit(node.idNode);
 		writer.print(".h\"\n");
 	}

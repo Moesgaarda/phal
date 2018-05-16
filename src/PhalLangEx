@@ -7,7 +7,9 @@
  * Focus will be on the syntax of the language.      *
 ******************************************************/
 
-using lightsensorPRS
+using Group
+using LinkedList
+
 # The setup method is a default method similar to main, it's used for defining what's in the different ports/pins and such.
 #define <method name> with <parameters and types> returntype <type>
 
