@@ -1,3 +1,12 @@
+/*****************************************************
+ * Program purpose:                                  *
+ * The purpose of this program is to evaluate the    *
+ * light level within a room and increase the light- *
+ * level if needed.                                  *
+ *                                                   *
+ * Focus will be on the syntax of the language.      *
+******************************************************/
+
 using lightsensorPRS
 # The setup method is a default method similar to main, it's used for defining what's in the different ports/pins and such.
 #define <method name> with <parameters and types> returntype <type>
@@ -115,8 +124,8 @@ define listdiffer with (list of bool bolleboll) returnType list of bool{
     remove element 3 from result
     remove element 1, 2 from result
 
- 	bolleboll := john
- 	john := result
+ 	#bolleboll := john
+ 	#john := bolleboll
  	return result
 }
 
@@ -135,11 +144,12 @@ define waitup with(number num) returnType number{
 
     if(num1 = 4) then {
         num2 := 3
-    }else if(num < 3) then{
-        num := 4
-    }else if(five >= 3) then{
-        five := 2
-    }else then{
+    }
+#    else if(num < 3) then{
+ #       num := 4
+  #  }else if(five >= 3) then{
+   #     five := 2
+    else then{
         num2 := num1
     }
 
