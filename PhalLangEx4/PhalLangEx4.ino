@@ -13,7 +13,7 @@ bool alive = !true;
 bool dead = false;
 float boob = 8008;
 LinkedList<bool> bla = LinkedList<bool>();
-bla.add(1 == 4);
+bla.add(bool hello);
 bla.add(false);
 bla.add(satan);
 bla.add(alive);
