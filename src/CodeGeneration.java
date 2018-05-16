@@ -96,16 +96,32 @@ public class CodeGeneration extends Visitor{
 
 	@Override
 	public void visit(AssignmentNode node){
-		visit(node.idNode);
-		if(node.assignmentOperator == AssignmentOperator.EQUALS){
-			writer.print(" = ");
-		}
-		else{
-			writer.print(node.assignmentOperator.toString());
-		}
 
-		visit(node.exprNode);
-		writer.print(";\n");
+		if(node.idNode.type == Type.GROUP){
+			if(node.assignmentOperator == AssignmentOperator.EQUALS){
+				// TODO Toggle status of components in group
+			}
+		}
+		else if(node.idNode.type == Type.LIST) {
+			if (node.assignmentOperator == AssignmentOperator.PLUSEQUALS) {
+				// TODO Add to list
+			} else if (node.assignmentOperator == AssignmentOperator.MINUSEQUALS) {
+				// TODO Remove from list
+			} else if (node.assignmentOperator == AssignmentOperator.EQUALS) {
+				// TODO Replace list
+			}
+		}
+			else{
+			visit(node.idNode);
+			if (node.assignmentOperator == AssignmentOperator.EQUALS) {
+				writer.print(" = ");
+			} else {
+				writer.print(node.assignmentOperator.toString());
+			}
+
+			visit(node.exprNode);
+			writer.print(";\n");
+		}
 	}
 
 	@Override
@@ -309,7 +325,7 @@ public class CodeGeneration extends Visitor{
 				writer.print("void");
 				break;
 			case NUMBER:
-				writer.print("float"); // TODO fiks mig
+				writer.print("float"); // TODO Change to reflect int/float
 				break;
 			case BOOL:
 				writer.print("bool");
@@ -327,7 +343,7 @@ public class CodeGeneration extends Visitor{
 				writer.print("temperatureSensor");
 				break;
 			case LIST:
-				writer.print("list"); // TODO FIks mig
+				writer.print("list"); // TODO Add type of list
 				break;
 			case GROUP:
 				writer.print("group");
@@ -467,7 +483,6 @@ public class CodeGeneration extends Visitor{
 		}
 	}
 
-	// TODO Tilføj at slukke og tænde komponenter (group)
 	// TODO Tjek om ting er call by reference
 
 }
