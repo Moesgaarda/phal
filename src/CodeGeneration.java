@@ -33,7 +33,7 @@ public class CodeGeneration extends Visitor {
 
     private void printCmpIncludes() {
         for (Type t : ComponentIncludesMap) {
-            writer.print("#include \"" + t + "/" + t + ".h\" \n"
+            writer.print("#include \"" + t + ".h\" \n"
             );
         }
 
@@ -238,13 +238,13 @@ public class CodeGeneration extends Visitor {
         if (location == CodeGen.GLOBAL) {
             switch (node.advTypeNode.Type) {
                 case TEMPERATURESENSOR:
-                    writer.print("TemperatureSensor ");
+                    writer.print("TemperatureSensor *");
                     break;
                 case LIGHTBULB:
-                    writer.print("Lightbulb ");
+                    writer.print("Lightbulb *");
                     break;
                 case MOTOR:
-                    writer.print("Motor ");
+                    writer.print("Motor *");
                     break;
                 default:
                     writer.print(node.advTypeNode.type);
@@ -265,21 +265,39 @@ public class CodeGeneration extends Visitor {
         }
 
         if (location == CodeGen.SETUP) {
+        	int sizeLit = node.literalExprNodes.size();
+        	visit(node.idNode);
+        	writer.print(" = ");
             switch (node.advTypeNode.Type) {
                 case TEMPERATURESENSOR:
-                    for (LiteralExprNode exp : node.literalExprNodes) {
-                        writer.print("pinMode(");
-                        writer.print(exp.literalExprNode);
-                        writer.print(", INPUT);\n");
+                	writer.print("TemperatureSensor(");
+                    for (int i = 0; i < sizeLit; i++) {
+                    	if(i != 0) {
+                    		writer.print(", ");
+                    	}
+                        writer.print(node.literalExprNodes.get(i));
                     }
+                    writer.print(")");
                     break;
                 case LIGHTBULB:
-                case MOTOR:
-                    for (LiteralExprNode exp : node.literalExprNodes) {
-                        writer.print("pinMode(");
-                        writer.print(exp.literalExprNode);
-                        writer.print(", OUTPUT);\n");
+                	writer.print("LightBulb(");
+                    for (int i = 0; i < sizeLit; i++) {
+                    	if(i != 0) {
+                    		writer.print(", ");
+                    	}
+                        writer.print(node.literalExprNodes.get(i));
                     }
+                    writer.print(")");
+                    break;
+                case MOTOR:
+                	writer.print("Motor(");
+                    for (int i = 0; i < sizeLit; i++) {
+                    	if(i != 0) {
+                    		writer.print(", ");
+                    	}
+                        writer.print(node.literalExprNodes.get(i));
+                    }
+                    writer.print(")");
                     break;
             }
         }

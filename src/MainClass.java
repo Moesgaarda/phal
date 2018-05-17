@@ -20,7 +20,6 @@ public class MainClass {
 	public static String inputFileName;
 	public static void main(String args[]) throws Exception
 	{
-		
 		inputFileName = args[0];
 		String comPort = args[1];
         File file = new File(inputFileName);
