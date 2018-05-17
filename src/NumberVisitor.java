@@ -29,8 +29,11 @@ public class NumberVisitor extends Visitor {
     }
 
     private boolean checkExprType(IdRefExprNode node){
-        VarDclNode dcl = (VarDclNode) node.idNode.dclNode;
-        return dcl.typeNode.isInt;
+        if(node.idNode.dclNode instanceof VarDclNode){
+            return ((VarDclNode) node.idNode.dclNode).typeNode.isInt;
+        }else{
+            return ((VarDclNode) node.idNode.dclNode).typeNode.isInt;
+        }
     }
 
     private boolean checkExprType(LiteralExprNode node){
@@ -57,8 +60,14 @@ public class NumberVisitor extends Visitor {
     private boolean checkExprType(FuncExprNode node){
         for(ExprNode expr : node.funcCallNode.callCntNode.exprNodes){
             if(expr instanceof IdRefExprNode){
-                VarDclNode dcl = ((VarDclNode)((IdRefExprNode) expr).idNode.dclNode);
-                dcl.typeNode.isInt = false;
+                IdRefExprNode idRef = (IdRefExprNode)expr;
+                if(idRef.idNode.dclNode instanceof VarDclNode){
+                    VarDclNode dcl = ((VarDclNode)((IdRefExprNode) expr).idNode.dclNode);
+                    dcl.typeNode.isInt = false;
+                }else {
+                    ParamNode dcl = ((ParamNode)((IdRefExprNode) expr).idNode.dclNode);
+                    dcl.typeNode.isInt = false;
+                }
             }
         }
         return false;
