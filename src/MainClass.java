@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.io.*;
 
 public class MainClass {
 	
@@ -16,19 +17,60 @@ public class MainClass {
 	
 	public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
 	public static List<CompilerError.Error> CompileWarnings = new ArrayList<>();
-	public static String inputFileName = "PhalLangEx4"; //TODO ER KUN TIL TEST FOR CODE GEN, SKAL �NDRES
+	public static String inputFileName;
 	public static void main(String args[]) throws Exception
 	{
 		
-		String fileName = "../phal/src/PhalLangEx";
-        File file = new File(fileName);
+		inputFileName = args[0];
+		String comPort = args[1];
+        File file = new File(inputFileName);
         AstNode ast = ASTBuilder(new FileInputStream(file));
-		PrettyPrinter pp = new PrettyPrinter();
-		pp.visit((ProgramNode)ast);
+//		PrettyPrinter pp = new PrettyPrinter();
+//		pp.visit((ProgramNode)ast);
 		SymbolTable ST = new SymbolTable();
 		TypeChecking(ast, ST);	
 		CodeGeneration cg = new CodeGeneration(ST.getCompInclMap());
 		cg.visit((ProgramNode)ast);
+
+		System.console().printf("Verifying Arduino code\n");
+
+		String execstring = "arduino_debug --upload " + inputFileName + ".ino --port " + comPort;
+		System.console().printf(execstring + "\n");
+		Process compile = Runtime.getRuntime().exec(execstring );
+		compile.waitFor();
+		StringBuffer output = new StringBuffer();
+		BufferedReader stdError = new BufferedReader(new
+				InputStreamReader(compile.getErrorStream()));
+
+
+		String line = "";
+		while ((line = stdError.readLine())!= null) {
+			output.append(line + "\n");
+		}
+
+		System.console().printf(output.toString());
+
+
+		switch(compile.exitValue()){
+			case 0:
+				System.console().printf("\n\nUpload successful.\n");
+				break;
+			case 1:
+				System.console().printf("\n\nBuild or upload failed.\n");
+				break;
+			case 2:
+				System.console().printf("\n\nSketch not found.\n");
+				break;
+			case 3:
+				System.console().printf("\n\nInvalid arguments.\n");
+				break;
+			case 4:
+				System.console().printf("\n\nPreference for --get-pref does not exist.\n");
+				break;
+		}
+
+
+
 	}
 	
 	public static void TypeChecking(AstNode ast, SymbolTable ST) {
@@ -43,6 +85,13 @@ public class MainClass {
 		TypeChecker tc = new TypeChecker(ST);
 		tc.visit((ProgramNode) ast);
 		
+		if(!CompileErrors.isEmpty()) {
+			PrintErrorsAndExit();
+		}
+
+		NumberVisitor nv = new NumberVisitor();
+		nv.visit((ProgramNode) ast);
+
 		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
 		}

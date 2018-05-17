@@ -1,7 +1,4 @@
-import enums.AdvancedTypeModifierOperator;
-import enums.AssignmentOperator;
-import enums.CodeGen;
-import enums.LoopUntilOperator;
+import enums.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +16,7 @@ public class CodeGeneration extends Visitor {
     CodeGeneration(List<Type> CIM) {
         ComponentIncludesMap = CIM;
         try {
-            writer = new PrintWriter(new FileWriter("../phal/PhalLangEx4/" + MainClass.inputFileName + ".ino", false));
+            writer = new PrintWriter(new FileWriter(MainClass.inputFileName + ".ino", false));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -410,7 +407,11 @@ public class CodeGeneration extends Visitor {
                 writer.print("void");
                 break;
             case NUMBER:
-                writer.print("float"); // TODO Change to reflect int/float
+                if(node.isInt){
+                    writer.print("int");
+                }else{
+                    writer.print("float");
+                }
                 break;
             case BOOL:
                 writer.print("bool");

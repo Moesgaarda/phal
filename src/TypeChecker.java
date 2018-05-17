@@ -430,9 +430,17 @@ public class TypeChecker extends Visitor{
 							vdNode.typeNode.Type.toString(), node.memberIdNodes.get(i).id));
 				}
 				else if(isAList(node.memberIdNodes.get(i).dclNode)) {
-					ListNode listNode = (ListNode) node.memberIdNodes.get(i).dclNode;
-					MainClass.CompileErrors.add(new GroupError(node.memberIdNodes.get(i).columnNumber, node.memberIdNodes.get(i).lineNumber, 
-							listNode.typeNode.Type.toString(), node.memberIdNodes.get(i).id));
+					if(node.memberIdNodes.get(i).dclNode instanceof ListNode) {
+						ListNode listNode = (ListNode) node.memberIdNodes.get(i).dclNode;
+						MainClass.CompileErrors.add(new GroupError(node.memberIdNodes.get(i).columnNumber, node.memberIdNodes.get(i).lineNumber, 
+								listNode.typeNode.Type.toString(), node.memberIdNodes.get(i).id));
+					}
+					else if(node.memberIdNodes.get(i).dclNode instanceof ParamNode) {
+						ParamNode pNode = (ParamNode) node.memberIdNodes.get(i).dclNode;
+						MainClass.CompileErrors.add(new GroupError(node.memberIdNodes.get(i).columnNumber, node.memberIdNodes.get(i).lineNumber, 
+								pNode.typeNode.Type.toString(), node.memberIdNodes.get(i).id));
+					}
+					
 				}
 			}
 		}

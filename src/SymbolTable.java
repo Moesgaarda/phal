@@ -4,6 +4,7 @@ import java.util.List;
 
 import CompilerError.*;
 import Warnings.*;
+import enums.Type;
 
 import java.util.Stack;
 
