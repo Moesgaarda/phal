@@ -3,14 +3,23 @@ import CompilerError.ListIndexExprError;
 import CompilerError.ListIndexTypeError;
 import enums.Type;
 
+import java.util.HashMap;
+
 public class NumberVisitor extends Visitor {
+    private HashMap<String, FuncNode> functionMap = new HashMap<>();
     @Override
-    public void visit(VarDclNode node){
-        if(node.typeNode.Type == Type.NUMBER && node.exprNode != null){
+    public  void visit(ProgramNode node){
+        for(FuncNode func : node.funcNodes){
+            functionMap.put(func.idNode.id, func);
+        }
+        super.visit(node);
+    }
+    @Override
+    public void visit(VarDclNode node) {
+        if (node.typeNode.Type == Type.NUMBER && node.exprNode != null) {
             node.typeNode.isInt = checkExprType(node.exprNode);
         }
     }
-
     @Override
     public void visit(AssignmentNode node) {
         if (node.idNode.type == Type.NUMBER) {
@@ -27,12 +36,27 @@ public class NumberVisitor extends Visitor {
             }
         }
     }
+    @Override
+    public void visit(ExprNode node){
+        if(node instanceof FuncExprNode){
+            visit((FuncExprNode) node);
+        }
+    }
+    @Override
+    public void visit(FuncCallNode node){
+        FuncNode func = functionMap.get(node.idNode.id);
+        for(int i = 0; i < node.callCntNode.exprNodes.size(); i++){
+            if(func.parametersNode.paramNodes.get(i).typeNode.isInt){
+                func.parametersNode.paramNodes.get(i).typeNode.isInt = checkExprType(node.callCntNode.exprNodes.get(i));
+            }
+        }
+    }
 
     private boolean checkExprType(IdRefExprNode node){
         if(node.idNode.dclNode instanceof VarDclNode){
             return ((VarDclNode) node.idNode.dclNode).typeNode.isInt;
         }else{
-            return ((VarDclNode) node.idNode.dclNode).typeNode.isInt;
+            return ((ParamNode) node.idNode.dclNode).typeNode.isInt;
         }
     }
 
@@ -58,6 +82,22 @@ public class NumberVisitor extends Visitor {
     }
 
     private boolean checkExprType(FuncExprNode node){
+        FuncNode func = functionMap.get(node.funcCallNode.idNode.id);
+        for(int i = 0; i < node.funcCallNode.callCntNode.exprNodes.size(); i++){
+            if(func.parametersNode.paramNodes.get(i).typeNode.isInt){
+                func.parametersNode.paramNodes.get(i).typeNode.isInt = checkExprType(node.funcCallNode.callCntNode.exprNodes.get(i));
+            }
+            if(node.funcCallNode.callCntNode.exprNodes.get(i) instanceof  IdRefExprNode){
+                IdRefExprNode idRef = (IdRefExprNode)node.funcCallNode.callCntNode.exprNodes.get(i);
+                if(idRef.idNode.dclNode instanceof VarDclNode){
+                    VarDclNode dcl = (VarDclNode)idRef.idNode.dclNode;
+                    dcl.typeNode.isInt = false;
+                }else {
+                    ParamNode dcl = (ParamNode)idRef.idNode.dclNode;
+                    dcl.typeNode.isInt = false;
+                }
+            }
+        }/*
         for(ExprNode expr : node.funcCallNode.callCntNode.exprNodes){
             if(expr instanceof IdRefExprNode){
                 IdRefExprNode idRef = (IdRefExprNode)expr;
@@ -69,7 +109,7 @@ public class NumberVisitor extends Visitor {
                     dcl.typeNode.isInt = false;
                 }
             }
-        }
+        }*/
         return false;
     }
 
