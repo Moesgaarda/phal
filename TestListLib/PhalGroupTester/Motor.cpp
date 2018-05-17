@@ -8,11 +8,9 @@ Motor::Motor(int pin) : Adt()
 }
 
 void Motor::on() {
-    status = true;
     digitalWrite(_pin, HIGH);
 }
 
 void Motor::off() {
-    status = false;
     digitalWrite(_pin, LOW);	
 }

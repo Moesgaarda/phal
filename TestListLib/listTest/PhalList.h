@@ -48,12 +48,11 @@ void PhalList<T>::add(T _t)
 
   _size++;
 }
+
 template <typename T>
 T PhalList<T>::get(int index)
 {
-  if(index > _size){
-    return false;
-  }
+  
   Node<T> *tmp = new Node<T>();
   tmp = root->next;
   for(int i = 0; i < index; i++)
@@ -61,13 +60,11 @@ T PhalList<T>::get(int index)
     tmp = root->next;
   }
   return tmp->data;
+  
 }
 template <typename T>
 void PhalList<T>::remove(int index)
 {
-    if(index > _size){
-    return false;
-  }
   Node<T> *removedNode = new Node<T>();
   Node<T> *tmp = new Node<T>();
   removedNode = root;
