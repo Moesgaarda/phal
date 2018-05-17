@@ -24,6 +24,7 @@ setup{
   bool alive := !on
   bool dead := off
   number boob := 8008
+  number floater := 5
   list bool bla {
   1=4
   false
@@ -79,6 +80,7 @@ setup{
         default:
             boob := 2
     }
+    floater := 5.2
 
       bool test := get element 2+2 from bla
 

@@ -46,6 +46,13 @@ public class MainClass {
 		if(!CompileErrors.isEmpty()) {
 			PrintErrorsAndExit();
 		}
+
+		NumberVisitor nv = new NumberVisitor();
+		nv.visit((ProgramNode) ast);
+
+		if(!CompileErrors.isEmpty()) {
+			PrintErrorsAndExit();
+		}
 		if(!CompileWarnings.isEmpty()) {
 			PrintWarnings();
 		}

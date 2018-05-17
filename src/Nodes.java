@@ -10,6 +10,7 @@ import enums.LoopUntilOperator;
 import enums.UnaryOperator;
 import enums.AssignmentOperator;
 import enums.AdvancedTypeModifierOperator;
+import enums.Type;
 
 
 abstract class AstNode {
@@ -93,7 +94,6 @@ abstract class DclNode extends AstNode{
 	public IdNode idNode;
 	public boolean isUsed = false;
 	public boolean isInitialized = false;
-	public boolean isInt;
 	public DclNode() {	
 	}
 	public DclNode(ParserRuleContext ctx) {
@@ -130,6 +130,7 @@ class VarDclNode extends DclNode{
 class TypeNode extends AstNode{
 	public String type;
 	public Type Type;
+	public boolean isInt = true;
 	public boolean islist = false;
 	
 	public TypeNode(String type) {
@@ -196,38 +197,7 @@ class TypeNode extends AstNode{
 	}
 }
 
-enum Type{
-	NUMBER,
-	TEXT,
-	BOOL,
-	GROUP,
-	LIST,
-	LIGHTBULB,
-	MOTOR,
-	TEMPERATURESENSOR,
-	NONE,
-	ERROR;
 
-	@Override
-    public String toString() {
-        String stringRep = "";
-        switch(this) {
-	        case MOTOR:
-	        	stringRep = "Motor";
-	        	break;
-	        case TEMPERATURESENSOR:
-	        	stringRep = "TemperatureSensor";
-	        	break;
-	        case LIGHTBULB:
-	        	stringRep = "Lightbulb";
-	        	break;
-            default:
-            	stringRep = this.name();
-            	break;
-        }
-    return stringRep;
-    }
-}
 
 abstract class AdvDataTypeNode extends DclNode{
 	public AdvDataTypeNode() {
