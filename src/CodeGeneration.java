@@ -407,7 +407,11 @@ public class CodeGeneration extends Visitor {
                 writer.print("void");
                 break;
             case NUMBER:
-                writer.print("float"); // TODO Change to reflect int/float
+                if(node.isInt){
+                    writer.print("int");
+                }else{
+                    writer.print("float");
+                }
                 break;
             case BOOL:
                 writer.print("bool");
