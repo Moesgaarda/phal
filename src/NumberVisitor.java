@@ -16,10 +16,14 @@ public class NumberVisitor extends Visitor {
         if (node.idNode.type == Type.NUMBER) {
             if(node.idNode.dclNode instanceof VarDclNode){
                 VarDclNode dcl = (VarDclNode) node.idNode.dclNode;
-                dcl.typeNode.isInt = checkExprType(node.exprNode);
+                if(dcl.typeNode.isInt){
+                    dcl.typeNode.isInt = checkExprType(node.exprNode);
+                }
             }else{
                 ParamNode dcl = (ParamNode) node.idNode.dclNode;
-                dcl.typeNode.isInt = checkExprType(node.exprNode);
+                if(dcl.typeNode.isInt){
+                    dcl.typeNode.isInt = checkExprType(node.exprNode);
+                }
             }
         }
     }
