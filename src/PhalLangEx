@@ -16,6 +16,8 @@ using LinkedList
 setup{
   # The types define whether they are input or output
   # <type> <name> := pin <number>
+  number komma := 2.53
+  number notkomma := 2
   lightbulb l := pin 1
   temperatureSensor ls := pin 2
   motor mot := pin 3

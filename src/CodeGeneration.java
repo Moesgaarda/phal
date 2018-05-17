@@ -1,7 +1,4 @@
-import enums.AdvancedTypeModifierOperator;
-import enums.AssignmentOperator;
-import enums.CodeGen;
-import enums.LoopUntilOperator;
+import enums.*;
 
 import java.io.FileWriter;
 import java.io.IOException;

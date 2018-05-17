@@ -8,12 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import enums.AdvancedTypeModifierOperator;
-import enums.AssignmentOperator;
-import enums.InfixOperator;
-import enums.LoopUntilOperator;
-import enums.UnaryOperator;
-
+import enums.*;
 
 public class BuildAST extends PhalBaseVisitor<AstNode> {
 	@Override
