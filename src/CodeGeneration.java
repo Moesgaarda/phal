@@ -16,7 +16,7 @@ public class CodeGeneration extends Visitor {
     CodeGeneration(List<Type> CIM) {
         ComponentIncludesMap = CIM;
         try {
-            writer = new PrintWriter(new FileWriter("../phal/PhalLangEx4/" + MainClass.inputFileName + ".ino", false));
+            writer = new PrintWriter(new FileWriter(MainClass.inputFileName + ".ino", false));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
