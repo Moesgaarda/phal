@@ -465,10 +465,10 @@ public class CodeGeneration extends Visitor {
 
         if (location == CodeGen.FUNCTION) {
             visit(node.typeNode);
-            writer.print(" ");
+            writer.print(" *");
             visit(node.idNode);
 
-            writer.print(" = ");
+            writer.print(" = new ");
             visit(node.typeNode);
 
             writer.print("();\n");

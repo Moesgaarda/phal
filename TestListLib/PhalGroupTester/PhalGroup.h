@@ -5,7 +5,7 @@
 #include "Adt.h"
 
 
-class PhalGroup
+class PhalGroup : public Adt
 {
 private:
 	PhalList<Adt*> list;
@@ -14,8 +14,8 @@ public:
 	void add(Adt *item);
 	Adt* get(int index);
 	int size();
-	void on();
-	void off();
+	virtual void on();
+	virtual void off();
 };
 
 #endif
