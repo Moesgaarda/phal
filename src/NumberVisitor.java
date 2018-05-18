@@ -191,6 +191,22 @@ public class NumberVisitor extends Visitor {
     }
 
     private void checkIndexType(ExprNode node){
-        checkIndexType(node);
+        if(node instanceof IdRefExprNode){
+            checkIndexType((IdRefExprNode)node);
+        }else if(node instanceof LiteralExprNode){
+            checkIndexType((LiteralExprNode)node);
+        }else if(node instanceof InfixExprNode){
+            checkIndexType((InfixExprNode)node);
+        }else if(node instanceof UnaryExprNode){
+            checkIndexType((UnaryExprNode)node);
+        }else if(node instanceof FuncExprNode){
+            checkIndexType((FuncExprNode)node);
+        }else if(node instanceof LiteralAdvancedNode){
+            checkIndexType((LiteralAdvancedNode)node);
+        }else if(node instanceof ParensExprNode){
+            checkIndexType((ParensExprNode)node);
+        }else{
+            checkIndexType((IdNode)node);
+        }
     }
 }
