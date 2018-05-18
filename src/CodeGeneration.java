@@ -112,7 +112,10 @@ public class CodeGeneration extends Visitor {
 
     @Override
     public void visit(AssignmentNode node) {
-        if (node.idNode.type == Type.GROUP) {
+        if (node.idNode.type == Type.GROUP
+                || node.idNode.type == Type.LIGHTBULB
+                || node.idNode.type == Type.MOTOR
+                || node.idNode.type == Type.MOTOR) {
             if (node.assignmentOperator == AssignmentOperator.EQUALS) {
                 visit(node.idNode);
                 LiteralExprNode le = (LiteralExprNode) node.exprNode;
