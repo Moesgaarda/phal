@@ -304,6 +304,12 @@ public class TypeChecker extends Visitor{
 						node.exprNode.type.toString(), node.idNode.type.toString()));
 			}
 		}
+		else if(node.idNode.dclNode instanceof CmpDclNode) {
+			if(node.exprNode.type != Type.BOOL) {
+				MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
+						node.exprNode.type.toString(), node.idNode.type.toString()));
+			}
+		}
 		// check om id og expr er samme type
 		else if(node.idNode.type != node.exprNode.type) {
 			MainClass.CompileErrors.add(new AssignmentError(node.columnNumber, node.lineNumber, 
