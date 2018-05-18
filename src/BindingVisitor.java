@@ -103,12 +103,6 @@ public class BindingVisitor extends Visitor {
 	@Override
 	public void visit(FuncCallNode node) {
 		FuncNode func = ST.getFunctionFromFuncMap(node);
-		//TODO OVERVEJ OM DET SKAL V�RE HER
-		if(func == null) {
-			MainClass.CompileErrors.add(
-					new FunctionNotDeclaredError( node.columnNumber,node.lineNumber, node.idNode.id)
-					);
-		}
 		if(node.callCntNode != null)
 		{
 			node.callCntNode.accept(this);

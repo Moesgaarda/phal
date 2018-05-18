@@ -140,7 +140,14 @@ public class SymbolTable {
 
 	public FuncNode getFunctionFromFuncMap(FuncCallNode node) {
 		FuncNode func = functionMap.get(node.idNode.id);
-		func.isUsed = true;
+		if(func == null) {
+			MainClass.CompileErrors.add(
+					new FunctionNotDeclaredError( node.columnNumber,node.lineNumber, node.idNode.id)
+			);
+		}
+		else{
+			func.isUsed = true;
+		}
 		return func;
 	}
 	

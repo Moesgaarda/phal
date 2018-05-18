@@ -1,12 +1,12 @@
 #pragma once
-#ifndef LightBulb_h
-#define LightBulb_h
+#ifndef Lightbulb_h
+#define Lightbulb_h
 
 #include "Adt.h"
 
-class LightBulb : public Adt {
+class Lightbulb : public Adt {
 public:
-	LightBulb(int pin);
+	Lightbulb(int pin);
 	virtual void on();
 	virtual void off();
 };

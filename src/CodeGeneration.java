@@ -120,21 +120,21 @@ public class CodeGeneration extends Visitor {
                 switch (le.literalExprNode) {
                     case "true":
                     case "on":
-                        writer.print(".on();\n");
+                        writer.print("->on();\n");
                         break;
                     case "false":
                     case "off":
-                        writer.print(".off();\n");
+                        writer.print("->off();\n");
                         break;
                 }
             }
         } else if (node.idNode.type == Type.LIST) {
             visit(node.idNode);
             if (node.assignmentOperator == AssignmentOperator.PLUSEQUALS) {
-                writer.print(".add(");
+                writer.print("->add(");
                 writer.print(")");
             } else if (node.assignmentOperator == AssignmentOperator.MINUSEQUALS) {
-                writer.print(".remove(");
+                writer.print("->remove(");
                 writer.print(")");
             } else if (node.assignmentOperator == AssignmentOperator.EQUALS) {
                 writer.print(" = ");
@@ -252,54 +252,33 @@ public class CodeGeneration extends Visitor {
             }
 
             visit(node.idNode);
-            writer.print("(");
-            for (int i = 0; i < node.literalExprNodes.size(); i++) {
+            writer.print(";\n");
+        }
+
+        if (location == CodeGen.SETUP) {
+            int sizeLit = node.literalExprNodes.size();
+            visit(node.idNode);
+            writer.print(" = new ");
+            switch (node.advTypeNode.Type) {
+                case TEMPERATURESENSOR:
+                    writer.print("TemperatureSensor(");
+                    break;
+                case LIGHTBULB:
+                    writer.print("Lightbulb(");
+                    break;
+                case MOTOR:
+                    writer.print("Motor(");
+                    break;
+            }
+
+            for (int i = 0; i < sizeLit; i++) {
                 if (i != 0) {
                     writer.print(", ");
                 }
                 visit(node.literalExprNodes.get(i));
             }
-            writer.print(")");
+            writer.print(");\n");
 
-            writer.print(";\n");
-        }
-
-        if (location == CodeGen.SETUP) {
-        	int sizeLit = node.literalExprNodes.size();
-        	visit(node.idNode);
-        	writer.print(" = ");
-            switch (node.advTypeNode.Type) {
-                case TEMPERATURESENSOR:
-                	writer.print("TemperatureSensor(");
-                    for (int i = 0; i < sizeLit; i++) {
-                    	if(i != 0) {
-                    		writer.print(", ");
-                    	}
-                        writer.print(node.literalExprNodes.get(i));
-                    }
-                    writer.print(")");
-                    break;
-                case LIGHTBULB:
-                	writer.print("LightBulb(");
-                    for (int i = 0; i < sizeLit; i++) {
-                    	if(i != 0) {
-                    		writer.print(", ");
-                    	}
-                        writer.print(node.literalExprNodes.get(i));
-                    }
-                    writer.print(")");
-                    break;
-                case MOTOR:
-                	writer.print("Motor(");
-                    for (int i = 0; i < sizeLit; i++) {
-                    	if(i != 0) {
-                    		writer.print(", ");
-                    	}
-                        writer.print(node.literalExprNodes.get(i));
-                    }
-                    writer.print(")");
-                    break;
-            }
         }
     }
 
@@ -417,7 +396,7 @@ public class CodeGeneration extends Visitor {
     @Override
     public void visit(TypeNode node) {
         if (node.islist) {
-            writer.print("LinkedList<");
+            writer.print("PhalList<");
         }
 
         switch (node.Type) {
@@ -425,9 +404,9 @@ public class CodeGeneration extends Visitor {
                 writer.print("void");
                 break;
             case NUMBER:
-                if(node.isInt){
+                if (node.isInt) {
                     writer.print("int");
-                }else{
+                } else {
                     writer.print("float");
                 }
                 break;
@@ -438,13 +417,13 @@ public class CodeGeneration extends Visitor {
                 writer.print("String");
                 break;
             case MOTOR:
-                writer.print("motor");
+                writer.print("Motor");
                 break;
             case LIGHTBULB:
-                writer.print("lightbulb");
+                writer.print("Lightbulb");
                 break;
             case TEMPERATURESENSOR:
-                writer.print("temperatureSensor");
+                writer.print("TemperatureSensor");
                 break;
             case GROUP:
                 writer.print("group");
@@ -463,10 +442,11 @@ public class CodeGeneration extends Visitor {
     public void visit(ListNode node, Enum<CodeGen> location) {
         if (location == CodeGen.GLOBAL) {
             visit(node.typeNode);
-            writer.print(" ");
+            writer.print(" *");
             visit(node.idNode);
 
-            writer.print(" = ");
+
+            writer.print(" = new ");
             visit(node.typeNode);
 
             writer.print("();\n");
@@ -474,9 +454,10 @@ public class CodeGeneration extends Visitor {
 
         if (location == CodeGen.SETUP) {
             for (ExprNode expr : node.memberExprNodes) {
+                writer.print("");
                 visit(node.idNode);
 
-                writer.print(".add(");
+                writer.print("->add(");
                 visit(expr);
                 writer.print(");\n");
             }
@@ -494,7 +475,7 @@ public class CodeGeneration extends Visitor {
 
             for (ExprNode expr : node.memberExprNodes) {
                 visit(node.idNode);
-                writer.print(".add(");
+                writer.print("->add(");
                 visit(expr);
                 writer.print(");\n");
             }
@@ -504,26 +485,26 @@ public class CodeGeneration extends Visitor {
 
     public void visit(GroupNode node, Enum<CodeGen> location) {
         if (location == CodeGen.GLOBAL) {
-            writer.print("PhalGroup<Adt> ");
+            writer.print("PhalGroup *");
             visit(node.idNode);
-            writer.print(" = PhalGroup<Adt>(" + node.memberIdNodes.size() + ");\n");
+            writer.print(" = new PhalGroup();\n");
         }
 
         if (location == CodeGen.SETUP) {
             for (IdNode id : node.memberIdNodes) {
                 visit(node.idNode);
-                writer.print(".add(" + id.id + ");\n");
+                writer.print("->add(" + id.id + ");\n");
             }
         }
 
         if (location == CodeGen.FUNCTION) {
-            writer.print("PhalGroup ");
+            writer.print("PhalGroup *");
             visit(node.idNode);
-            writer.print(" = PhalGroup<Adt>(" + node.memberIdNodes.size() + ");\n");
+            writer.print(" = new PhalGroup();\n");
 
             for (IdNode id : node.memberIdNodes) {
                 visit(node.idNode);
-                writer.print(".add(" + id.id + ");\n");
+                writer.print("->add(" + id.id + ");\n");
             }
         }
     }
@@ -581,7 +562,7 @@ public class CodeGeneration extends Visitor {
     public void visit(LiteralAdvancedNode node) {
         //'get' 'element' expr 'from' ID
         visit(node.idNode);
-        writer.print(".get(");
+        writer.print("->get(");
         visit(node.exprNode);
         writer.print(")");
     }
@@ -607,8 +588,8 @@ public class CodeGeneration extends Visitor {
     @Override
     public void visit(IncludeNode node) {
         writer.print("#include \"");
-        visit(node.idNode);
-        writer.print("/");
+        //  visit(node.idNode);
+        //  writer.print("/");
         visit(node.idNode);
         writer.print(".h\"\n");
     }
@@ -619,11 +600,11 @@ public class CodeGeneration extends Visitor {
         for (ExprNode expr : node.exprNodes) {
             visit(node.idNode);
             if (node.advancedTypeModifierOperator == AdvancedTypeModifierOperator.ADD) {
-                writer.print(".add(");
+                writer.print("->add(");
             }
 
             if (node.advancedTypeModifierOperator == AdvancedTypeModifierOperator.REMOVE) {
-                writer.print(".remove(");
+                writer.print("->remove(");
             }
             visit(expr);
             writer.print(");\n");
