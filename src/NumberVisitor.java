@@ -82,22 +82,26 @@ public class NumberVisitor extends Visitor {
     }
 
     private boolean checkExprType(FuncExprNode node){
-        FuncNode func = functionMap.get(node.funcCallNode.idNode.id);
-        for(int i = 0; i < node.funcCallNode.callCntNode.exprNodes.size(); i++){
-            if(func.parametersNode.paramNodes.get(i).typeNode.isInt){
-                func.parametersNode.paramNodes.get(i).typeNode.isInt = checkExprType(node.funcCallNode.callCntNode.exprNodes.get(i));
-            }
-            if(node.funcCallNode.callCntNode.exprNodes.get(i) instanceof  IdRefExprNode){
-                IdRefExprNode idRef = (IdRefExprNode)node.funcCallNode.callCntNode.exprNodes.get(i);
-                if(idRef.idNode.dclNode instanceof VarDclNode){
-                    VarDclNode dcl = (VarDclNode)idRef.idNode.dclNode;
-                    dcl.typeNode.isInt = false;
-                }else {
-                    ParamNode dcl = (ParamNode)idRef.idNode.dclNode;
-                    dcl.typeNode.isInt = false;
+        
+        if(node.funcCallNode.callCntNode != null) {
+        	FuncNode func = functionMap.get(node.funcCallNode.idNode.id);
+            for(int i = 0; i < node.funcCallNode.callCntNode.exprNodes.size(); i++){
+                if(func.parametersNode.paramNodes.get(i).typeNode.isInt){
+                    func.parametersNode.paramNodes.get(i).typeNode.isInt = checkExprType(node.funcCallNode.callCntNode.exprNodes.get(i));
+                }
+                if(node.funcCallNode.callCntNode.exprNodes.get(i) instanceof  IdRefExprNode){
+                    IdRefExprNode idRef = (IdRefExprNode)node.funcCallNode.callCntNode.exprNodes.get(i);
+                    if(idRef.idNode.dclNode instanceof VarDclNode){
+                        VarDclNode dcl = (VarDclNode)idRef.idNode.dclNode;
+                        dcl.typeNode.isInt = false;
+                    }else {
+                        ParamNode dcl = (ParamNode)idRef.idNode.dclNode;
+                        dcl.typeNode.isInt = false;
+                    }
                 }
             }
-        }/*
+        }
+/*
         for(ExprNode expr : node.funcCallNode.callCntNode.exprNodes){
             if(expr instanceof IdRefExprNode){
                 IdRefExprNode idRef = (IdRefExprNode)expr;

@@ -388,12 +388,14 @@ public class CodeGeneration extends Visitor {
 
     @Override
     public void visit(ParametersNode node) {
-        for (int i = 0; i < node.paramNodes.size(); i++) {
-            if (i != 0) {
-                writer.print(", ");
+    	if(node.paramNodes != null) {
+            for (int i = 0; i < node.paramNodes.size(); i++) {
+                if (i != 0) {
+                    writer.print(", ");
+                }
+                visit(node.paramNodes.get(i));
             }
-            visit(node.paramNodes.get(i));
-        }
+    	}
     }
 
     @Override
@@ -574,7 +576,10 @@ public class CodeGeneration extends Visitor {
     public void visit(FuncCallNode node) {
         visit(node.idNode);
         writer.print("(");
-        visit(node.callCntNode);
+        if(node.callCntNode != null) {
+            visit(node.callCntNode);
+        }
+
         writer.print(");\n");
     }
 
