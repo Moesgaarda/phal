@@ -1,0 +1,92 @@
+using PhalGroup
+using PhalList
+
+setup{
+    lightbulb lb1 := pin 1
+    lightbulb lb2 := pin 2
+    lightbulb lb3 := pin 3
+    lightbulb lb4 := pin 4
+    lightbulb lb5 := pin 5
+    lightbulb lb6 := pin 6
+    motor mot1 := pin 8
+
+    group lightsleft{
+        lb1
+        lb2
+    }
+
+    group lightsmid{
+        lb3
+        lb4
+    }
+
+    group lightsright{
+        lb5
+        lb6
+    }
+
+    group lightsouter{
+        lightsleft
+        lightsright
+    }
+
+    group lights {
+        lightsleft
+        lightsmid
+        lightsright
+    }
+
+
+}
+
+
+repeat{
+    #one at a time
+        lb1 := on
+        wait 1 seconds
+        lb2 := on
+        wait 1 seconds
+        lb3 := on
+        wait 1 seconds
+        lb4 := on
+        wait 1 seconds
+        lb5 := on
+        wait 1 seconds
+        lb6 := on
+        wait 1 seconds
+        lights := off
+        wait 1 seconds
+
+    # turn on two and two
+        lights := off
+        lightsleft := on
+        wait 1 seconds
+        lightsleft := off
+
+        lightsmid := on
+        wait 1 seconds
+        lightsmid := off
+
+        lightsright := on
+        wait 1 seconds
+        lightsright := off
+        wait 1 seconds
+
+   # turn on sides and mid
+       lights := off
+       lightsouter := on
+       wait 1 seconds
+       lights := off
+       lightsmid := on
+       wait 1 seconds
+       lights := off
+
+   # toggle motor on and off
+       mot1 := on
+       wait 5.2 seconds
+       mot1 := off
+}
+
+define textLights with (text input) returnType none{
+    text result := get element 1 from input
+}

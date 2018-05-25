@@ -1,0 +1,29 @@
+using PhalGroup
+using PhalList
+
+setup{
+lightbulb lb1 := pin 1
+lightbulb lb2 := pin 2
+lightbulb lb3 := pin 3
+lightbulb lb4 := pin 4
+lightbulb lb5 := pin 5
+lightbulb lb6 := pin 6
+
+group lights{
+lb1
+lb2
+lb3
+lb4
+lb5
+lb6
+}
+
+}
+
+
+repeat{
+ lights := off
+ wait 2 seconds
+ lights := on
+ wait 2 seconds
+}

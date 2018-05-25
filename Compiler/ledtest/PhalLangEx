@@ -1,0 +1,177 @@
+/*****************************************************
+ * Program purpose:                                  *
+ * The purpose of this program is to evaluate the    *
+ * light level within a room and increase the light- *
+ * level if needed.                                  *
+ *                                                   *
+ * Focus will be on the syntax of the language.      *
+******************************************************/
+
+using PhalGroup
+using PhalList
+
+# The setup method is a default method similar to main, it's used for defining what's in the different ports/pins and such.
+#define <method name> with <parameters and types> returntype <type>
+
+setup{
+  # The types define whether they are input or output
+  # <type> <name> := pin <number>
+  number komma := 2.53
+  number notkomma := 2
+  lightbulb l := pin 1
+  temperatureSensor ls := pin 2
+  motor mot := pin 3
+  bool satan := true
+  bool god := false
+  bool alive := !on
+  bool dead := off
+  number boob := 8008
+  number floater := 5
+  list bool bla {
+  1 = 4
+  false
+  satan
+  alive }
+  dead := true
+
+  group testgroup{
+    l
+    ls
+  }
+
+  wait 32 seconds
+
+    if(true = false) then{
+    dead := on
+    }else if(true) then{
+    dead := off
+    }else then{
+    # testgroup := on
+    }
+
+    loop 5 times{
+      dead := on
+      dead := off
+    }
+
+    loop 2 times{
+      dead := on
+      dead := off
+    }
+
+        loop 3 times{
+          dead := on
+          dead := off
+        }
+
+    loop until boob > 9000 and dead is off or alive is off increase boob by 500{
+        boob -= 200
+    }
+
+    loop until boob < 3000 decrease boob by 500{
+        boob += 200
+    }
+
+    switch(boob < 3){
+        case true:
+            boob += 2
+            boob -= 2
+        case false:
+            boob += 4
+            boob += (2+(4-2))
+        default:
+            boob := 2
+    }
+    floater := 5.2
+
+      bool test := get element 2+2 from bla
+
+      list bool gah {
+      false
+      }
+
+      add true to bla
+      remove element 2 from bla
+      bla := gah
+
+}
+
+# The repeat method is a default method, it's used for code that's repeated in each cycle of the hardware. 
+repeat{  
+  if(true = false and false = false) then {
+      if(true = off & 21 > 30) then {
+        satan := false
+        god := alive
+      }
+        else if(god = alive) then{
+            satan := dead
+        }else if(satan = alive) then{
+            satan := dead
+        }else then{
+            alive := false
+        }
+  }
+
+  call waitup with (24)
+  call nevergettingcalled with (24, 13)
+
+    testgroup := on
+    wait 2 seconds
+    testgroup := off
+
+}
+
+define listdiffer with (bool bolleboll) returnType bool{
+ 	list number result {
+    1
+    2
+    5
+    34
+    21
+ 	}
+
+    list text john {
+     	"hello"
+     	"goodbye"
+     	"itsa me mario"
+    }
+
+    add 11 to result
+    remove element 3 from result
+    remove element 1, 2 from result
+
+ 	#bolleboll := john
+ 	#john := bolleboll
+ 	return true
+}
+
+define waitup with(number num) returnType number{
+ 	number num1
+ 	number num2
+ 	num += 45
+ 	num1 += 45
+
+ 	return 42
+}
+
+ define nevergettingcalled with(number num, number five) returnType number{
+ 	number num1
+ 	number num2
+ 	num += 45
+ 	num1 += 45
+
+    if(num1 = 4) then {
+        num2 := 3
+    }
+    else if(num < 3) then{
+        num := 4
+    }else if(five >= 3) then{
+        five := 2
+    }else then{
+        num2 := num1
+    }
+
+    wait 2.5 seconds
+
+ 	return 15
+ }
