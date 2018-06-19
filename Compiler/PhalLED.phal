@@ -86,7 +86,3 @@ repeat{
        wait 5.2 seconds
        mot1 := off
 }
-
-define textLights with (text input) returnType none{
-    text result := get element 1 from input
-}
